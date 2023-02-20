@@ -20,6 +20,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import controller.Controller;
+import model.individuos.Individuo;
+import model.individuos.Individuo1;
 
 public class LeftPanel extends JPanel {
 	
@@ -132,7 +134,7 @@ public class LeftPanel extends JPanel {
 		errorPanel.add(errorLabel);
 		errorPanel.add(errorText);
 	}
-
+	
 	private void seleccionPanel() {
 		selecPanel = new JPanel();
 		selecPanel.setPreferredSize(new Dimension(300, 75));
@@ -143,7 +145,7 @@ public class LeftPanel extends JPanel {
 		
 		tipoSelecLabel = new JLabel("Tipo de selección");
 		
-		String[] ejemplo = new String[] {"Seleccion Ruleta", "Seleccion Torneo", "Estocastico Universal", "Truncamiento", "Restos"};
+		String[] ejemplo = new String[] {"Seleccion Torneo", "Estocastico Universal", "Truncamiento", "Restos"};
 		
 		selecBox = new JComboBox<String>(ejemplo);
 		

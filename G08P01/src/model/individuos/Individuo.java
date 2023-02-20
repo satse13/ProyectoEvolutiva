@@ -9,7 +9,8 @@ public abstract class Individuo<T> {
 	protected double[] max;
 	protected double[] min;
 	protected Random rand;
-	protected int valorError;
+	// protected static double valorError;
+	
 	
 	public double getFitness() {
 		return this.getValor();

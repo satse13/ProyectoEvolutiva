@@ -30,7 +30,7 @@ public class MainWindow extends JFrame {
 		mainPanel.add(new TopPanel(_ctrl), BorderLayout.PAGE_START);
 		mainPanel.add(new BottomPanel(_ctrl), BorderLayout.PAGE_END);
 		mainPanel.add(new LeftPanel(_ctrl), BorderLayout.WEST);
-		mainPanel.add(new Graph(_ctrl), BorderLayout.CENTER);
+		//mainPanel.add(new Graph(_ctrl), BorderLayout.CENTER);
 		
 		setBackground(Color.WHITE);
 		this.pack();
