@@ -49,6 +49,16 @@ public abstract class Individuo<T> {
 		return num;	
 	}
 	
+	public T[] getCromosoma() {
+		return this.cromosoma;
+	}
 	
+	public void setAlelo(T b, int i) {
+		this.cromosoma[i] = b;
+	}
+	
+	public int getSize() {
+		return this.cromosoma.length;
+	}
 	
 }

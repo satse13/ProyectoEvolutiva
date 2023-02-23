@@ -3,8 +3,10 @@ package model;
 import java.util.ArrayList;
 
 import factories.IndividuoFactory;
+import model.cruce.Cruce;
 import model.individuos.Individuo;
 import model.seleccion.Seleccion;
+import utils.Pair;
 
 public class AlgoritmoGenetico {
 
@@ -13,6 +15,7 @@ public class AlgoritmoGenetico {
 	private ArrayList<Double> fitness;
 	private IndividuoFactory<Individuo> factory;
 	private Seleccion seleccion;
+	private Cruce cruce;
 	private int maxGeneraciones;
 	private double probSel;
 	private double probCruce;
@@ -23,7 +26,7 @@ public class AlgoritmoGenetico {
 	private int dimension;
 	private double valorError;
 	
-	public AlgoritmoGenetico(int tamPoblacion, int maxGeneraciones, double probSel, double probCruce, double probMutacion, IndividuoFactory factory, Seleccion seleccion, int dimension) {
+	public AlgoritmoGenetico(int tamPoblacion, int maxGeneraciones, double probSel, double probCruce, double probMutacion, IndividuoFactory factory, Seleccion seleccion,Cruce cruce, int dimension) {
 		this.tamPoblacion = tamPoblacion;
 		this.maxGeneraciones = maxGeneraciones;
 		this.probSel = probSel; 
@@ -32,15 +35,25 @@ public class AlgoritmoGenetico {
 		this.dimension = dimension;		
 		this.factory = factory;
 		this.seleccion = seleccion;
+		this.cruce = cruce;
 		
 		fitness = new ArrayList<Double>();
+		poblacion = new ArrayList<Individuo>();
 	}
 	
 	public void run() {
-		poblacion = factory.generatePob(tamPoblacion, valorError);
+		
+		for(int i = 0; i < this.tamPoblacion;i++) {
+			poblacion.add(factory.generateInd(valorError)); 
+		}
 		pobEvaluation();
+		ArrayList<Pair<Integer,Integer>> seleccionados = new ArrayList<Pair<Integer,Integer>>();
 		for (int i = 0; i < maxGeneraciones; ++i) {
-			seleccion.seleccionar(poblacion, probSel);
+			seleccionados = seleccion.seleccionar(poblacion, probSel); // lo mejor es hacer un constructor con el cromosoma ya hecho en cada individuo y que el cruce devuelva una lista con cromosomas que luego hay que pasar a la factoria para que convierta en individuos
+			poblacion = cruce.cruzar(poblacion,seleccionados, probCruce);
+			
+			// mutacion
+			
 			
 			pobEvaluation();
 		}

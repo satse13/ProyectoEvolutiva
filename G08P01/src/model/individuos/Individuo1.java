@@ -48,4 +48,12 @@ public class Individuo1 extends Individuo<Boolean>{
 		return num;	
 	}
 	
+	public Boolean[] getCromosoma() {
+		return this.cromosoma;
+	}
+	
+	public void setAlelo(boolean b, int i) {
+		this.cromosoma[i] = b;
+	}
+	
 }
