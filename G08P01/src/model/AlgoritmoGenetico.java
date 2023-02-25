@@ -24,7 +24,7 @@ public class AlgoritmoGenetico {
 	private Individuo elMejor; 
 	private int pos_mejor = 0;
 	private int dimension;
-	private double valorError;
+	private double valorError = 0.1;
 	
 	public AlgoritmoGenetico(int tamPoblacion, int maxGeneraciones, double probSel, double probCruce, double probMutacion, IndividuoFactory factory, Seleccion seleccion,Cruce cruce, int dimension) {
 		this.tamPoblacion = tamPoblacion;
@@ -43,19 +43,31 @@ public class AlgoritmoGenetico {
 	
 	public void run() {
 		
-		for(int i = 0; i < this.tamPoblacion;i++) {
-			poblacion.add(factory.generateInd(valorError)); 
+		initPoblacion();
+	//	pobEvaluation();
+		
+		for(int j = 0; j < poblacion.size();j++) {
+			System.out.println(poblacion.get(j).getCromosoma());
 		}
-		pobEvaluation();
-		ArrayList<Pair<Integer,Integer>> seleccionados = new ArrayList<Pair<Integer,Integer>>();
+		
+		System.out.println("--------------------");
+		ArrayList<Integer> seleccionados = new ArrayList<Integer>();
+		ArrayList cromosomas = new ArrayList<>();
+		
 		for (int i = 0; i < maxGeneraciones; ++i) {
-			seleccionados = seleccion.seleccionar(poblacion, probSel); // lo mejor es hacer un constructor con el cromosoma ya hecho en cada individuo y que el cruce devuelva una lista con cromosomas que luego hay que pasar a la factoria para que convierta en individuos
-			poblacion = cruce.cruzar(poblacion,seleccionados, probCruce);
+			
+			seleccionados = seleccion.seleccionar(poblacion, probSel); 
+			cromosomas = cruce.cruzar(poblacion,seleccionados, probCruce);
+			poblacion = nuevaGen(cromosomas);
+		
+			for(int j = 0; j < poblacion.size();j++) {
+				System.out.println(poblacion.get(j).getCromosoma());
+			}
 			
 			// mutacion
 			
 			
-			pobEvaluation();
+			//pobEvaluation();
 		}
 	}
 	
@@ -73,5 +85,19 @@ public class AlgoritmoGenetico {
 		elMejor = poblacion.get(pos_mejor);
 	}	
 	
+	private void initPoblacion() {
+		for(int i = 0; i < this.tamPoblacion;i++) {
+			poblacion.add(factory.generateInd(valorError)); 
+		}
+	}
 	
+	private <T> ArrayList<Individuo> nuevaGen(ArrayList cromosomas) {
+		ArrayList<Individuo> nuevaGen = new ArrayList<Individuo>();
+		
+		for(int i = 0; i < cromosomas.size();i++) {
+			nuevaGen.add(factory.generateInd((ArrayList<T>) cromosomas.get(i),valorError));
+		}
+		
+		return nuevaGen;
+	}
 }

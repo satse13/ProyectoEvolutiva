@@ -9,27 +9,27 @@ import utils.Pair;
 public class SeleccionRuleta implements Seleccion {
 
 	@Override
-	public ArrayList<Pair<Integer, Integer>> seleccionar(ArrayList<Individuo> poblacion, double prob) {
+	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion, double prob) {
 		int sumaFit = 0;
 		for (int i = 0; i < poblacion.size(); ++i) {
 			sumaFit += poblacion.get(i).getFitness();
 		}
+		
 		double probabilidad = 0;
 		ArrayList<Double> probabilidades = new ArrayList<Double>(poblacion.size());
 		for (int i = 0; i < poblacion.size(); ++i) {
 			probabilidad += poblacion.get(i).getFitness() / sumaFit;
 			probabilidades.add(probabilidad);
 		}
+		
 		Random random = new Random();
-		ArrayList<Pair<Integer, Integer>> seleccionados = new ArrayList<Pair<Integer, Integer>>(poblacion.size() / 2);
+		ArrayList<Integer> seleccionados = new ArrayList<Integer>(poblacion.size());
 		double r;
-		int a, b;
-		for (int i = 0; i < poblacion.size() / 2; ++i) {
+		int indi;
+		for (int i = 0; i < poblacion.size(); ++i) {
 			r = random.nextDouble();
-			a = buscarIndividuo(probabilidades, r, 0, probabilidades.size());
-			r = random.nextDouble();
-			b = buscarIndividuo(probabilidades, r, 0, probabilidades.size());
-			seleccionados.add(new Pair<Integer, Integer>(a,b));
+			indi = buscarIndividuo(probabilidades, r, 0, probabilidades.size());
+			seleccionados.add(indi);
 		}
 		return seleccionados;
 	}

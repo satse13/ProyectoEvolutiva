@@ -1,15 +1,15 @@
 package model.individuos;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Individuo<T> {
 
-	protected T[] cromosoma;
+	protected ArrayList<T> cromosoma;
 	protected int[] tamGenes;
 	protected double[] max;
 	protected double[] min;
 	protected Random rand;
-	// protected static double valorError;
 	
 	
 	public double getFitness() {
@@ -49,16 +49,8 @@ public abstract class Individuo<T> {
 		return num;	
 	}
 	
-	public T[] getCromosoma() {
+	public ArrayList<T> getCromosoma() {
 		return this.cromosoma;
-	}
-	
-	public void setAlelo(T b, int i) {
-		this.cromosoma[i] = b;
-	}
-	
-	public int getSize() {
-		return this.cromosoma.length;
 	}
 	
 }
