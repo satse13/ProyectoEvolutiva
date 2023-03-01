@@ -14,8 +14,13 @@ import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
 
 import controller.Controller;
+import factories.IndividuoFactory;
+import model.AlgoritmoGenetico;
+import model.cruce.Cruce;
+import model.observers.Observer;
+import model.seleccion.Seleccion;
 
-public class BottomPanel extends JToolBar {
+public class BottomPanel extends JToolBar implements Observer {
 	
 	private Controller _ctrl;
 	
@@ -23,7 +28,8 @@ public class BottomPanel extends JToolBar {
 	JPanel textPanel;
 	JLabel solucionLabel;
 	JTextArea solucionText;
-
+	
+	
 	public BottomPanel(Controller ctrl) {
 		_ctrl = ctrl;
 		initGUI();
@@ -69,6 +75,16 @@ public class BottomPanel extends JToolBar {
 
 	private void actions() {
 		// TODO Hacer ActionListeners aqui
+	}
+
+	@Override
+	public void onEnd(AlgoritmoGenetico algoritmo) {
+		solucionText.setText(algoritmo.getMejor().getDeco());		
+	}
+
+	@Override
+	public void onReset() {
+		solucionText.setText("");	
 	}
 
 }

@@ -9,7 +9,7 @@ import utils.Pair;
 public class SeleccionRuleta implements Seleccion {
 
 	@Override
-	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion, double prob) {
+	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion) {
 		
 		Individuo peorInd = poblacion.get(0);
 		

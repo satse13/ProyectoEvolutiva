@@ -67,4 +67,22 @@ public class Individuo1 extends IndBool{
 	
 	}
 
+	@Override
+	protected String decodificar() {
+		
+		String str = "";
+		
+		for(int i = 0; i < 2; i++) {
+			str+= "Variable X" + i + " = " + getFenotipo(i) + ", ";
+		}
+		
+		str += "Valor de la funcion = " + this.fitness;  
+		
+		return str;
+	}
+
+
+
+	
+	
 }

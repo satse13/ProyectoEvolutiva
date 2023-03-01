@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -18,6 +19,14 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 import controller.Controller;
 import model.individuos.Individuo;
@@ -99,6 +108,55 @@ public class LeftPanel extends JPanel {
 		pobLabel = new JLabel("Tamaño Población");
 		
 		pobText = new JTextField();
+		
+		DocumentListener dl = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setPobSize();
+				
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setPobSize();
+				
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setPobSize();
+				
+			}
+			
+			private void setPobSize() {
+				_ctrl.updatePobSize(Integer.parseInt(pobText.getText()));
+			}
+		};
+			
+		
+        
+        DocumentFilter filter = new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+                // Filtrar cualquier entrada que no sea numérica
+                if (text.matches("\\d+")) {
+                    super.insertString(fb, offset, text, attr);
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                // Filtrar cualquier entrada que no sea numérica
+                if (text.matches("\\d+")) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        };
+        
+        
+        pobText.getDocument().addDocumentListener(dl);
+        ((AbstractDocument) pobText.getDocument()).setDocumentFilter(filter);
 		
 		pobPanel.add(pobLabel);
 		pobPanel.add(pobText);

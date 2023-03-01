@@ -2,15 +2,15 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-
+ 
 import factories.IndividuoFactory;
 import model.cruce.Cruce;
 import model.individuos.Individuo;
+import model.observers.Observable;
+import model.observers.Observer;
 import model.seleccion.Seleccion;
-import utils.Pair;
-
-public class AlgoritmoGenetico {
+ 
+public class AlgoritmoGenetico implements Observable<Observer>{
 
 	private int tamPoblacion;
 	private ArrayList<Individuo> poblacion;
@@ -19,7 +19,6 @@ public class AlgoritmoGenetico {
 	private Seleccion seleccion;
 	private Cruce cruce;
 	private int maxGeneraciones;
-	private double probSel;
 	private double probCruce;
 	private double probMutacion;
 	private int tamTorneo;
@@ -28,11 +27,12 @@ public class AlgoritmoGenetico {
 	private double valorError = 0.00001;
 	private double porElitismo = 0.05;
 	private ArrayList<Individuo> elite;
+	
+	private ArrayList<Observer> observers;
 		
-	public AlgoritmoGenetico(int tamPoblacion, int maxGeneraciones, double probSel, double probCruce, double probMutacion, IndividuoFactory factory, Seleccion seleccion,Cruce cruce, int dimension, double porElitismo) {
+	public AlgoritmoGenetico(int tamPoblacion, int maxGeneraciones, double probCruce, double probMutacion, IndividuoFactory factory, Seleccion seleccion,Cruce cruce, int dimension, double porElitismo) {
 		this.tamPoblacion = tamPoblacion;
 		this.maxGeneraciones = maxGeneraciones;
-		this.probSel = probSel; 
 		this.probCruce = probCruce;
 		this.probMutacion = probMutacion;
 		this.dimension = dimension;		
@@ -43,9 +43,11 @@ public class AlgoritmoGenetico {
 		fitness = new ArrayList<Double>();
 		poblacion = new ArrayList<Individuo>();
 		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
+		observers = new ArrayList<>();
 	}
 	
 	public void run() {
+		
 		
 		initPoblacion();
 		
@@ -68,7 +70,7 @@ public class AlgoritmoGenetico {
 			if(porElitismo > 0)
 				seleccionaElite();
 			
-			seleccionados = seleccion.seleccionar(poblacion, probSel); 
+			seleccionados = seleccion.seleccionar(poblacion); 
 			cromosomas = cruce.cruzar(poblacion,seleccionados, probCruce);
 			poblacion = nuevaGen(cromosomas);
 		
@@ -136,5 +138,24 @@ public class AlgoritmoGenetico {
 		}
 		
 		return nuevaGen;
+	}
+
+	@Override
+	public void addObserver(Observer o) {
+		observers.add(o);
+	}
+
+	@Override
+	public void removeObserver(Observer o) {
+		observers.remove(o);
+	}
+	
+	public Individuo getMejor() {
+		return elMejor;
+	}
+
+	public void setPobSize(int parseInt) {
+		this.tamPoblacion = parseInt;
+		
 	}
 }

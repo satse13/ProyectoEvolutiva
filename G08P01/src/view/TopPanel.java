@@ -10,8 +10,12 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 import controller.Controller;
+import factories.IndividuoFactory;
+import model.cruce.Cruce;
+import model.observers.Observer;
+import model.seleccion.Seleccion;
 
-public class TopPanel extends JPanel {
+public class TopPanel extends JPanel  {
 	
 	private Controller _ctrl;
 	
@@ -52,5 +56,4 @@ public class TopPanel extends JPanel {
 		setVisible(true);
 		setPreferredSize(new Dimension(1500, 40));
 	}
-
 }
