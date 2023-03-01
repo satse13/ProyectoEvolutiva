@@ -10,15 +10,30 @@ public class SeleccionRuleta implements Seleccion {
 
 	@Override
 	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion, double prob) {
-		int sumaFit = 0;
-		for (int i = 0; i < poblacion.size(); ++i) {
-			sumaFit += poblacion.get(i).getFitness();
+		
+		Individuo peorInd = poblacion.get(0);
+		
+		
+		for (int i = 1; i < poblacion.size(); ++i) {			
+			if(peorInd.mejorFitness(poblacion.get(i))) {
+				peorInd = poblacion.get(i);
+			}
 		}
+		
+		ArrayList<Double> fitness = new ArrayList<Double>();
+		
+		double sumaFit = 0;
+
+		for(int i = 0; i < poblacion.size();i++) {
+			fitness.add(peorInd.adaptar(poblacion.get(i)));
+			sumaFit += fitness.get(i);
+		}
+		
 		
 		double probabilidad = 0;
 		ArrayList<Double> probabilidades = new ArrayList<Double>(poblacion.size());
 		for (int i = 0; i < poblacion.size(); ++i) {
-			probabilidad += poblacion.get(i).getFitness() / sumaFit;
+			probabilidad += fitness.get(i) / sumaFit;
 			probabilidades.add(probabilidad);
 		}
 		

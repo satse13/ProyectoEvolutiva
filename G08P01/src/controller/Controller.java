@@ -1,8 +1,6 @@
 package controller;
 
 
-
-/** En esta clase ira el algoritmo genetico **/
 public class Controller {
 	// TODO: Vista
 	
@@ -11,7 +9,6 @@ public class Controller {
 		
 	}
 
-	//public algoritmoGenetico() {
 		
-	//}
+	
 }

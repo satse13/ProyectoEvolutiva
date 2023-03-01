@@ -3,7 +3,7 @@ package model.individuos;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Individuo1 extends Individuo<Boolean>{
+public class Individuo1 extends IndBool{
 
 	public Individuo1(double valorError) {
 		initIndividuo();
@@ -12,14 +12,15 @@ public class Individuo1 extends Individuo<Boolean>{
 		int tamTotal = tamGenes[0] + tamGenes[1];
 		this.cromosoma = new ArrayList<Boolean>(tamTotal);
 		for(int i = 0; i < tamTotal; i++) { this.cromosoma.add(this.rand.nextBoolean()); }
+		this.fitness = this.getValor();
 	}
 	
 	public Individuo1(ArrayList<Boolean> cromosoma, double valorError) {
 		initIndividuo();
 		this.tamGenes[0] = this.tamGen(valorError, min[0], max[0]);
 		this.tamGenes[1] = this.tamGen(valorError, min[1], max[1]);
-		int tamTotal = tamGenes[0] + tamGenes[1];
 		this.cromosoma = cromosoma;	
+		this.fitness = this.getValor();
 	}
 
 	protected int tamGen(double valorError, double min, double max) {
@@ -29,32 +30,6 @@ public class Individuo1 extends Individuo<Boolean>{
 	protected double getValor() {
 		double x1 = this.getFenotipo(0), x2 = this.getFenotipo(1);
 		return (21.5 + x1 * Math.sin(4 * Math.PI * x1) + x2 * Math.sin(20 * Math.PI * x2));
-	}
-	
-	protected double getFenotipo(int gen) { // TODO hacer funcion
-		
-		
-//		return  (this.min[gen] + (this.cromosoma));
-		return 0;
-	}
-	
-	protected long bool2int(boolean foo) {
-	    return (foo) ? 1 : 0;
-	}
-	
-	protected long bool2long(Boolean[] bool, int ini, int fin) {
-		int acc = 1;
-		long num = 0;
-		for (int i = fin; i >= ini; --i) {
-			num += (acc * bool2int(bool[i]));
-			acc = acc * 10;
-	
-		}
-		return num;	
-	}
-	
-	public ArrayList<Boolean> getCromosoma() {
-		return this.cromosoma;
 	}
 	
 	private void initIndividuo() {
@@ -67,5 +42,29 @@ public class Individuo1 extends Individuo<Boolean>{
 		this.max[1] = 5.800;
 		this.rand = new Random();
 	}
+
+	@Override
+	public boolean mejorFitness(Individuo individuo) {
+		if(individuo.getFitness() > this.getValor())
+			return true;
+		return false;
+	}
+
+	@Override
+	public Double adaptar(Individuo individuo) {
+		return individuo.getFitness() + Math.abs(this.getFitness() 	* 1.05);
+	}
+
+	@Override
+	public int compareTo(Individuo o) {
+
+		 if(this.fitness > o.fitness)
+			 return 1;
+		 else if(this.fitness == o.fitness)
+			 return 0;
+		 else
+			 return -1;
 	
+	}
+
 }
