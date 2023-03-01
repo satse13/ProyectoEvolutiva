@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import model.individuos.Individuo;
 
 
-public interface IndividuoFactory<Individuo>{
+public interface IndividuoFactory<T extends Individuo>{
 	
 	public Individuo generateInd(double valorError);
 	

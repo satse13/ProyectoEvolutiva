@@ -3,6 +3,8 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,6 +34,7 @@ public class BottomPanel extends JToolBar implements Observer {
 	
 	public BottomPanel(Controller ctrl) {
 		_ctrl = ctrl;
+		_ctrl.addObserver(this);
 		initGUI();
 	}
 
@@ -58,7 +61,7 @@ public class BottomPanel extends JToolBar implements Observer {
 		
 		solucionLabel = new JLabel("Solucion:  ");
 		solucionText = new JTextArea("Aqui ira la solucion");
-		solucionText.setPreferredSize(new Dimension(500, 15));
+		solucionText.setPreferredSize(new Dimension(600, 15));
 		solucionText.setEditable(false);
 		
 		textPanel.add(solucionLabel);
@@ -74,7 +77,11 @@ public class BottomPanel extends JToolBar implements Observer {
 	}
 
 	private void actions() {
-		// TODO Hacer ActionListeners aqui
+		ejecutarButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				_ctrl.run();
+			}
+		});
 	}
 
 	@Override

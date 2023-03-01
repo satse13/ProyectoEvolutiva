@@ -2,6 +2,8 @@ package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -43,8 +45,14 @@ public class TopPanel extends JPanel  {
 		JSeparator separator2 = new JSeparator(JSeparator.VERTICAL);
 		separator2.setPreferredSize(new Dimension(5, 0));
 		
-		Integer[] ejemplo = new Integer[] {1,2,3,4,5};
-		problemaBox = new JComboBox<Integer>(ejemplo);
+		String[] ejemplo = new String[] {"Función 1: calibración y prueba", "2"};
+		problemaBox = new JComboBox<String>(ejemplo);
+		
+		problemaBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				_ctrl.updateIndividuoFactory((String) problemaBox.getSelectedItem());
+			}
+		});
 		
 		add(variedad);
 		add(separator1);

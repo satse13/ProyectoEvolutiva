@@ -9,6 +9,8 @@ import controller.Controller;
 import factories.Individuo1Factory;
 import factories.IndividuoFactory;
 import model.AlgoritmoGenetico;
+import model.cruce.Cruce;
+import model.cruce.CruceMonopunto;
 import model.seleccion.Seleccion;
 import model.seleccion.SeleccionRuleta;
 import view.MainWindow;
@@ -19,12 +21,14 @@ public class Main {
 
 	private static Map<String, Seleccion> mapaSeleccion = null;
 	
+	private static Map<String, Cruce> mapaCruce = null;
+	
 		
 	public static void main(String[] args) {
 		
 		initMaps();
-		AlgoritmoGenetico algoritmo = new AlgoritmoGenetico(0, 0, 0, 0, null, null, null, 0, 0);
-		Controller ctrl = new Controller(algoritmo,mapaFactories,mapaSeleccion);
+		AlgoritmoGenetico algoritmo = new AlgoritmoGenetico();
+		Controller ctrl = new Controller(algoritmo,mapaFactories,mapaSeleccion, mapaCruce);
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -43,6 +47,10 @@ public class Main {
 		mapaSeleccion = new HashMap<String, Seleccion>(){{
 				put("Ruleta", new SeleccionRuleta());
 		}};
+		
+		mapaCruce = new HashMap<String, Cruce>(){{
+			put("Cruce Monopunto", new CruceMonopunto());
+	}};
 	}
 
 }

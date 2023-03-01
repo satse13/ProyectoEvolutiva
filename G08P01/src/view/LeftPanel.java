@@ -1,36 +1,25 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
 
 import controller.Controller;
-import model.individuos.Individuo;
-import model.individuos.Individuo1;
 
 public class LeftPanel extends JPanel {
 	
@@ -107,7 +96,7 @@ public class LeftPanel extends JPanel {
 		
 		pobLabel = new JLabel("Tamaño Población");
 		
-		pobText = new JTextField();
+		pobText = new JTextField("100");
 		
 		DocumentListener dl = new DocumentListener() {
 
@@ -130,33 +119,16 @@ public class LeftPanel extends JPanel {
 			}
 			
 			private void setPobSize() {
-				_ctrl.updatePobSize(Integer.parseInt(pobText.getText()));
+				try {
+					_ctrl.updatePobSize(Integer.parseInt(pobText.getText()));
+				}
+				catch(Exception e) {
+					
+				}
 			}
 		};
-			
-		
-        
-        DocumentFilter filter = new DocumentFilter() {
-            @Override
-            public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
-                // Filtrar cualquier entrada que no sea numérica
-                if (text.matches("\\d+")) {
-                    super.insertString(fb, offset, text, attr);
-                }
-            }
-
-            @Override
-            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-                // Filtrar cualquier entrada que no sea numérica
-                if (text.matches("\\d+")) {
-                    super.replace(fb, offset, length, text, attrs);
-                }
-            }
-        };
-        
         
         pobText.getDocument().addDocumentListener(dl);
-        ((AbstractDocument) pobText.getDocument()).setDocumentFilter(filter);
 		
 		pobPanel.add(pobLabel);
 		pobPanel.add(pobText);
@@ -171,7 +143,40 @@ public class LeftPanel extends JPanel {
 		
 		geneLabel = new JLabel("Número de generaciones");
 		
-		geneText = new JTextField();
+		geneText = new JTextField("100");
+		
+		DocumentListener dl = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setGenSize();
+				
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setGenSize();
+				
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setGenSize();
+				
+			}
+			
+			private void setGenSize() {
+				try {
+					_ctrl.updateGenSize(Integer.parseInt(geneText.getText()));
+				}
+				catch(Exception e) {
+					
+				}
+				
+			}
+		};
+		
+        geneText.getDocument().addDocumentListener(dl);
 		
 		genePanel.add(geneLabel);
 		genePanel.add(geneText);
@@ -187,8 +192,39 @@ public class LeftPanel extends JPanel {
 		
 		errorLabel = new JLabel("Valor de error");
 		
-		errorText = new JTextField();
+		errorText = new JTextField("0.001");
 		
+		DocumentListener dl = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setValorError();
+				
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setValorError();
+				
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setValorError();
+				
+			}
+			
+			private void setValorError() {
+				try {
+					_ctrl.updateValorError(Double.parseDouble(errorText.getText()));
+				}
+				catch(Exception e) {
+					System.out.println("Error"); //TODO
+				}
+			}
+		};
+		
+		errorText.getDocument().addDocumentListener(dl);
 		errorPanel.add(errorLabel);
 		errorPanel.add(errorText);
 	}
@@ -203,9 +239,15 @@ public class LeftPanel extends JPanel {
 		
 		tipoSelecLabel = new JLabel("Tipo de selección");
 		
-		String[] ejemplo = new String[] {"Seleccion Torneo", "Estocastico Universal", "Truncamiento", "Restos"};
+		String[] ejemplo = new String[] {"Ruleta", "Estocastico Universal", "Truncamiento", "Restos"};
 		
 		selecBox = new JComboBox<String>(ejemplo);
+		
+		selecBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				_ctrl.updateSeleccion((String) selecBox.getSelectedItem());
+			}
+		});
 		
 		selecPanel.add(tipoSelecLabel);
 		selecPanel.add(selecBox);
@@ -224,9 +266,48 @@ public class LeftPanel extends JPanel {
 		String[] ejemplo = new String[] {"Cruce Monopunto", "Cruce Uniforme"};
 		cruceBox = new JComboBox<String>(ejemplo);
 		
+		cruceBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				_ctrl.updateCruce((String) cruceBox.getSelectedItem());
+			}
+		});
+		
 		porCruceLabel = new JLabel("% Cruce");
 		
-		cruceText = new JTextField();
+		cruceText = new JTextField("60.0");
+		
+		DocumentListener dl = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setProbCruce();
+				
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setProbCruce();
+				
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setProbCruce();
+				
+			}
+			
+			private void setProbCruce() {
+				try {
+					_ctrl.updateProbCruce(Double.parseDouble(cruceText.getText()) / 100);
+				}
+				catch(Exception e) {
+					
+				}
+			}
+		};
+        
+        
+        cruceText.getDocument().addDocumentListener(dl);
 		
 		crucePanel.add(tipoCruceLabel);
 		crucePanel.add(cruceBox);
@@ -249,7 +330,40 @@ public class LeftPanel extends JPanel {
 		
 		porMutaLabel = new JLabel("% Mutación");
 		
-		mutaText = new JTextField();
+		mutaText = new JTextField("5.0");
+		
+		DocumentListener dl = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setProbMuta();
+				
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setProbMuta();
+				
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setProbMuta();
+				
+			}
+			
+			private void setProbMuta() {
+				try {
+					_ctrl.updateProbMuta(Double.parseDouble(mutaText.getText()) / 100);
+				}
+				catch(Exception e) {
+					
+				}
+			}
+		};
+        
+        
+        mutaText.getDocument().addDocumentListener(dl);
 		
 		mutaPanel.add(tipoMutaLabel);
 		mutaPanel.add(mutaBox);
@@ -267,7 +381,40 @@ public class LeftPanel extends JPanel {
 		
 		porEliteLabel = new JLabel("% Élite");
 		
-		eliteText = new JTextField();
+		eliteText = new JTextField("0.0");
+		
+		DocumentListener dl = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setPorElite();
+				
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setPorElite();
+				
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setPorElite();
+				
+			}
+			
+			private void setPorElite() {
+				try {
+					_ctrl.updatePorElite(Double.parseDouble(eliteText.getText()) / 100);
+				}
+				catch(Exception e) {
+					
+				}
+			}
+		};
+        
+        
+        eliteText.getDocument().addDocumentListener(dl);
 		
 		elitePanel.add(porEliteLabel);
 		elitePanel.add(eliteText);

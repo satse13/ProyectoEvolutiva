@@ -73,7 +73,7 @@ public class Individuo1 extends IndBool{
 		String str = "";
 		
 		for(int i = 0; i < 2; i++) {
-			str+= "Variable X" + i + " = " + getFenotipo(i) + ", ";
+			str+= "Variable X" + (i+1) + " = " + getFenotipo(i) + ", ";
 		}
 		
 		str += "Valor de la funcion = " + this.fitness;  

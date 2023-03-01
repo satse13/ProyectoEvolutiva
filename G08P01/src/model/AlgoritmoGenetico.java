@@ -2,20 +2,23 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
- 
+
+import factories.Individuo1Factory;
 import factories.IndividuoFactory;
 import model.cruce.Cruce;
+import model.cruce.CruceMonopunto;
 import model.individuos.Individuo;
 import model.observers.Observable;
 import model.observers.Observer;
 import model.seleccion.Seleccion;
+import model.seleccion.SeleccionRuleta;
  
 public class AlgoritmoGenetico implements Observable<Observer>{
 
 	private int tamPoblacion;
 	private ArrayList<Individuo> poblacion;
 	private ArrayList<Double> fitness;
-	private IndividuoFactory<Individuo> factory;
+	private IndividuoFactory<? extends Individuo> factory;
 	private Seleccion seleccion;
 	private Cruce cruce;
 	private int maxGeneraciones;
@@ -24,22 +27,23 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	private int tamTorneo;
 	private Individuo elMejor; 
 	private int dimension;
-	private double valorError = 0.00001;
-	private double porElitismo = 0.05;
+	private double valorError;
+	private double porElitismo;
 	private ArrayList<Individuo> elite;
 	
 	private ArrayList<Observer> observers;
 		
-	public AlgoritmoGenetico(int tamPoblacion, int maxGeneraciones, double probCruce, double probMutacion, IndividuoFactory factory, Seleccion seleccion,Cruce cruce, int dimension, double porElitismo) {
-		this.tamPoblacion = tamPoblacion;
-		this.maxGeneraciones = maxGeneraciones;
-		this.probCruce = probCruce;
-		this.probMutacion = probMutacion;
-		this.dimension = dimension;		
-		this.factory = factory;
-		this.seleccion = seleccion;
-		this.cruce = cruce;
-		this.porElitismo = porElitismo;
+	public AlgoritmoGenetico() { // CUIDADO CON DIMENSION
+		this.tamPoblacion = 100;
+		this.maxGeneraciones = 100;
+		this.probCruce = 0.6;
+		this.probMutacion = 0.05;
+		this.dimension = 2;		
+		this.factory = new Individuo1Factory();
+		this.seleccion = new SeleccionRuleta();
+		this.cruce = new CruceMonopunto();
+		this.valorError = 0.001;
+		this.porElitismo = 0.0;
 		fitness = new ArrayList<Double>();
 		poblacion = new ArrayList<Individuo>();
 		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
@@ -48,21 +52,12 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	
 	public void run() {
 		
-		
 		initPoblacion();
 		
 		pobEvaluation();
-		
-		
-		
-		//for(int j = 0; j < poblacion.size();j++) { 
-			//System.out.println(poblacion.get(j).getCromosoma());
-		//}
-		
-		//System.out.println("--------------------");
+	
 		ArrayList<Integer> seleccionados = new ArrayList<Integer>();
 		ArrayList cromosomas = new ArrayList<>();
-		
 		
 		
 		for (int i = 0; i < maxGeneraciones; ++i) {
@@ -74,30 +69,18 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 			cromosomas = cruce.cruzar(poblacion,seleccionados, probCruce);
 			poblacion = nuevaGen(cromosomas);
 		
-			//for(int j = 0; j < poblacion.size();j++) { 
-				//System.out.println(poblacion.get(j).getCromosoma());
-			//}
-			
-			// mutacion
 			for(int j = 0; j < poblacion.size();j++) {
 				poblacion.get(j).mutar(probMutacion);
 			}
-			
-			//System.out.println("-------------------");
-			
-			//for(int j = 0; j < poblacion.size();j++) {  // ESTO HAY QUE BORRARLO
-				//System.out.println(poblacion.get(j).getCromosoma());
-			//}
 			if(porElitismo > 0)
 				incluirElite();
 			
 			pobEvaluation();
 		}
 		
-		
-		System.out.println(elMejor.getFenotipo(0));
-		System.out.println(elMejor.getFenotipo(1));
-		System.out.println(elMejor.getFitness());
+		for (Observer o: observers) {
+			o.onEnd(this);
+		}
 
 	}
 	
@@ -158,4 +141,43 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.tamPoblacion = parseInt;
 		
 	}
+
+	public void setGenSize(int parseInt) {
+		this.maxGeneraciones = parseInt;
+	}
+
+	public void setValorError(double d) {
+		this.valorError = d;
+		
+	}
+
+	public void setProbCruce(double d) {
+		this.probCruce = d;
+	}
+
+	public void setProbMutacion(double d) {
+		this.probMutacion = d;
+		
+	}
+
+	public void setPorElitismo(double d) {
+		this.porElitismo = d;
+		
+	}
+
+	public void setSeleccion(Seleccion seleccion) {
+		this.seleccion = seleccion;
+	}
+
+	public void setProbCruce(Cruce cruce) {
+		this.cruce = cruce;
+		
+	}
+
+	public void setIndividuoFactory(IndividuoFactory individuoFactory) {
+		this.factory = individuoFactory;
+		
+	}
+	
+	
 }
