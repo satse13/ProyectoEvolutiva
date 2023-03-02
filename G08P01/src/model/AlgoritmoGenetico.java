@@ -61,7 +61,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		if(!parseParam())
 			return;
 		
-		System.out.println(cruce);
+		System.out.println(seleccion);
 		
 		poblacion = new ArrayList<Individuo>();
 		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
@@ -81,6 +81,9 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 			
 			if(porElitismo > 0)
 				seleccionaElite();
+			
+			for(int j = 0; j < poblacion.size();j++)
+				System.out.println(poblacion.get(j).getFitness());
 			
 			seleccionados = seleccion.seleccionar(poblacion); 
 			cromosomas = cruce.cruzar(poblacion,seleccionados, probCruce);

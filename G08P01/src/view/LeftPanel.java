@@ -244,9 +244,9 @@ public class LeftPanel extends JPanel implements Observer{
 		
 		tipoSelecLabel = new JLabel("Tipo de selección");
 		
-		String[] ejemplo = new String[] {"Ruleta", "Estocastico Universal", "Truncamiento", "Restos"};
+	//	String[] ejemplo = new String[] {"Ruleta", "Estocastico Universal", "Truncamiento", "Restos"};
 		
-		selecBox = new JComboBox<String>(ejemplo);
+		selecBox = new JComboBox<String>(_ctrl.getMapaSeleccionKeys());
 		
 		selecBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

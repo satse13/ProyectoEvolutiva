@@ -23,6 +23,7 @@ public class Controller {
 	private Map<String, Cruce> mapaCruceBool;
 	private Map<String, Cruce> mapaCruceDouble;
 	private Map<String, Cruce> mapaCruceActual;
+	private ArrayList<String> listaSeleccion;
 	private ArrayList<String> listaCruceDouble;
 	private ArrayList<String> listaCruceBool;
 	private ArrayList<String> listaCruceActual;
@@ -30,7 +31,7 @@ public class Controller {
 	private String tipoCruce;
 	
 	public Controller(AlgoritmoGenetico algoritmo, Map<String, Trio<IndividuoFactory, Boolean, TipoDato>> mapaFactories, Map<String, Seleccion> mapaSeleccion, 
-			Map<String, Cruce> mapaCruceBool,Map<String, Cruce> mapaCruceDouble, ArrayList<String> listaCruceBool, ArrayList<String> listaCruceDouble) {
+			Map<String, Cruce> mapaCruceBool,Map<String, Cruce> mapaCruceDouble, ArrayList<String> listaCruceBool, ArrayList<String> listaCruceDouble, ArrayList<String> listaSeleccion) {
 		this.algoritmo = algoritmo;
 		this.mapaFactories = mapaFactories;
 		this.mapaSeleccion = mapaSeleccion;	
@@ -40,7 +41,7 @@ public class Controller {
 		this.listaCruceDouble = listaCruceDouble;
 		this.mapaCruceActual = new HashMap<String, Cruce> (mapaCruceBool);
 		this.listaCruceActual = new ArrayList<String> (listaCruceBool);
-		
+		this.listaSeleccion = listaSeleccion;
 	}
 
 	public void run() {
@@ -153,15 +154,16 @@ public class Controller {
 
 	public String[] getMapaCruceKeys() {
 		String[] ret = new String[mapaCruceActual.size()];
-		/*int i = 0;
-		for (String clave:mapaCruceActual.keySet()) {
-		   ret[i] = clave;
-		   i++;
-		}
-		return ret;
-		*/
 		for(int i = 0; i < listaCruceActual.size();i++) {
 			ret[i] = listaCruceActual.get(i);
+		}
+		return ret;
+	}
+	
+	public String[] getMapaSeleccionKeys() {
+		String[] ret = new String[mapaSeleccion.size()];
+		for(int i = 0; i < listaSeleccion.size();i++) {
+			ret[i] = listaSeleccion.get(i);
 		}
 		return ret;
 	}

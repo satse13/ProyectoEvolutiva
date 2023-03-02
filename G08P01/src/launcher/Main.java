@@ -2,7 +2,6 @@ package launcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,8 +14,11 @@ import model.AlgoritmoGenetico;
 import model.cruce.Cruce;
 import model.cruce.CruceMonopunto;
 import model.cruce.CruceUniforme;
+import model.seleccion.EstocasticoUniversal;
 import model.seleccion.Seleccion;
 import model.seleccion.SeleccionRuleta;
+import model.seleccion.TorneoDeterministico;
+import model.seleccion.TorneoProbabilistico;
 import utils.TipoDato;
 import utils.Trio;
 import view.MainWindow;
@@ -27,6 +29,8 @@ public class Main {
 
 	private static Map<String, Seleccion> mapaSeleccion = null;
 	
+	private static ArrayList<String> listaSeleccion = null;
+	
 	private static Map<String, Cruce> mapaCruceDouble = null;
 	
 	private static ArrayList<String> listaCruceDouble = null;
@@ -35,13 +39,12 @@ public class Main {
 	
 	private static ArrayList<String> listaCruceBool = null;
 
-	
-		
+
 	public static void main(String[] args) {
 		
 		initMaps();
 		AlgoritmoGenetico algoritmo = new AlgoritmoGenetico();
-		Controller ctrl = new Controller(algoritmo,mapaFactories,mapaSeleccion, mapaCruceBool,mapaCruceDouble, listaCruceBool,listaCruceDouble);
+		Controller ctrl = new Controller(algoritmo,mapaFactories,mapaSeleccion, mapaCruceBool,mapaCruceDouble, listaCruceBool,listaCruceDouble,listaSeleccion);
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -61,7 +64,17 @@ public class Main {
 			
 		mapaSeleccion = new HashMap<String, Seleccion>(){{
 				put("Ruleta", new SeleccionRuleta());
-				
+				put("Torneo Determinístico", new TorneoDeterministico());
+				put("Torneo Probabilísitco", new TorneoProbabilistico());
+				put("Estocástico Universal", new EstocasticoUniversal());
+		}};
+		
+		
+		listaSeleccion = new ArrayList<String>() {{
+				add("Ruleta");
+				add("Torneo Determinístico");
+				add("Torneo Probabilísitco");
+				add("Estocástico Universal");
 		}};
 		
 		mapaCruceDouble = new HashMap<String, Cruce>(){{
