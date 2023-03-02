@@ -20,8 +20,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import controller.Controller;
+import model.AlgoritmoGenetico;
+import model.observers.Observer;
 
-public class LeftPanel extends JPanel {
+public class LeftPanel extends JPanel implements Observer{
 	
 	Controller _ctrl;
 	
@@ -37,6 +39,7 @@ public class LeftPanel extends JPanel {
 	
 	public LeftPanel(Controller ctrl) {
 		_ctrl = ctrl;
+		_ctrl.addObserver(this);
 		initGUI();
 	}
 
@@ -419,6 +422,25 @@ public class LeftPanel extends JPanel {
 		elitePanel.add(porEliteLabel);
 		elitePanel.add(eliteText);
 	}
+
+	@Override
+	public void onEnd(AlgoritmoGenetico algoritmo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onReset() {
+        pobText.setText("100");
+        geneText.setText("100");
+        errorText.setText("0.001");
+        cruceText.setText("60.0");
+        mutaText.setText("5.0");
+        eliteText.setText("0.0");
+        cruceBox.setSelectedIndex(0);
+        mutaBox.setSelectedIndex(0);
+        selecBox.setSelectedIndex(0);
+    }
 	
 
 

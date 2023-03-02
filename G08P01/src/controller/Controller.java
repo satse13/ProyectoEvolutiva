@@ -31,7 +31,7 @@ public class Controller {
 	}
 	
 	public void reset() {
-		//algoritmo.reset();  
+		algoritmo.reset();  
 	}
 	
 	public void addObserver(Observer o) {

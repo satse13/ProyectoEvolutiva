@@ -82,6 +82,11 @@ public class BottomPanel extends JToolBar implements Observer {
 				_ctrl.run();
 			}
 		});
+		resetButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				_ctrl.reset();
+			}
+		});
 	}
 
 	@Override

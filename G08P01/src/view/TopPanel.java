@@ -13,11 +13,12 @@ import javax.swing.JSeparator;
 
 import controller.Controller;
 import factories.IndividuoFactory;
+import model.AlgoritmoGenetico;
 import model.cruce.Cruce;
 import model.observers.Observer;
 import model.seleccion.Seleccion;
 
-public class TopPanel extends JPanel  {
+public class TopPanel extends JPanel implements Observer {
 	
 	private Controller _ctrl;
 	
@@ -29,6 +30,7 @@ public class TopPanel extends JPanel  {
 	
 	public TopPanel(Controller ctrl) {
 		_ctrl = ctrl;
+		_ctrl.addObserver(this);
 		initGUI();
 	}
 
@@ -64,4 +66,16 @@ public class TopPanel extends JPanel  {
 		setVisible(true);
 		setPreferredSize(new Dimension(1500, 40));
 	}
+
+	@Override
+	public void onEnd(AlgoritmoGenetico algoritmo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onReset() {
+        problemaBox.setSelectedIndex(0);
+
+    }
 }

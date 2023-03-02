@@ -44,13 +44,15 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.cruce = new CruceMonopunto();
 		this.valorError = 0.001;
 		this.porElitismo = 0.0;
-		fitness = new ArrayList<Double>();
-		poblacion = new ArrayList<Individuo>();
-		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
 		observers = new ArrayList<>();
 	}
 	
 	public void run() {
+		
+
+		fitness = new ArrayList<Double>();
+		poblacion = new ArrayList<Individuo>();
+		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
 		
 		initPoblacion();
 		
@@ -179,5 +181,21 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		
 	}
 	
+	public void reset() {
+        this.tamPoblacion = 100;
+        this.maxGeneraciones = 100;
+        this.probCruce = 0.6;
+        this.probMutacion = 0.05;
+        this.dimension = 2;
+        this.factory = new Individuo1Factory();
+        this.seleccion = new SeleccionRuleta();
+        this.cruce = new CruceMonopunto();
+        this.valorError = 0.001;
+        this.porElitismo = 0.0;
+
+        for (Observer o: observers) {
+            o.onReset();
+        }
+    }
 	
 }
