@@ -9,8 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -27,6 +29,8 @@ public class LeftPanel extends JPanel implements Observer{
 	
 	Controller _ctrl;
 	
+	TopPanel tp;
+	
 	JPanel pobPanel, genePanel, errorPanel, selecPanel, crucePanel, mutaPanel, elitePanel;
 	
 	JLabel pobLabel, geneLabel, errorLabel, tipoSelecLabel, tipoCruceLabel, porCruceLabel, tipoMutaLabel, porMutaLabel, porEliteLabel;
@@ -39,6 +43,7 @@ public class LeftPanel extends JPanel implements Observer{
 	
 	public LeftPanel(Controller ctrl) {
 		_ctrl = ctrl;
+		this.tp = tp;
 		_ctrl.addObserver(this);
 		initGUI();
 	}
@@ -97,7 +102,7 @@ public class LeftPanel extends JPanel implements Observer{
 		pobPanel.setBackground(Color.WHITE);
 		pobPanel.setBorder(new EmptyBorder(10,10,10,10));
 		
-		pobLabel = new JLabel("Tamaño Población");
+		pobLabel = new JLabel("Tamaño Población (> 1)");
 		
 		pobText = new JTextField("100");
 		
@@ -105,20 +110,17 @@ public class LeftPanel extends JPanel implements Observer{
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				setPobSize();
-				
+				setPobSize();	
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				setPobSize();
-				
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				setPobSize();
-				
 			}
 			
 			private void setPobSize() {
@@ -126,7 +128,7 @@ public class LeftPanel extends JPanel implements Observer{
 					_ctrl.updatePobSize(Integer.parseInt(pobText.getText()));
 				}
 				catch(Exception e) {
-					
+					_ctrl.updatePobSize(-1);
 				}
 			}
 		};
@@ -144,7 +146,7 @@ public class LeftPanel extends JPanel implements Observer{
 		genePanel.setBackground(Color.WHITE);
 		genePanel.setBorder(new EmptyBorder(10,10,10,10));
 		
-		geneLabel = new JLabel("Número de generaciones");
+		geneLabel = new JLabel("Número de generaciones (>= 0)");
 		
 		geneText = new JTextField("100");
 		
@@ -173,7 +175,7 @@ public class LeftPanel extends JPanel implements Observer{
 					_ctrl.updateGenSize(Integer.parseInt(geneText.getText()));
 				}
 				catch(Exception e) {
-					
+					_ctrl.updateGenSize(-1);
 				}
 				
 			}
@@ -193,7 +195,7 @@ public class LeftPanel extends JPanel implements Observer{
 		errorPanel.setBackground(Color.WHITE);
 		errorPanel.setBorder(new EmptyBorder(10,10,10,10));
 		
-		errorLabel = new JLabel("Valor de error");
+		errorLabel = new JLabel("Valor de error (>0 y <1)");
 		
 		errorText = new JTextField("0.001");
 		
@@ -222,7 +224,7 @@ public class LeftPanel extends JPanel implements Observer{
 					_ctrl.updateValorError(Double.parseDouble(errorText.getText()));
 				}
 				catch(Exception e) {
-					System.out.println("Error"); //TODO
+					_ctrl.updateValorError(-1);
 				}
 			}
 		};
@@ -266,8 +268,7 @@ public class LeftPanel extends JPanel implements Observer{
 		
 		tipoCruceLabel = new JLabel("Tipo de cruce");
 		
-		String[] ejemplo = new String[] {"Cruce Monopunto", "Cruce Uniforme"};
-		cruceBox = new JComboBox<String>(ejemplo);
+ 		cruceBox = new JComboBox<String>( _ctrl.getMapaCruceKeys());
 		
 		cruceBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -275,7 +276,7 @@ public class LeftPanel extends JPanel implements Observer{
 			}
 		});
 		
-		porCruceLabel = new JLabel("% Cruce");
+		porCruceLabel = new JLabel("% Cruce (>= 0 y <= 100)");
 		
 		cruceText = new JTextField("60.0");
 		
@@ -304,7 +305,7 @@ public class LeftPanel extends JPanel implements Observer{
 					_ctrl.updateProbCruce(Double.parseDouble(cruceText.getText()) / 100);
 				}
 				catch(Exception e) {
-					
+					_ctrl.updateProbCruce(-1);
 				}
 			}
 		};
@@ -331,7 +332,7 @@ public class LeftPanel extends JPanel implements Observer{
 		String[] ejemplo = new String[] {"Mutación Básica"};
 		mutaBox = new JComboBox<String>(ejemplo);
 		
-		porMutaLabel = new JLabel("% Mutación");
+		porMutaLabel = new JLabel("% Mutación (>= 0 y <= 100)");
 		
 		mutaText = new JTextField("5.0");
 		
@@ -360,7 +361,7 @@ public class LeftPanel extends JPanel implements Observer{
 					_ctrl.updateProbMuta(Double.parseDouble(mutaText.getText()) / 100);
 				}
 				catch(Exception e) {
-					
+					_ctrl.updateProbMuta(-1);
 				}
 			}
 		};
@@ -382,7 +383,7 @@ public class LeftPanel extends JPanel implements Observer{
 		Border _defaultBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
 		elitePanel.setBorder(BorderFactory.createTitledBorder(_defaultBorder, "Élite", TitledBorder.LEFT,TitledBorder.TOP));
 		
-		porEliteLabel = new JLabel("% Élite");
+		porEliteLabel = new JLabel("% Élite (>= 0 y <= 100)");
 		
 		eliteText = new JTextField("0.0");
 		
@@ -411,7 +412,7 @@ public class LeftPanel extends JPanel implements Observer{
 					_ctrl.updatePorElite(Double.parseDouble(eliteText.getText()) / 100);
 				}
 				catch(Exception e) {
-					
+					_ctrl.updatePorElite(-1);
 				}
 			}
 		};
@@ -441,7 +442,16 @@ public class LeftPanel extends JPanel implements Observer{
         mutaBox.setSelectedIndex(0);
         selecBox.setSelectedIndex(0);
     }
-	
 
+	@Override
+	public void onError(String exception) {
+		JOptionPane.showMessageDialog(null, exception, "Parámetro inválido", JOptionPane.DEFAULT_OPTION);
+	}
 
+	public void refreshCruceBox() {
+		String[] str = _ctrl.getMapaCruceKeys();
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(str);
+		cruceBox.setModel(model);
+		_ctrl.updateCruce(str[0]);
+	}
 }

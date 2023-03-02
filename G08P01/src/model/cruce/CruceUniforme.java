@@ -6,10 +6,10 @@ import java.util.Random;
 import model.individuos.Individuo;
 import utils.Pair;
 
-@SuppressWarnings("unchecked")
-public class CruceMonopunto implements Cruce {
+public class CruceUniforme implements Cruce{
 
-	public ArrayList<ArrayList> cruzar(ArrayList<Individuo> poblacion, ArrayList<Integer> seleccionados, double probCruce) {
+	@Override
+public ArrayList<ArrayList> cruzar(ArrayList<Individuo> poblacion, ArrayList<Integer> seleccionados, double probCruce) {
 		
 		ArrayList nuevaGen = new ArrayList<>();
 		
@@ -47,31 +47,27 @@ public class CruceMonopunto implements Cruce {
 
 	private Pair<ArrayList, ArrayList> cruceAux(Individuo padre1, Individuo padre2) {
 		
+		
 		ArrayList cPadre1 = padre1.getCromosoma();
 		ArrayList cPadre2 = padre2.getCromosoma();
-
+		
+		Random r = new Random();
 		
 		ArrayList crom1 = new ArrayList<>(cPadre1.size()); 
 		ArrayList crom2 = new ArrayList<>(cPadre2.size());
 		
-		Random r = new Random();
-		
-		int punto = r.nextInt(0,cPadre1.size());
-	
-		for(int i = 0; i < punto;i++) {
-			crom1.add(cPadre1.get(i));
-			crom2.add(cPadre2.get(i));
+		for(int i = 0; i < cPadre1.size();i++) {
+			if(r.nextDouble(0,1) < 0.5) {
+				crom1.add(cPadre2.get(i));
+				crom2.add(cPadre1.get(i));
+			}
+			else {
+				crom1.add(cPadre1.get(i));
+				crom2.add(cPadre2.get(i));
+			}
 		}
 		
-		for(int i = punto; i < cPadre1.size();i++) {
-			crom1.add(cPadre2.get(i));
-			crom2.add(cPadre1.get(i));
-		}
-			
 		return new Pair<ArrayList,ArrayList>(crom1,crom2);
 	}
-}
 
-	
-	
-	
+}

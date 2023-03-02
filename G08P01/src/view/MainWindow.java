@@ -27,9 +27,10 @@ public class MainWindow extends JFrame {
 	private void initGUI() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		this.setContentPane(mainPanel);
-		mainPanel.add(new TopPanel(_ctrl), BorderLayout.PAGE_START);
+		LeftPanel lp = new LeftPanel(_ctrl);
+		mainPanel.add(new TopPanel(_ctrl,lp), BorderLayout.PAGE_START);
 		mainPanel.add(new BottomPanel(_ctrl), BorderLayout.PAGE_END);
-		mainPanel.add(new LeftPanel(_ctrl), BorderLayout.WEST);
+		mainPanel.add(lp, BorderLayout.WEST);
 		mainPanel.add(new Graph(_ctrl), BorderLayout.CENTER);
 		
 		setBackground(Color.WHITE);

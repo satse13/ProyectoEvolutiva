@@ -21,7 +21,6 @@ public class Individuo1 extends IndBool{
 		this.tamGenes[1] = this.tamGen(valorError, min[1], max[1]);
 		this.cromosoma = new ArrayList<Boolean>(cromosoma);
 		this.fitness = this.getValor();
-		
 	}
 
 	protected int tamGen(double valorError, double min, double max) {

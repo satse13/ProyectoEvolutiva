@@ -40,7 +40,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	
 	private ArrayList<Observer> observers;
 		
-	public AlgoritmoGenetico() { // CUIDADO CON DIMENSION
+	public AlgoritmoGenetico() { 
 		this.tamPoblacion = 100;
 		this.maxGeneraciones = 100;
 		this.probCruce = 0.6;
@@ -57,6 +57,11 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	public void run() {
 		
 		// Hcaer todo eso en un metodo priv
+				
+		if(!parseParam())
+			return;
+		
+		System.out.println(cruce);
 		
 		poblacion = new ArrayList<Individuo>();
 		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
@@ -96,6 +101,30 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 
 	}
 	
+	private boolean parseParam(){
+		try {
+			if(this.tamPoblacion < 2)
+				throw new Exception("El tamaño de la poblacion debe ser superior a 1");
+			else if(this.maxGeneraciones < 0)
+				throw new Exception("Debe haber un minimo de 0 generaciones");
+			else if(this.valorError <= 0 || this.valorError > 1)
+				throw new Exception("El valor de error debe estar entre 0 y 1");
+			else if(this.probCruce < 0 || this.probCruce > 1)
+				throw new Exception("La probabilidad de cruce debe estar entre 0 y 100");
+			else if(this.probMutacion < 0 || this.probMutacion > 1)
+				throw new Exception("La probabilidad de mutacion debe estar entre 0 y 100");
+			else if(this.porElitismo < 0 || this.porElitismo > 1)
+				throw new Exception("El porcentaje de elitismo debe estar entre 0 y 100");
+			return true;
+		}
+		catch(Exception e) {
+			
+			for(Observer o: observers)
+				o.onError(e.getMessage());
+			return false;
+		}
+	}
+
 	private void incluirElite() {
 		Collections.sort(poblacion);
 		
@@ -115,16 +144,6 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 			contador--;
 			numElite--;
 		}
-			
-			
-	/*
-		int j = poblacion.size() - 1;
-		for(int i = 0; i < elite.size();i++){
-			elite.set(i, poblacion.get(j));
-			j--;
-		}
-		
-		*/
 	}
 
 	private void pobEvaluation(int i) {
@@ -155,7 +174,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	
 	private void initPoblacion() {
 		for(int i = 0; i < this.tamPoblacion;i++) {
-			poblacion.add(factory.generateInd(valorError)); 
+			poblacion.add(factory.generateInd(valorError, dimension)); 
 		}
 	}
 	
@@ -241,6 +260,14 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		
 	}
 	
+	public void setDimension(int value) {
+		this.dimension = value;
+	}
+	
+	public void setCruce(Cruce cruce) {
+		this.cruce = cruce;
+	}
+	
 	public void reset() {
         this.tamPoblacion = 100;
         this.maxGeneraciones = 100;
@@ -257,5 +284,9 @@ public class AlgoritmoGenetico implements Observable<Observer>{
             o.onReset();
         }
     }
+
+	
+
+	
 	
 }

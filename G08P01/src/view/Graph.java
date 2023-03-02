@@ -62,6 +62,12 @@ public class Graph extends JPanel implements Observer {
 	public void onReset() {
 		plot.removeAllPlots();		
 	}
+
+	@Override
+	public void onError(String exception) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 

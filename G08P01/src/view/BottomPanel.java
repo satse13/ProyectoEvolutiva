@@ -99,4 +99,10 @@ public class BottomPanel extends JToolBar implements Observer {
 		solucionText.setText("");	
 	}
 
+	@Override
+	public void onError(String exception) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
