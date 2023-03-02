@@ -10,10 +10,11 @@ public abstract class Individuo<T> implements Comparable<Individuo>{
 	protected double[] max;
 	protected double[] min;
 	protected Random rand;
+	protected double fitness;
 
 	
 	public double getFitness() {
-		return this.getValor();
+		return this.fitness;
 	}
 	
 	public String getDeco() {
@@ -35,7 +36,10 @@ public abstract class Individuo<T> implements Comparable<Individuo>{
 	public abstract Double adaptar(Individuo individuo);
 	
 	public void setCromosoma(ArrayList<T> cromosoma) {
-		this.cromosoma = cromosoma;
+		for(int i = 0; i < cromosoma.size();i++) {
+			this.cromosoma.set(i, cromosoma.get(i));
+		}
+		this.fitness = this.getValor();
 	}
 	
 	

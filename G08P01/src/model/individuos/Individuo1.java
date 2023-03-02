@@ -12,13 +12,16 @@ public class Individuo1 extends IndBool{
 		int tamTotal = tamGenes[0] + tamGenes[1];
 		this.cromosoma = new ArrayList<Boolean>(tamTotal);
 		for(int i = 0; i < tamTotal; i++) { this.cromosoma.add(this.rand.nextBoolean()); }
+		this.fitness = this.getValor();
 	}
 	
 	public Individuo1(ArrayList<Boolean> cromosoma, double valorError) {
 		initIndividuo();
 		this.tamGenes[0] = this.tamGen(valorError, min[0], max[0]);
 		this.tamGenes[1] = this.tamGen(valorError, min[1], max[1]);
-		this.cromosoma = cromosoma;	
+		this.cromosoma = new ArrayList<Boolean>(cromosoma);
+		this.fitness = this.getValor();
+		
 	}
 
 	protected int tamGen(double valorError, double min, double max) {

@@ -30,6 +30,7 @@ public abstract class IndBool extends Individuo<Boolean>{
 				cromosoma.set(i, !cromosoma.get(i));
 			}
 		}
+		this.fitness = this.getValor();
 	}
 	
 	public ArrayList<Boolean> getCromosoma() {

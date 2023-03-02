@@ -53,12 +53,14 @@ public class Graph extends JPanel implements Observer {
 			generaciones[i] = i;
 		}
 		plot.addLinePlot("Mejor Absoluto", generaciones, algoritmo.getMejorAbs());
+		plot.addLinePlot("Mejor de la generación", generaciones, algoritmo.getMejorGeneracion());
+		plot.addLinePlot("Media de la generación", generaciones, algoritmo.getMedias());
 	}
+	
 
 	@Override
 	public void onReset() {
-		// TODO Auto-generated method stub
-		
+		plot.removeAllPlots();		
 	}
 }
 

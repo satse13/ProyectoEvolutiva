@@ -12,7 +12,8 @@ import model.observers.Observable;
 import model.observers.Observer;
 import model.seleccion.Seleccion;
 import model.seleccion.SeleccionRuleta;
- 
+@SuppressWarnings("rawtypes")
+
 public class AlgoritmoGenetico implements Observable<Observer>{
 
 	private int tamPoblacion;
@@ -97,20 +98,33 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	
 	private void incluirElite() {
 		Collections.sort(poblacion);
+		
 		for (int i = 0; i < elite.size(); ++i) {
 			poblacion.set(i, elite.get(i));
 		}
+		elite.clear();
 	}
 
 	private void seleccionaElite() {
 		
 		Collections.sort(poblacion);
-				
+		double numElite = (porElitismo * poblacion.size());
+		int contador = poblacion.size()-1;
+		while(numElite > 0) {
+			elite.add(poblacion.get(contador));
+			contador--;
+			numElite--;
+		}
+			
+			
+	/*
 		int j = poblacion.size() - 1;
 		for(int i = 0; i < elite.size();i++){
 			elite.set(i, poblacion.get(j));
 			j--;
 		}
+		
+		*/
 	}
 
 	private void pobEvaluation(int i) {
@@ -119,14 +133,11 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		mejorGeneracion = poblacion.get(poblacion.size()-1);
 		
 		if (i == 0)
-			elMejorAbs = factory.generateInd(poblacion.get(poblacion.size()-1).getCromosoma(), valorError);
-		else if (elMejorAbs.getFitness()<mejorAbs[i - 1]) {
-			int x = 0;
-		}
-		if (elMejorAbs.mejorFitness(mejorGeneracion)) {
+			elMejorAbs = factory.generateInd(mejorGeneracion.getCromosoma(), valorError);
+		
+		else if (elMejorAbs.mejorFitness(mejorGeneracion)) {
 			elMejorAbs.setCromosoma(mejorGeneracion.getCromosoma());
 		}
-		// (elMejorAbs.getFitness() > mejorGeneracion.getFitness()) && elMejorAbs.mejorFitness(mejorGeneracion)
 		mejorGen[i] = mejorGeneracion.getFitness();
 		mejorAbs[i] = elMejorAbs.getFitness();
 		
@@ -169,7 +180,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	}
 	
 	public Individuo getMejor() {
-		return mejorGeneracion;
+		return elMejorAbs;
 	}
 	
 	public int getMaxGeneraciones() {
