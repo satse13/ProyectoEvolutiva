@@ -17,7 +17,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 
 	private int tamPoblacion;
 	private ArrayList<Individuo> poblacion;
-	private ArrayList<Double> fitness;
+	
 	private IndividuoFactory<? extends Individuo> factory;
 	private Seleccion seleccion;
 	private Cruce cruce;
@@ -25,11 +25,17 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	private double probCruce;
 	private double probMutacion;
 	private int tamTorneo;
-	private Individuo elMejor; 
+	private Individuo mejorGeneracion; 
 	private int dimension;
 	private double valorError;
 	private double porElitismo;
 	private ArrayList<Individuo> elite;
+	
+	private double[] medias;
+	private double[] mejorGen;
+	private double[] mejorAbs;
+	
+	private Individuo elMejorAbs ;
 	
 	private ArrayList<Observer> observers;
 		
@@ -49,15 +55,18 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	
 	public void run() {
 		
-
-		fitness = new ArrayList<Double>();
+		// Hcaer todo eso en un metodo priv
+		
 		poblacion = new ArrayList<Individuo>();
 		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
+		medias = new double[maxGeneraciones+1];
+		mejorGen = new double[maxGeneraciones+1];
+		mejorAbs = new double[maxGeneraciones+1];
 		
 		initPoblacion();
 		
-		pobEvaluation();
-	
+		pobEvaluation(0);
+		
 		ArrayList<Integer> seleccionados = new ArrayList<Integer>();
 		ArrayList cromosomas = new ArrayList<>();
 		
@@ -77,7 +86,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 			if(porElitismo > 0)
 				incluirElite();
 			
-			pobEvaluation();
+			pobEvaluation(i+1);
 		}
 		
 		for (Observer o: observers) {
@@ -104,9 +113,33 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		}
 	}
 
-	private void pobEvaluation() {
+	private void pobEvaluation(int i) {
 		Collections.sort(poblacion);
-		elMejor = poblacion.get(poblacion.size()-1);
+		
+		mejorGeneracion = poblacion.get(poblacion.size()-1);
+		
+		if (i == 0)
+			elMejorAbs = factory.generateInd(poblacion.get(poblacion.size()-1).getCromosoma(), valorError);
+		else if (elMejorAbs.getFitness()<mejorAbs[i - 1]) {
+			int x = 0;
+		}
+		if (elMejorAbs.mejorFitness(mejorGeneracion)) {
+			elMejorAbs.setCromosoma(mejorGeneracion.getCromosoma());
+		}
+		// (elMejorAbs.getFitness() > mejorGeneracion.getFitness()) && elMejorAbs.mejorFitness(mejorGeneracion)
+		mejorGen[i] = mejorGeneracion.getFitness();
+		mejorAbs[i] = elMejorAbs.getFitness();
+		
+		double media = 0.0;
+		for (int j = 0; j < poblacion.size(); j++) {
+			media += poblacion.get(j).getFitness();
+			
+		}
+		media = media / poblacion.size();
+		
+		medias[i] = media;
+		
+		
 	}	
 	
 	private void initPoblacion() {
@@ -136,7 +169,23 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	}
 	
 	public Individuo getMejor() {
-		return elMejor;
+		return mejorGeneracion;
+	}
+	
+	public int getMaxGeneraciones() {
+		return maxGeneraciones;
+	}
+	
+	public double[] getMejorGeneracion() {
+		return mejorGen;
+	}
+	
+	public double[] getMedias() {
+		return medias;
+	}
+	
+	public double[] getMejorAbs() {
+		return mejorAbs;
 	}
 
 	public void setPobSize(int parseInt) {

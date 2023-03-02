@@ -12,7 +12,6 @@ public class Individuo1 extends IndBool{
 		int tamTotal = tamGenes[0] + tamGenes[1];
 		this.cromosoma = new ArrayList<Boolean>(tamTotal);
 		for(int i = 0; i < tamTotal; i++) { this.cromosoma.add(this.rand.nextBoolean()); }
-		this.fitness = this.getValor();
 	}
 	
 	public Individuo1(ArrayList<Boolean> cromosoma, double valorError) {
@@ -20,7 +19,6 @@ public class Individuo1 extends IndBool{
 		this.tamGenes[0] = this.tamGen(valorError, min[0], max[0]);
 		this.tamGenes[1] = this.tamGen(valorError, min[1], max[1]);
 		this.cromosoma = cromosoma;	
-		this.fitness = this.getValor();
 	}
 
 	protected int tamGen(double valorError, double min, double max) {
@@ -45,7 +43,7 @@ public class Individuo1 extends IndBool{
 
 	@Override
 	public boolean mejorFitness(Individuo individuo) {
-		if(individuo.getFitness() > this.getValor())
+		if(individuo.getFitness() > this.getFitness())
 			return true;
 		return false;
 	}
@@ -58,9 +56,9 @@ public class Individuo1 extends IndBool{
 	@Override
 	public int compareTo(Individuo o) {
 
-		 if(this.fitness > o.fitness)
+		 if(this.getFitness() > o.getFitness())
 			 return 1;
-		 else if(this.fitness == o.fitness)
+		 else if(this.getFitness() == o.getFitness())
 			 return 0;
 		 else
 			 return -1;
@@ -76,7 +74,7 @@ public class Individuo1 extends IndBool{
 			str+= "Variable X" + (i+1) + " = " + getFenotipo(i) + ", ";
 		}
 		
-		str += "Valor de la funcion = " + this.fitness;  
+		str += "Valor de la funcion = " + this.getFitness();  
 		
 		return str;
 	}
