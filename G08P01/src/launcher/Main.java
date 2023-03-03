@@ -19,6 +19,7 @@ import model.seleccion.Seleccion;
 import model.seleccion.SeleccionRuleta;
 import model.seleccion.TorneoDeterministico;
 import model.seleccion.TorneoProbabilistico;
+import model.seleccion.Truncamiento;
 import utils.TipoDato;
 import utils.Trio;
 import view.MainWindow;
@@ -67,6 +68,7 @@ public class Main {
 				put("Torneo Determinístico", new TorneoDeterministico());
 				put("Torneo Probabilísitco", new TorneoProbabilistico());
 				put("Estocástico Universal", new EstocasticoUniversal());
+				put("Truncamiento", new Truncamiento());
 		}};
 		
 		
@@ -75,6 +77,7 @@ public class Main {
 				add("Torneo Determinístico");
 				add("Torneo Probabilísitco");
 				add("Estocástico Universal");
+				add("Truncamiento");
 		}};
 		
 		mapaCruceDouble = new HashMap<String, Cruce>(){{
