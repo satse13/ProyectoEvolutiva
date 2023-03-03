@@ -26,7 +26,6 @@ public class MainWindow extends JFrame {
 
 	private void initGUI() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		this.setContentPane(mainPanel);
 		LeftPanel lp = new LeftPanel(_ctrl);
 		mainPanel.add(new TopPanel(_ctrl,lp), BorderLayout.PAGE_START);
 		mainPanel.add(new BottomPanel(_ctrl), BorderLayout.PAGE_END);
@@ -34,6 +33,7 @@ public class MainWindow extends JFrame {
 		mainPanel.add(new Graph(_ctrl), BorderLayout.CENTER);
 		
 		setBackground(Color.WHITE);
+		this.setContentPane(mainPanel);
 		this.pack();
 		Dimension s = Toolkit.getDefaultToolkit().getScreenSize();
 		setSize(WIDTH, HEIGHT);

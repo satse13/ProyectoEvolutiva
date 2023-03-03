@@ -81,7 +81,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 			if(porElitismo > 0)
 				seleccionaElite();
 			
-			seleccionados = seleccion.seleccionar(poblacion); 
+			seleccionados = seleccion.seleccionar(poblacion, poblacion.size()); 
 			cromosomas = cruce.cruzar(poblacion,seleccionados, probCruce);
 			poblacion = nuevaGen(cromosomas);
 		
@@ -151,7 +151,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		mejorGeneracion = poblacion.get(poblacion.size()-1);
 		
 		if (i == 0)
-			elMejorAbs = factory.generateInd(mejorGeneracion.getCromosoma(), valorError);
+			elMejorAbs = factory.generateInd(mejorGeneracion.getCromosoma(), valorError, dimension);
 		
 		else if (elMejorAbs.mejorFitness(mejorGeneracion)) {
 			elMejorAbs.setCromosoma(mejorGeneracion.getCromosoma());
@@ -181,7 +181,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		ArrayList<Individuo> nuevaGen = new ArrayList<Individuo>();
 		
 		for(int i = 0; i < cromosomas.size();i++) {
-			nuevaGen.add(factory.generateInd((ArrayList<T>) cromosomas.get(i),valorError));
+			nuevaGen.add(factory.generateInd((ArrayList<T>) cromosomas.get(i),valorError,dimension));
 		}
 		
 		return nuevaGen;

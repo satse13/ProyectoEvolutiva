@@ -6,8 +6,11 @@ import java.util.Random;
 public abstract class IndBool extends Individuo<Boolean>{
 
 	
-	protected abstract int tamGen(double valorError, double min, double max);
 	protected abstract double getValor();
+	
+	protected int tamGen(double valorError, double min, double max) {
+		return (int) (Math.log10(((max - min) / valorError) + 1) / Math.log10(2));
+	}
 
 	public double getFenotipo(int gen) {
         int tam = this.tamGenes[gen];

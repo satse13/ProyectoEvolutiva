@@ -8,7 +8,7 @@ import model.individuos.Individuo;
 public class EstocasticoUniversal implements Seleccion {
 
 	@Override
-	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion) {
+	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion, int numSeleccionar) {
 		
 		Individuo peorInd = poblacion.get(0);
 		
@@ -40,10 +40,10 @@ public class EstocasticoUniversal implements Seleccion {
 		
 		double a = new Random().nextDouble(0,espacio);
 		
-		ArrayList<Integer> seleccionados = new ArrayList<Integer>(poblacion.size());
+		ArrayList<Integer> seleccionados = new ArrayList<Integer>(numSeleccionar);
 		double indice = 0;
 		int contador = 0;
-		for(int i = 0; i < poblacion.size();i++) {
+		for(int i = 0; i < numSeleccionar;i++) {
 		
 			indice = (a + i) / poblacion.size(); // Hemos quitado el -1 de la formula pq se cancela con el +1 de la i
 			while(contador < poblacion.size()) {

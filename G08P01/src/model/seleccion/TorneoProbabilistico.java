@@ -11,12 +11,12 @@ public class TorneoProbabilistico implements Seleccion{
 	private final double P = 0.5;
 	
 	@Override
-	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion) {
+	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion, int numSeleccionar) {
 		
 		ArrayList<Integer> seleccionados = new ArrayList<Integer>();
 		Random r = new Random();
 		
-		 for(int i = 0; i < poblacion.size();i++) {
+		 for(int i = 0; i < numSeleccionar;i++) {
 			  ArrayList<Integer> competidores = new ArrayList<Integer>();
 			  for (int j = 0; j < SIZE_GRUPO; j++) {
 		            competidores.add(r.nextInt(0,poblacion.size()));

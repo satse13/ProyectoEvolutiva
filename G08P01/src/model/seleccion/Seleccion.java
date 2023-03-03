@@ -6,5 +6,5 @@ import model.individuos.Individuo;
 import utils.Pair;
 
 public interface Seleccion {
-    public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion);
+    public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion, int numSeleccionar);
 }

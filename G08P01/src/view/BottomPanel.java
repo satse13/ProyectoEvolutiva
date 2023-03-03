@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
@@ -56,16 +58,20 @@ public class BottomPanel extends JToolBar implements Observer {
 	}
 	
 	private void textConfiguration() {
-		textPanel = new JPanel(new FlowLayout());
+		textPanel = new JPanel(new BorderLayout());
 		textPanel.setBackground(Color.WHITE);
+		
+		JScrollPane scroll = new JScrollPane();
 		
 		solucionLabel = new JLabel("Solucion:  ");
 		solucionText = new JTextArea("Aqui ira la solucion");
-		solucionText.setPreferredSize(new Dimension(600, 15));
+		//solucionText.setPreferredSize(new Dimension(600, 15));
 		solucionText.setEditable(false);
 		
-		textPanel.add(solucionLabel);
-		textPanel.add(solucionText);
+		scroll.setViewportView(solucionText);
+		textPanel.add(solucionLabel,BorderLayout.WEST);
+		//textPanel.add(solucionText);
+		textPanel.add(scroll);
 	}
 	
 	private void buttonsConfiguration() {

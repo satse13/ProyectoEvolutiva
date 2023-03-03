@@ -11,7 +11,7 @@ public class Individuo1Factory implements IndividuoFactory<Individuo1>{
 	}
 
 	@Override
-	public <T> Individuo1 generateInd(ArrayList<T> cromosoma, double valorError) {
+	public <T> Individuo1 generateInd(ArrayList<T> cromosoma, double valorError, int dimension) {
 		return new Individuo1((ArrayList<Boolean>) cromosoma,valorError);
 	}
 	

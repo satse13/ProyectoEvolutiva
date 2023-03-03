@@ -9,9 +9,9 @@ import utils.Pair;
 public class SeleccionRuleta implements Seleccion {
 
 	@Override
-	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion) {
+	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion, int numSeleccionar) {
 		
-		Individuo peorInd = poblacion.get(0);
+		Individuo peorInd = poblacion.get(0); // Estan ordenados de antse
 		
 		
 		for (int i = 1; i < poblacion.size(); ++i) {			
@@ -38,10 +38,10 @@ public class SeleccionRuleta implements Seleccion {
 		}
 		
 		Random random = new Random();
-		ArrayList<Integer> seleccionados = new ArrayList<Integer>(poblacion.size());
+		ArrayList<Integer> seleccionados = new ArrayList<Integer>(numSeleccionar);
 		double r;
 		int indi;
-		for (int i = 0; i < poblacion.size(); ++i) {
+		for (int i = 0; i < numSeleccionar; ++i) {
 			r = random.nextDouble();
 			indi = buscarIndividuo(probabilidades, r, 0, probabilidades.size());
 			seleccionados.add(indi);

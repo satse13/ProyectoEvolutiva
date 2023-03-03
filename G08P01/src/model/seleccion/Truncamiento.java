@@ -10,16 +10,16 @@ public class Truncamiento implements Seleccion{
 	private final double P = 0.4;  
 			
 	@Override
-	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion) {
+	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion,int numSeleccionar) {
 		
 		
- 		double indiVueltas = poblacion.size() * P;
+ 		double indiVueltas = numSeleccionar * P;
 		
-		ArrayList<Integer> seleccionados = new ArrayList<Integer>(poblacion.size());
+		ArrayList<Integer> seleccionados = new ArrayList<Integer>(numSeleccionar);
 		
-		while(seleccionados.size() < poblacion.size()){
+		while(seleccionados.size() < numSeleccionar){
 			int i = 0; 
-			while(i < indiVueltas && seleccionados.size() < poblacion.size()) {
+			while(i < indiVueltas && seleccionados.size() < numSeleccionar) {
 				seleccionados.add(poblacion.size()-1-i);
 				i++;
 			}
