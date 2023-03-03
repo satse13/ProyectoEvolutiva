@@ -21,7 +21,6 @@ public abstract class Individuo<T> implements Comparable<Individuo>{
 		return decodificar();
 	}
 	
-	protected abstract int tamGen(double valorError, double min, double max);
 	protected abstract double getValor();
 	protected abstract String decodificar();
 	public abstract double getFenotipo(int gen);

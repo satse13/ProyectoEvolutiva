@@ -1,6 +1,7 @@
 package model.seleccion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import model.individuos.Individuo;
 
@@ -24,7 +25,8 @@ public class Truncamiento implements Seleccion{
 				i++;
 			}
 		}
-		
+		Collections.shuffle(seleccionados);
+
 		return seleccionados;
 	}
 

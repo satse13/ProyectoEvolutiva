@@ -12,9 +12,12 @@ import factories.Individuo1Factory;
 import factories.Individuo2Factory;
 import factories.Individuo3Factory;
 import factories.Individuo4AFactory;
+import factories.Individuo4BFactory;
 import factories.IndividuoFactory;
 import model.AlgoritmoGenetico;
 import model.cruce.Cruce;
+import model.cruce.CruceAritmetico;
+import model.cruce.CruceBLXA;
 import model.cruce.CruceMonopunto;
 import model.cruce.CruceUniforme;
 import model.seleccion.EstocasticoUniversal;
@@ -65,7 +68,8 @@ public class Main {
 				put("Función 1: Calibración y prueba",new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo1Factory(),false,TipoDato.BOOLEAN));
 				put("Función 2: GrieWank",new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo2Factory(),false,TipoDato.BOOLEAN)); 
 				put("Función 3: Styblinski-tang", new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo3Factory(),false,TipoDato.BOOLEAN));
-				put("Función 4A: Michalewicz", new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo4AFactory(),true,TipoDato.BOOLEAN)); 
+				put("Función 4A: Michalewicz", new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo4AFactory(),true,TipoDato.BOOLEAN));
+				put("Función 4B: Michalewicz", new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo4BFactory(),true,TipoDato.DOUBLE));
 		}};
 			
 		mapaSeleccion = new HashMap<String, Seleccion>(){{
@@ -90,11 +94,16 @@ public class Main {
 		mapaCruceDouble = new HashMap<String, Cruce>(){{
 				put("Cruce Monopunto", new CruceMonopunto());
 				put("Cruce Uniforme" , new CruceUniforme());
+				put("Cruce Aritmético", new CruceAritmetico());
+				put("BLX-Alpha", new CruceBLXA());
+
 		}};
 		
 		listaCruceDouble = new ArrayList<String>() {{
 				add("Cruce Monopunto");
 				add("Cruce Uniforme");
+				add("Cruce Aritmético");
+				add("BLX-Alpha");
 		}};
 		
 		mapaCruceBool = new HashMap<String, Cruce>(){{

@@ -1,6 +1,7 @@
 package model.seleccion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import model.individuos.Individuo;
@@ -15,7 +16,7 @@ public class SeleccionRuleta implements Seleccion {
 		
 		
 		for (int i = 1; i < poblacion.size(); ++i) {			
-			if(peorInd.mejorFitness(poblacion.get(i))) {
+			if(!peorInd.mejorFitness(poblacion.get(i))) {
 				peorInd = poblacion.get(i);
 			}
 		}
@@ -46,6 +47,8 @@ public class SeleccionRuleta implements Seleccion {
 			indi = buscarIndividuo(probabilidades, r, 0, probabilidades.size());
 			seleccionados.add(indi);
 		}
+		Collections.shuffle(seleccionados);
+
 		return seleccionados;
 	}
 

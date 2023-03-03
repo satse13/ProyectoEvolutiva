@@ -1,6 +1,7 @@
 package model.seleccion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import model.individuos.Individuo;
@@ -13,7 +14,7 @@ public class EstocasticoUniversal implements Seleccion {
 		Individuo peorInd = poblacion.get(0);
 		
 		for (int i = 1; i < poblacion.size(); ++i) {			
-			if(peorInd.mejorFitness(poblacion.get(i))) {
+			if(!peorInd.mejorFitness(poblacion.get(i))) {
 				peorInd = poblacion.get(i);
 			}
 		}
@@ -54,6 +55,8 @@ public class EstocasticoUniversal implements Seleccion {
 				contador++;
 			}
 		}
+		
+		Collections.shuffle(seleccionados);
 		
 		return seleccionados;
 	}

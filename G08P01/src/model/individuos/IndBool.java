@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class IndBool extends Individuo<Boolean>{
-
-	
-	protected abstract double getValor();
 	
 	protected int tamGen(double valorError, double min, double max) {
 		return (int) (Math.log10(((max - min) / valorError) + 1) / Math.log10(2));

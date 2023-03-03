@@ -1,6 +1,7 @@
 package model.seleccion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import model.individuos.Individuo;
 
@@ -13,7 +14,7 @@ public class Restos implements Seleccion{
 		
 		
 		for (int i = 1; i < poblacion.size(); ++i) {			
-			if(peorInd.mejorFitness(poblacion.get(i))) {
+			if(!peorInd.mejorFitness(poblacion.get(i))) {
 				peorInd = poblacion.get(i);
 			}
 		}
@@ -54,7 +55,8 @@ public class Restos implements Seleccion{
 			}
 			
 		}
-		
+		Collections.shuffle(seleccionados);
+
 		return seleccionados;
 	}
 

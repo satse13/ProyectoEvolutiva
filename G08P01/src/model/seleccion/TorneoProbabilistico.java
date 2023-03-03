@@ -1,6 +1,7 @@
 package model.seleccion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import model.individuos.Individuo;
@@ -45,6 +46,8 @@ public class TorneoProbabilistico implements Seleccion{
 			  
 			  seleccionados.add(ganador);
 		 }
+			Collections.shuffle(seleccionados);
+
 		return seleccionados;
 	}
 

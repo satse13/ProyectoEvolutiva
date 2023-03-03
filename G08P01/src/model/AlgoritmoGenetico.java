@@ -75,13 +75,12 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		ArrayList<Integer> seleccionados = new ArrayList<Integer>();
 		ArrayList cromosomas = new ArrayList<>();
 		
-		
 		for (int i = 0; i < maxGeneraciones; ++i) {
 			
 			if(porElitismo > 0)
 				seleccionaElite();
 			
-			seleccionados = seleccion.seleccionar(poblacion, poblacion.size()); 
+			seleccionados = seleccion.seleccionar(poblacion, poblacion.size());
 			cromosomas = cruce.cruzar(poblacion,seleccionados, probCruce);
 			poblacion = nuevaGen(cromosomas);
 		
