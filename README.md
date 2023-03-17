@@ -1,5 +1,10 @@
 # ProyectoEvolutiva
 
+Nuevo tipo de individuo:
+
+  - Como hay atributos de individuo que no se usan en el individuo tsp, estaria bien hacer una clase IndividuoFuncion de la que luego hereden individuoBool y double
+    para que, de esta manera el individuo tsp no tenga cosas que no usa.
+
 Individuo TSP: 
 
   - Ahora mismo tenemos hecho que el Controller tiene una instancia de todas las listas de cruces o selecciones en función de si el tipo de la funcion es Bool o Double
