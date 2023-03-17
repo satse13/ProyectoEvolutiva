@@ -46,7 +46,7 @@ public class EstocasticoUniversal implements Seleccion {
 		int contador = 0;
 		for(int i = 0; i < numSeleccionar;i++) {
 		
-			indice = (a + i) / poblacion.size(); // Hemos quitado el -1 de la formula pq se cancela con el +1 de la i
+			indice = (a + i) / poblacion.size(); 
 			while(contador < poblacion.size()) {
 				if(probabilidades[contador] > indice) {
 					seleccionados.add(poblacion.size() - contador-1);

@@ -12,7 +12,7 @@ public class SeleccionRuleta implements Seleccion {
 	@Override
 	public ArrayList<Integer> seleccionar(ArrayList<Individuo> poblacion, int numSeleccionar) {
 		
-		Individuo peorInd = poblacion.get(0); // Estan ordenados de antse
+		Individuo peorInd = poblacion.get(0); 
 		
 		
 		for (int i = 1; i < poblacion.size(); ++i) {			

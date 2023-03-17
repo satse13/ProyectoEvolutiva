@@ -63,8 +63,9 @@ public class TopPanel extends JPanel implements Observer {
 			public void actionPerformed(ActionEvent e) {
 				_ctrl.updateIndividuoFactory((String) problemaBox.getSelectedItem());		
 				dimensionSpinner.setEnabled(_ctrl.getMapaFactories().get((String) problemaBox.getSelectedItem()).getSecond());
-				_ctrl.updateListaCruces((String) problemaBox.getSelectedItem());
+				lp.setIndividuo((String) problemaBox.getSelectedItem());
 				lp.refreshCruceBox();
+				lp.refreshMutacionBox();
 			}	
 		});
 		
@@ -88,8 +89,7 @@ public class TopPanel extends JPanel implements Observer {
 			
 		});
 		
-		add(variedad);
-		add(separator1);
+ 		add(separator1);
 		add(problemaLabel);
 		add(separator2);
 		add(problemaBox);

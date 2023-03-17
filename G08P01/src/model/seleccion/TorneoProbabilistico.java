@@ -27,7 +27,7 @@ public class TorneoProbabilistico implements Seleccion{
 			  
 			  double prob = r.nextDouble(0,1);
 			  
-			  if(prob > P) { // Se coge el mejor del grupo
+			  if(prob > P) {
 				  for (int j = 1; j < SIZE_GRUPO; j++) {
 			            int actual = competidores.get(j);
 			            if (poblacion.get(ganador).mejorFitness(poblacion.get(actual))) {

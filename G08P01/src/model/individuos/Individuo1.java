@@ -41,7 +41,7 @@ public class Individuo1 extends IndBool{
 	}
 
 	@Override
-	public boolean mejorFitness(Individuo individuo) {
+	public  boolean mejorFitness(Individuo individuo) {
 		if(individuo.getFitness() > this.getFitness())
 			return true;
 		return false;

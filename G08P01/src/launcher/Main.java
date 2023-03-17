@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import controller.Controller;
@@ -20,6 +21,8 @@ import model.cruce.CruceAritmetico;
 import model.cruce.CruceBLXA;
 import model.cruce.CruceMonopunto;
 import model.cruce.CruceUniforme;
+import model.mutacion.Mutacion;
+import model.mutacion.MutacionBasica;
 import model.seleccion.EstocasticoUniversal;
 import model.seleccion.Restos;
 import model.seleccion.Seleccion;
@@ -33,45 +36,40 @@ import view.MainWindow;
 
 public class Main {
 
-	private static Map<String, Trio<IndividuoFactory, Boolean, TipoDato>> mapaFactories = null;
+	private static Map<String, Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>> mapaFactories = null;
 
 	private static Map<String, Seleccion> mapaSeleccion = null;
+
+	private static Map<String, Cruce> mapaCruce = null;
+	
+	private static Map<String, Mutacion> mapaMutacion = null;
 	
 	private static ArrayList<String> listaSeleccion = null;
 	
-	private static Map<String, Cruce> mapaCruceDouble = null;
-	
 	private static ArrayList<String> listaCruceDouble = null;
-	
-	private static Map<String, Cruce> mapaCruceBool = null;
-	
+		
 	private static ArrayList<String> listaCruceBool = null;
-
+	
+	private static ArrayList<String> listaMutacionBasica = null;
+	
 
 	public static void main(String[] args) {
 		
 		initMaps();
 		AlgoritmoGenetico algoritmo = new AlgoritmoGenetico();
-		Controller ctrl = new Controller(algoritmo,mapaFactories,mapaSeleccion, mapaCruceBool,mapaCruceDouble, listaCruceBool,listaCruceDouble,listaSeleccion);
+		Controller ctrl = new Controller(algoritmo,mapaFactories,mapaSeleccion, mapaCruce,mapaMutacion);
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new MainWindow(ctrl);
+					new MainWindow(ctrl);
+				
 			}
 		});	
 	}
 	
 	private static void initMaps() {
 		
-		 mapaFactories = new TreeMap<String, Trio<IndividuoFactory, Boolean, TipoDato>>(){{
-				put("Función 1: Calibración y prueba",new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo1Factory(),false,TipoDato.BOOLEAN));
-				put("Función 2: GrieWank",new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo2Factory(),false,TipoDato.BOOLEAN)); 
-				put("Función 3: Styblinski-tang", new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo3Factory(),false,TipoDato.BOOLEAN));
-				put("Función 4A: Michalewicz", new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo4AFactory(),true,TipoDato.BOOLEAN));
-				put("Función 4B: Michalewicz", new Trio<IndividuoFactory, Boolean, TipoDato>(new Individuo4BFactory(),true,TipoDato.DOUBLE));
-		}};
-			
 		mapaSeleccion = new HashMap<String, Seleccion>(){{
 				put("Ruleta", new SeleccionRuleta());
 				put("Torneo Determinístico", new TorneoDeterministico());
@@ -81,6 +79,16 @@ public class Main {
 				put("Restos", new Restos());
 		}};
 		
+		mapaCruce = new HashMap<String, Cruce>(){{
+			put("Cruce Monopunto", new CruceMonopunto());
+			put("Cruce Uniforme" , new CruceUniforme());
+			put("Cruce Aritmético", new CruceAritmetico());
+			put("BLX-Alpha", new CruceBLXA());
+		}};
+		
+		mapaMutacion = new HashMap<String, Mutacion>(){{
+			put("Mutación Básica", new MutacionBasica());
+		}};
 		
 		listaSeleccion = new ArrayList<String>() {{
 				add("Ruleta");
@@ -91,13 +99,6 @@ public class Main {
 				add("Restos");
 		}};
 		
-		mapaCruceDouble = new HashMap<String, Cruce>(){{
-				put("Cruce Monopunto", new CruceMonopunto());
-				put("Cruce Uniforme" , new CruceUniforme());
-				put("Cruce Aritmético", new CruceAritmetico());
-				put("BLX-Alpha", new CruceBLXA());
-
-		}};
 		
 		listaCruceDouble = new ArrayList<String>() {{
 				add("Cruce Monopunto");
@@ -106,15 +107,23 @@ public class Main {
 				add("BLX-Alpha");
 		}};
 		
-		mapaCruceBool = new HashMap<String, Cruce>(){{
-				put("Cruce Monopunto", new CruceMonopunto());
-				put("Cruce Uniforme" , new CruceUniforme());
-		}};
-		
 		listaCruceBool = new ArrayList<String>() {{
 			add("Cruce Monopunto");
 			add("Cruce Uniforme");
-	}};
+		}};
+	
+		listaMutacionBasica = new ArrayList<String>(){{
+			add("Mutación Básica");
+		}};
+		
+		 mapaFactories = new TreeMap<String, Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>>(){{
+			 	put("Función 1: Calibración y prueba", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo1Factory(), false, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
+			 	put("Función 2: GrieWank", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo2Factory(), false, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
+			 	put("Función 3: Styblinski-tang", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo3Factory(), false, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
+			 	put("Función 4A: Michalewicz", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo4AFactory(), true, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
+			 	put("Función 4B: Michalewicz", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo4BFactory(), true, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceDouble,listaMutacionBasica)));
+		}};
+			
 	}
 
 }

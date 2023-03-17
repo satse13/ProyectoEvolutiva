@@ -39,7 +39,6 @@ public class Graph extends JPanel implements Observer {
 		
 		plot.setAxisLabels("  Generacion", "Valor de la función");
 
-		// define the legend position
 		plot.addLegend("SOUTH");
 		
 		add(plot, BorderLayout.CENTER);

@@ -65,12 +65,10 @@ public class BottomPanel extends JToolBar implements Observer {
 		
 		solucionLabel = new JLabel("Solucion:  ");
 		solucionText = new JTextArea("Aqui ira la solucion");
-		//solucionText.setPreferredSize(new Dimension(600, 15));
 		solucionText.setEditable(false);
 		
 		scroll.setViewportView(solucionText);
 		textPanel.add(solucionLabel,BorderLayout.WEST);
-		//textPanel.add(solucionText);
 		textPanel.add(scroll);
 	}
 	

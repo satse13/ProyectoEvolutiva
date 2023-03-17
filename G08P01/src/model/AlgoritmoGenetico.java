@@ -8,6 +8,8 @@ import factories.IndividuoFactory;
 import model.cruce.Cruce;
 import model.cruce.CruceMonopunto;
 import model.individuos.Individuo;
+import model.mutacion.Mutacion;
+import model.mutacion.MutacionBasica;
 import model.observers.Observable;
 import model.observers.Observer;
 import model.seleccion.Seleccion;
@@ -22,6 +24,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	private IndividuoFactory<? extends Individuo> factory;
 	private Seleccion seleccion;
 	private Cruce cruce;
+	private Mutacion mutacion;
 	private int maxGeneraciones;
 	private double probCruce;
 	private double probMutacion;
@@ -49,18 +52,18 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.factory = new Individuo1Factory();
 		this.seleccion = new SeleccionRuleta();
 		this.cruce = new CruceMonopunto();
+		this.mutacion = new MutacionBasica();
 		this.valorError = 0.001;
 		this.porElitismo = 0.0;
 		observers = new ArrayList<>();
 	}
 	
 	public void run() {
-		
-		// Hcaer todo eso en un metodo priv
 				
 		if(!parseParam())
 			return;
 		
+		System.out.println(cruce);
 		
 		poblacion = new ArrayList<Individuo>();
 		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
@@ -81,12 +84,13 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 				seleccionaElite();
 			
 			seleccionados = seleccion.seleccionar(poblacion, poblacion.size());
+			
 			cromosomas = cruce.cruzar(poblacion,seleccionados, probCruce);
+			
 			poblacion = nuevaGen(cromosomas);
 		
-			for(int j = 0; j < poblacion.size();j++) {
-				poblacion.get(j).mutar(probMutacion);
-			}
+			mutacion.mutar(poblacion, probMutacion);
+			
 			if(porElitismo > 0)
 				incluirElite();
 			
@@ -266,6 +270,10 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.cruce = cruce;
 	}
 	
+	public void setMutacion(Mutacion mutacion) {
+		this.mutacion = mutacion;
+	}
+	
 	public void reset() {
         this.tamPoblacion = 100;
         this.maxGeneraciones = 100;
@@ -275,6 +283,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
         this.factory = new Individuo1Factory();
         this.seleccion = new SeleccionRuleta();
         this.cruce = new CruceMonopunto();
+        this.mutacion = new MutacionBasica();
         this.valorError = 0.001;
         this.porElitismo = 0.0;
 
@@ -282,6 +291,8 @@ public class AlgoritmoGenetico implements Observable<Observer>{
             o.onReset();
         }
     }
+
+	
 
 	
 

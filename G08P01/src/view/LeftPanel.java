@@ -29,6 +29,8 @@ public class LeftPanel extends JPanel implements Observer{
 	
 	Controller _ctrl;
 	
+	String individuo;
+	
 	TopPanel tp;
 	
 	JPanel pobPanel, genePanel, errorPanel, selecPanel, crucePanel, mutaPanel, elitePanel;
@@ -45,6 +47,7 @@ public class LeftPanel extends JPanel implements Observer{
 		_ctrl = ctrl;
 		this.tp = tp;
 		_ctrl.addObserver(this);
+		individuo = "Función 1: Calibración y prueba";
 		initGUI();
 	}
 
@@ -243,10 +246,15 @@ public class LeftPanel extends JPanel implements Observer{
 		selecPanel.setBorder(BorderFactory.createTitledBorder(_defaultBorder, "Selección", TitledBorder.LEFT,TitledBorder.TOP));
 		
 		tipoSelecLabel = new JLabel("Tipo de selección");
+				
+		String[] selec = new String[_ctrl.getMapaFactories().get(individuo).getThird().getFirst().size()];
 		
-	//	String[] ejemplo = new String[] {"Ruleta", "Estocastico Universal", "Truncamiento", "Restos"};
 		
-		selecBox = new JComboBox<String>(_ctrl.getMapaSeleccionKeys());
+		for(int i = 0; i < selec.length;i++) {
+			selec[i] = _ctrl.getMapaFactories().get(individuo).getThird().getFirst().get(i);
+		}
+		
+		selecBox = new JComboBox<String>(selec);
 		
 		selecBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -268,8 +276,14 @@ public class LeftPanel extends JPanel implements Observer{
 		
 		tipoCruceLabel = new JLabel("Tipo de cruce");
 		
- 		cruceBox = new JComboBox<String>( _ctrl.getMapaCruceKeys());
+		String[] cruc = new String[_ctrl.getMapaFactories().get(individuo).getThird().getSecond().size()];
 		
+		for(int i = 0; i < cruc.length;i++) {
+			cruc[i] = _ctrl.getMapaFactories().get(individuo).getThird().getSecond().get(i);
+		}
+		
+		cruceBox = new JComboBox<String>(cruc);
+				
 		cruceBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				_ctrl.updateCruce((String) cruceBox.getSelectedItem());
@@ -329,8 +343,19 @@ public class LeftPanel extends JPanel implements Observer{
 		
 		tipoMutaLabel = new JLabel("Tipo de mutación");
 		
-		String[] ejemplo = new String[] {"Mutación Básica"};
-		mutaBox = new JComboBox<String>(ejemplo);
+		String[] muta = new String[_ctrl.getMapaFactories().get(individuo).getThird().getThird().size()];
+		
+		for(int i = 0; i < muta.length;i++) {
+			muta[i] = _ctrl.getMapaFactories().get(individuo).getThird().getThird().get(i);
+		}
+
+		mutaBox = new JComboBox<String>(muta);
+		
+		mutaBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				_ctrl.updateMutacion((String) mutaBox.getSelectedItem());
+			}
+		});
 		
 		porMutaLabel = new JLabel("% Mutación (>= 0 y <= 100)");
 		
@@ -449,9 +474,33 @@ public class LeftPanel extends JPanel implements Observer{
 	}
 
 	public void refreshCruceBox() {
-		String[] str = _ctrl.getMapaCruceKeys();
-		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(str);
+		
+		String[] cruc = new String[_ctrl.getMapaFactories().get(individuo).getThird().getSecond().size()];
+		
+		for(int i = 0; i < cruc.length;i++) {
+			cruc[i] = _ctrl.getMapaFactories().get(individuo).getThird().getSecond().get(i);
+		}
+		
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(cruc);
+		
 		cruceBox.setModel(model);
-		_ctrl.updateCruce(str[0]);
+		_ctrl.updateCruce(cruc[0]);
+	}
+	
+	public void refreshMutacionBox(){
+		
+		String[] mut = new String[_ctrl.getMapaFactories().get(individuo).getThird().getThird().size()];
+		
+		for(int i = 0; i < mut.length;i++) {
+			mut[i] = _ctrl.getMapaFactories().get(individuo).getThird().getThird().get(i);
+		}
+		
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(mut);
+		
+		mutaBox.setModel(model);
+		_ctrl.updateMutacion(mut[0]);
+	}
+	public void setIndividuo(String selectedItem) {
+		individuo = selectedItem;
 	}
 }
