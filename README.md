@@ -1,18 +1,5 @@
 # ProyectoEvolutiva
 
-Mutación: 
-  - Para implementar la mutación haremos una interfaz Mutación con el método mutar(). 
-  - Cada clase que implemente esta interfaz lo hará llamando a una función de Individuo que corresponda. La implementación real de la mutación se hará en las                 clases individuo double e individuoInt.
-  - Ejemplo:
-
-          public class Permutacion implements Mutacion{
-          
-              mutar() {
-                for(individuo: poblacion)
-                  indiviudo.mutarPermutacion();
-              }
-          }
-      
 Individuo TSP: 
 
   - Ahora mismo tenemos hecho que el Controller tiene una instancia de todas las listas de cruces o selecciones en función de si el tipo de la funcion es Bool o Double
