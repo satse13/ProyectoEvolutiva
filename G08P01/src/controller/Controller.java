@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+
 import factories.IndividuoFactory;
 import model.AlgoritmoGenetico;
 import model.cruce.Cruce;
@@ -15,9 +16,15 @@ import model.observers.Observer;
 import model.seleccion.Seleccion;
 import utils.TipoDato;
 import utils.Trio;
+import utils.Function;
 
 
 public class Controller {
+	
+	public final static String NINGUNO = "1";
+	public final static String TAM_POBLACION = "Tamaño Población";
+	public final static String PROB_CRUCE = "Prob. Cruce";
+	public final static String PROB_MUTACION = "Prob. Mutación";
 	
 	private AlgoritmoGenetico algoritmo;
 	
@@ -26,7 +33,11 @@ public class Controller {
 	private Map<String, Cruce> mapaCruce;
 	private Map<String ,Mutacion> mapaMutacion;
 	
+	private Map<String, Function<Double>> mapaFunciones;
+	
 	private String tipoCruce;
+	
+	private double min, max; 
 	
 	public Controller(AlgoritmoGenetico algoritmo, Map<String, Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>> mapaFactories, Map<String, Seleccion> mapaSeleccion,Map<String, Cruce> mapaCruce, Map<String,Mutacion> mapaMutacion) {
 		this.algoritmo = algoritmo;
@@ -34,10 +45,30 @@ public class Controller {
 		this.mapaSeleccion = mapaSeleccion;	
 		this.mapaCruce = mapaCruce;
 		this.mapaMutacion = mapaMutacion;
+		initMapa();
+	}
+
+	private void initMapa() {
+		mapaFunciones = new HashMap<>() {{
+			put(TAM_POBLACION, (x) -> updatePobSize(x));
+		}};
+		
 	}
 
 	public void run() {
 			algoritmo.run();
+	}
+	
+	public void run(String key) {
+		double inc = (max - min) / 10;
+		double valor = min;
+		for (int i = 0; i < 10; i++) {
+			mapaFunciones.get(key).apply(valor);
+			valor += inc;
+			algoritmo.run();
+			System.out.println(algoritmo.getMejor().getFitness());
+			System.out.println(valor);
+		}
 	}
 	
 	public void reset() {
@@ -62,13 +93,13 @@ public class Controller {
 		return ret;
 	}
 	
-	public void updatePobSize(int parseInt) {
-		algoritmo.setPobSize(parseInt);
+	public void updatePobSize(double parseInt) {
+		algoritmo.setPobSize((int)parseInt);
 		
 	}
 
-	public void updateGenSize(int parseInt) {
-		algoritmo.setGenSize(parseInt);
+	public void updateGenSize(double parseInt) {
+		algoritmo.setGenSize((int)parseInt);
 		
 	}
 
@@ -120,6 +151,12 @@ public class Controller {
 		algoritmo.setMutacion(this.mapaMutacion.get(selectedItem));
 	}
 	
+	public void setMin(double min) {
+		this.min = min;
+	}
 	
+	public void setMax(double max) {
+		this.max = max;
+	}
 
 }

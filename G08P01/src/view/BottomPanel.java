@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -28,10 +29,13 @@ public class BottomPanel extends JToolBar implements Observer {
 	
 	private Controller _ctrl;
 	
-	JButton resetButton, ejecutarButton;
+	JButton resetButton, ejecutarButton, adEjecutarButton;
 	JPanel textPanel;
 	JLabel solucionLabel;
 	JTextArea solucionText;
+	JPanel buttonPanel, ejecutarPanel, adEjecutarPanel;
+	
+	String intervaloActual = "1";
 	
 	
 	public BottomPanel(Controller ctrl) {
@@ -40,16 +44,22 @@ public class BottomPanel extends JToolBar implements Observer {
 		initGUI();
 	}
 
-	private void initGUI() {
+	protected void initGUI() {
 		setFloatable(false);
 		
 		buttonsConfiguration();
 		textConfiguration();
 		
+		JPanel aux = new JPanel(new FlowLayout());
+		buttonPanel = new JPanel(new CardLayout());
+		buttonPanel.add(ejecutarPanel, "1");
+		buttonPanel.add(adEjecutarPanel, "2");
+		
+		aux.add(buttonPanel);
 		addSeparator();
 		add(resetButton);
 		add(textPanel);
-		add(ejecutarButton);
+		add(aux);
 		addSeparator();
 		
 		setBackground(Color.WHITE);
@@ -72,10 +82,20 @@ public class BottomPanel extends JToolBar implements Observer {
 		textPanel.add(scroll);
 	}
 	
+
+	
 	private void buttonsConfiguration() {
+		
+		ejecutarPanel = new JPanel();
+		adEjecutarPanel = new JPanel();
 		
 		resetButton = new JButton("Resetear"); 
 		ejecutarButton = new JButton("Ejecutar");
+		adEjecutarButton = new JButton("Ejecutar*");
+		
+		ejecutarPanel.add(ejecutarButton);
+		adEjecutarPanel.add(adEjecutarButton);
+		
 		actions();
 		
 	}
@@ -89,6 +109,11 @@ public class BottomPanel extends JToolBar implements Observer {
 		resetButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				_ctrl.reset();
+			}
+		});
+		adEjecutarButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				_ctrl.run(intervaloActual); // AQUI VA EL RUN CON LOS PARAMETROS
 			}
 		});
 	}
@@ -106,6 +131,20 @@ public class BottomPanel extends JToolBar implements Observer {
 	@Override
 	public void onError(String exception) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	public void changePanel(String item) {
+		CardLayout cl = (CardLayout)(buttonPanel.getLayout());
+		if (item.equals("Ninguno")) {
+			cl.show(buttonPanel, "1");
+			intervaloActual = "1";
+		}
+		else {
+			cl.show(buttonPanel, "2");
+			intervaloActual = item;
+
+		}
 		
 	}
 

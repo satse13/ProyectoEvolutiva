@@ -26,14 +26,10 @@ public abstract class Individuo<T> implements Comparable<Individuo>{
 	public abstract void mutar(double prob);
 	public abstract boolean mejorFitness(Individuo individuo);
 	public abstract Double adaptar(Individuo individuo);
-
-
 	
 	public ArrayList<T> getCromosoma() {
 		return this.cromosoma;
 	}
-
-	
 	
 	public void setCromosoma(ArrayList<T> cromosoma) {
 		for(int i = 0; i < cromosoma.size();i++) {

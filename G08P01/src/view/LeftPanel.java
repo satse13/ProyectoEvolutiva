@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -7,8 +9,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -27,6 +32,11 @@ import model.observers.Observer;
 
 public class LeftPanel extends JPanel implements Observer{
 	
+	public final static String NINGUNO = "1";
+	public final static String TAM_POBLACION = "Tamaño Población";
+	public final static String PROB_CRUCE = "Prob. Cruce";
+	public final static String PROB_MUTACION = "Prob. Mutación";
+	
 	Controller _ctrl;
 	
 	String individuo;
@@ -41,7 +51,17 @@ public class LeftPanel extends JPanel implements Observer{
 	
 	JComboBox selecBox, cruceBox, mutaBox;
 	
+	JPanel adCrucePanel, adMutaPanel, adTamPobPanel;
+	
+	JTextField minProbCruce, maxProbCruce, minProbMuta, maxProbMuta, minTamPob, maxTamPob;
+	
 	GridBagConstraints c;
+	
+	JPanel textPanel;
+	
+	Map<String, JPanel> mapaPaneles;
+	
+	String intervaloActual = NINGUNO;
 	
 	public LeftPanel(Controller ctrl) {
 		_ctrl = ctrl;
@@ -57,6 +77,8 @@ public class LeftPanel extends JPanel implements Observer{
 		setPreferredSize(new Dimension(300, 625));
 		setVisible(true);
 		
+		initMapa();
+		
 		poblacionPanel();
 		generacionesPanel();
 		errorPanel();
@@ -68,6 +90,16 @@ public class LeftPanel extends JPanel implements Observer{
 		addPanels();	
 	}
 	
+	private void initMapa() {
+		
+		textPanel = new JPanel(new CardLayout());
+		
+		mapaPaneles = new HashMap<String, JPanel>(){{
+			put(TAM_POBLACION, textPanel);
+		}};
+		
+	}
+
 	private void addPanels() {
 		c = new GridBagConstraints();
 		
@@ -107,6 +139,8 @@ public class LeftPanel extends JPanel implements Observer{
 		
 		pobLabel = new JLabel("Tamaño Población (> 1)");
 		
+		JPanel pobTextPanel = new JPanel(new BorderLayout());
+		
 		pobText = new JTextField("100");
 		
 		DocumentListener dl = new DocumentListener() {
@@ -137,9 +171,87 @@ public class LeftPanel extends JPanel implements Observer{
 		};
         
         pobText.getDocument().addDocumentListener(dl);
+        
+        pobTextPanel.add(pobText, BorderLayout.CENTER);
+        
+        JPanel adPobTextPanel = new JPanel();
+        adPobTextPanel.setLayout(new BoxLayout(adPobTextPanel, BoxLayout.X_AXIS));
+    	adPobTextPanel.setBackground(Color.WHITE);
+    	
+    	minTamPob = new JTextField();
+    	
+		DocumentListener dlmin = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setMin();	
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setMin();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setMin();
+			}
+			
+			private void setMin() {
+				try {
+					_ctrl.setMin(Integer.parseInt(minTamPob.getText()));
+				}
+				catch(Exception e) {
+					_ctrl.setMin(-1);
+				}
+			}
+		};
+        
+        minTamPob.getDocument().addDocumentListener(dlmin);
+    	
+    	maxTamPob = new JTextField();
+    	
+		DocumentListener dlmax = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setMax();	
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setMax();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setMax();
+			}
+			
+			private void setMax() {
+				try {
+					_ctrl.setMax(Integer.parseInt(maxTamPob.getText()));
+				}
+				catch(Exception e) {
+					_ctrl.setMax(-1);
+				}
+			}
+		};
+        
+        maxTamPob.getDocument().addDocumentListener(dlmax);
+    	
+    	adPobTextPanel.add(new JLabel("  Min:  "));
+    	adPobTextPanel.add(minTamPob);
+    	adPobTextPanel.add(new JLabel("     Max:  "));
+    	adPobTextPanel.add(maxTamPob);
 		
+    	
+    	textPanel.add(pobTextPanel, NINGUNO); 
+    	textPanel.add(adPobTextPanel, TAM_POBLACION);
+    	
 		pobPanel.add(pobLabel);
-		pobPanel.add(pobText);
+		pobPanel.add(textPanel);
+		
 	}
 
 	private void generacionesPanel() {
@@ -500,7 +612,33 @@ public class LeftPanel extends JPanel implements Observer{
 		mutaBox.setModel(model);
 		_ctrl.updateMutacion(mut[0]);
 	}
+	
 	public void setIndividuo(String selectedItem) {
 		individuo = selectedItem;
+	}
+	
+	public String[] getOpciones() {
+		String[] ret = new String[mapaPaneles.keySet().size() + 1];
+		ret[0] = "Ninguno";
+		int i = 1;
+		for (String s : mapaPaneles.keySet()) {
+			ret[i] = s;
+			i++;
+		}
+		return ret;
+	}
+	
+	public void changePanel(String key) {
+		for(String s : mapaPaneles.keySet()) {
+			CardLayout cl = (CardLayout)(mapaPaneles.get(s).getLayout());
+			cl.show(mapaPaneles.get(s), NINGUNO);
+		}
+		if (!key.equals("Ninguno")) {
+			CardLayout cl = (CardLayout)(mapaPaneles.get(key).getLayout());
+			cl.show(mapaPaneles.get(key), key);
+			intervaloActual = key;
+		}
+		else 
+			intervaloActual = NINGUNO;
 	}
 }

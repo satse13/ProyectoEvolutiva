@@ -27,28 +27,36 @@ public class TopPanel extends JPanel implements Observer {
 	
 	private Controller _ctrl;
 	
-	JCheckBox variedad;
-	
 	JLabel problemaLabel, dimensionLabel;
 	
-	JComboBox problemaBox;
+	JComboBox problemaBox, parametrosBox;
 	
 	JSpinner dimensionSpinner;
 	
 	LeftPanel lp;
 	
-	public TopPanel(Controller ctrl, LeftPanel lp) {
+	BottomPanel bp;
+	
+	public TopPanel(Controller ctrl, LeftPanel lp, BottomPanel bp) {
 		_ctrl = ctrl;
 		this.lp = lp;
+		this.bp = bp;
 		_ctrl.addObserver(this);
 		initGUI();
 	}
 
 	private void initGUI() {
 		
-		variedad = new JCheckBox("Introducir variedad");
-		variedad.setBackground(Color.WHITE);
 		
+		parametrosBox = new JComboBox<String>(lp.getOpciones());
+		
+		parametrosBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lp.changePanel((String)parametrosBox.getSelectedItem());
+				bp.changePanel((String)parametrosBox.getSelectedItem());
+			}	
+		});
+	
 		JSeparator separator1 = new JSeparator(JSeparator.VERTICAL);
 		separator1.setPreferredSize(new Dimension(20, 0));
 		
@@ -89,6 +97,8 @@ public class TopPanel extends JPanel implements Observer {
 			
 		});
 		
+		add(new JLabel("Análisis de parametros: "));
+		add(parametrosBox);
  		add(separator1);
 		add(problemaLabel);
 		add(separator2);
@@ -112,7 +122,7 @@ public class TopPanel extends JPanel implements Observer {
 	@Override
 	public void onReset() {
         problemaBox.setSelectedIndex(0);
-
+        parametrosBox.setSelectedIndex(0);
     }
 
 	@Override

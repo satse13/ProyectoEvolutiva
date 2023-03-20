@@ -22,7 +22,7 @@ public abstract class IndBool extends Individuo<Boolean>{
         return min + (max - min) * valor / (Math.pow(2, tam) - 1);
     }
 	
-	@Override
+	
 	public void mutar(double prob) {  
 		Random r = new Random();	 
 		for(int i = 0; i < cromosoma.size();i++) {
