@@ -11,8 +11,7 @@ Individuo TSP:
     para poder implementar el TSP y evitar esto anterior se puede sustiuir el campo de el TipoDato por directamente las listas de selecciones,cruces y mutaciones que         puede hacer el individuo seleccionado. 
   - El problema del TSP se elegirá igual que si fuese una función más.
     
-   
-Interfaz para varias ejecuciones con intervalos: 
-
-   - Para elegir la ejecución con intervalos, habrá un botón o casilla en el TopPannel que al ser seleccionada cambiará la interfaz por completo, haciendo invisible la       interfaz normal y dejando a la vista únicamente la interfaz correspondiente. De esta manera el bottonPanel también cambiará y el botón ejecutar ya no será el mismo       que era anteriormente, para que al clickarse se realice una llamada a un run() distinto del controller.
+Control excepciones intervalos:
+ 
+  - Hay que hacer el control de excepciones en las casillas de los intervalos y darles valores por defecto.
   
