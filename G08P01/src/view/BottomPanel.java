@@ -113,13 +113,13 @@ public class BottomPanel extends JToolBar implements Observer {
 		});
 		adEjecutarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				_ctrl.run(intervaloActual); // AQUI VA EL RUN CON LOS PARAMETROS
+				_ctrl.run(intervaloActual); 
 			}
 		});
 	}
 
 	@Override
-	public void onEnd(AlgoritmoGenetico algoritmo) {
+	public void onEnd(AlgoritmoGenetico algoritmo, String key) {
 		solucionText.setText(algoritmo.getMejor().getDeco());		
 	}
 

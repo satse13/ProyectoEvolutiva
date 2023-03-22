@@ -45,7 +45,7 @@ public class Graph extends JPanel implements Observer {
 	}
 
 	@Override
-	public void onEnd(AlgoritmoGenetico algoritmo) {
+	public void onEnd(AlgoritmoGenetico algoritmo, String key) {
 		plot.removeAllPlots();
 		double[] generaciones = new double[algoritmo.getMaxGeneraciones() + 1];
 		for (int i = 1; i <= algoritmo.getMaxGeneraciones(); ++i) {

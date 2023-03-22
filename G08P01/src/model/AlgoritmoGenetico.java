@@ -14,6 +14,7 @@ import model.observers.Observable;
 import model.observers.Observer;
 import model.seleccion.Seleccion;
 import model.seleccion.SeleccionRuleta;
+import utils.Pair;
 @SuppressWarnings("rawtypes")
 
 public class AlgoritmoGenetico implements Observable<Observer>{
@@ -28,12 +29,12 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	private int maxGeneraciones;
 	private double probCruce;
 	private double probMutacion;
-	private int tamTorneo;
 	private Individuo mejorGeneracion; 
 	private int dimension;
 	private double valorError;
 	private double porElitismo;
 	private ArrayList<Individuo> elite;
+	private ArrayList<Pair<Double, Individuo>> mejoresIntervalo;
 	
 	private double[] medias;
 	private double[] mejorGen;
@@ -55,7 +56,9 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.mutacion = new MutacionBasica();
 		this.valorError = 0.001;
 		this.porElitismo = 0.0;
+		this.mejoresIntervalo = new ArrayList<Pair<Double, Individuo>>();
 		observers = new ArrayList<>();
+		
 	}
 	
 	public void run() {
@@ -97,10 +100,30 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 			pobEvaluation(i+1);
 		}
 		
+		
+		
 		for (Observer o: observers) {
-			o.onEnd(this);
+			o.onEnd(this, "");
 		}
 
+	}
+	
+	public void addValor(double valor) {
+		mejoresIntervalo.add(new Pair<Double, Individuo>(valor, elMejorAbs));
+	}
+	
+	
+	public Pair<double[], double[]> getMejoresIntervalos(){
+		double[] valores = new double[mejoresIntervalo.size()];
+		double[] fitness = new double[mejoresIntervalo.size()];
+		
+		for(int i = 0; i < valores.length;i++) {
+			valores[i] = mejoresIntervalo.get(i).getFirst();
+			fitness[i] = mejoresIntervalo.get(i).getSecond().getFitness();
+		}
+		
+		return new Pair<double[], double[]>(valores,fitness);
+		
 	}
 	
 	private boolean parseParam(){
@@ -120,11 +143,14 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 			return true;
 		}
 		catch(Exception e) {
-			
-			for(Observer o: observers)
-				o.onError(e.getMessage());
+			throwException(e.getMessage());
 			return false;
 		}
+	}
+	
+	public void throwException(String e) {
+		for(Observer o: observers)
+			o.onError(e);
 	}
 
 	private void incluirElite() {
@@ -291,6 +317,17 @@ public class AlgoritmoGenetico implements Observable<Observer>{
             o.onReset();
         }
     }
+
+	public void clearMejores() {
+		this.mejoresIntervalo.clear();
+		
+	}
+
+	public void finIntervalos(String key) {
+		for(Observer o : observers) {
+			o.onEnd(this, key);
+		}
+	}
 
 	
 

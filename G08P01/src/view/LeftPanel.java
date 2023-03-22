@@ -722,7 +722,7 @@ public class LeftPanel extends JPanel implements Observer{
 	}
 
 	@Override
-	public void onEnd(AlgoritmoGenetico algoritmo) {
+	public void onEnd(AlgoritmoGenetico algoritmo, String key) {
 		// TODO Auto-generated method stub
 		
 	}

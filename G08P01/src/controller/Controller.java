@@ -17,6 +17,7 @@ import model.seleccion.Seleccion;
 import utils.TipoDato;
 import utils.Trio;
 import utils.Function;
+import utils.Pair;
 
 
 public class Controller {
@@ -34,6 +35,7 @@ public class Controller {
 	private Map<String ,Mutacion> mapaMutacion;
 	
 	private Map<String, Function<Double>> mapaFunciones;
+	private Map<String, Pair<Double,Double>> mapaExcepciones;
 	
 	private String tipoCruce;
 	
@@ -55,27 +57,51 @@ public class Controller {
 			put(PROB_MUTACION, (x) -> updateProbMuta(x/100));
 		}};
 		
+		mapaExcepciones = new HashMap<>() {{
+			put(TAM_POBLACION, new Pair<Double,Double>(2.0,(double)Integer.MAX_VALUE));
+			put(PROB_CRUCE, new Pair<Double,Double>(0.0,100.0));
+			put(PROB_MUTACION, new Pair<Double,Double>(0.0,100.0));
+		}};
 	}
 
 	public void run() {
-			algoritmo.run();
+		algoritmo.clearMejores();
+		algoritmo.run();
 	}
 	
 	public void run(String key) {
 		
+		algoritmo.clearMejores();
 		
+		if(!parseMinMax(key))
+			return;
 		
 		double inc = (max - min) / 10;
 		double valor = min;
 		for (int i = 0; i < 10; i++) {
 			mapaFunciones.get(key).apply(valor);
 			algoritmo.run();
+			algoritmo.addValor(valor);
 			valor += inc;
 			System.out.println(algoritmo.getMejor().getFitness());
 			System.out.println(valor);
 		}
+		algoritmo.finIntervalos(key);
 	}
 	
+	private boolean parseMinMax(String key) {
+		if (min < mapaExcepciones.get(key).getFirst() || max > mapaExcepciones.get(key).getSecond()) {
+			algoritmo.throwException("Intervalo inválido");
+			return false;
+		}
+		else if(min > max) {
+			algoritmo.throwException("El valor mínimo debe ser mayor que el valor máximo");
+			return false;
+		}
+		
+		return true;
+	}
+
 	public void reset() {
 		algoritmo.reset();  
 	}
