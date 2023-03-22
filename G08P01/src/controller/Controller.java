@@ -51,6 +51,8 @@ public class Controller {
 	private void initMapa() {
 		mapaFunciones = new HashMap<>() {{
 			put(TAM_POBLACION, (x) -> updatePobSize(x));
+			put(PROB_CRUCE, (x) -> updateProbCruce(x/100));
+			put(PROB_MUTACION, (x) -> updateProbMuta(x/100));
 		}};
 		
 	}
@@ -60,12 +62,15 @@ public class Controller {
 	}
 	
 	public void run(String key) {
+		
+		
+		
 		double inc = (max - min) / 10;
 		double valor = min;
 		for (int i = 0; i < 10; i++) {
 			mapaFunciones.get(key).apply(valor);
-			valor += inc;
 			algoritmo.run();
+			valor += inc;
 			System.out.println(algoritmo.getMejor().getFitness());
 			System.out.println(valor);
 		}

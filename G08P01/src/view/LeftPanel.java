@@ -57,7 +57,7 @@ public class LeftPanel extends JPanel implements Observer{
 	
 	GridBagConstraints c;
 	
-	JPanel textPanel;
+	JPanel pobCardPanel, cruceCardPanel, mutaCardPanel;
 	
 	Map<String, JPanel> mapaPaneles;
 	
@@ -92,10 +92,14 @@ public class LeftPanel extends JPanel implements Observer{
 	
 	private void initMapa() {
 		
-		textPanel = new JPanel(new CardLayout());
+		pobCardPanel = new JPanel(new CardLayout());
+		cruceCardPanel = new JPanel(new CardLayout());
+		mutaCardPanel = new JPanel(new CardLayout());
 		
 		mapaPaneles = new HashMap<String, JPanel>(){{
-			put(TAM_POBLACION, textPanel);
+			put(TAM_POBLACION, pobCardPanel);
+			put(PROB_CRUCE, cruceCardPanel);
+			put(PROB_MUTACION, mutaCardPanel);
 		}};
 		
 	}
@@ -246,11 +250,11 @@ public class LeftPanel extends JPanel implements Observer{
     	adPobTextPanel.add(maxTamPob);
 		
     	
-    	textPanel.add(pobTextPanel, NINGUNO); 
-    	textPanel.add(adPobTextPanel, TAM_POBLACION);
+    	pobCardPanel.add(pobTextPanel, NINGUNO); 
+    	pobCardPanel.add(adPobTextPanel, TAM_POBLACION);
     	
 		pobPanel.add(pobLabel);
-		pobPanel.add(textPanel);
+		pobPanel.add(pobCardPanel);
 		
 	}
 
@@ -406,6 +410,8 @@ public class LeftPanel extends JPanel implements Observer{
 		
 		cruceText = new JTextField("60.0");
 		
+		JPanel cruceTextPanel = new JPanel(new BorderLayout());
+		
 		DocumentListener dl = new DocumentListener() {
 
 			@Override
@@ -438,11 +444,87 @@ public class LeftPanel extends JPanel implements Observer{
         
         
         cruceText.getDocument().addDocumentListener(dl);
+        
+        cruceTextPanel.add(cruceText, BorderLayout.CENTER);
 		
+        JPanel adCruceTextPanel = new JPanel();
+        adCruceTextPanel.setLayout(new BoxLayout(adCruceTextPanel, BoxLayout.X_AXIS));
+        adCruceTextPanel.setBackground(Color.WHITE);
+        
+    	minProbCruce = new JTextField();
+    	
+		DocumentListener dlmin = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setMin();	
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setMin();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setMin();
+			}
+			
+			private void setMin() {
+				try {
+					_ctrl.setMin(Integer.parseInt(minProbCruce.getText()));
+				}
+				catch(Exception e) {
+					_ctrl.setMin(-1);
+				}
+			}
+		};
+        
+		minProbCruce.getDocument().addDocumentListener(dlmin);
+    	
+		maxProbCruce = new JTextField();
+    	
+		DocumentListener dlmax = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setMax();	
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setMax();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setMax();
+			}
+			
+			private void setMax() {
+				try {
+					_ctrl.setMax(Integer.parseInt(maxProbCruce.getText()));
+				}
+				catch(Exception e) {
+					_ctrl.setMax(-1);
+				}
+			}
+		};
+        
+		maxProbCruce.getDocument().addDocumentListener(dlmax);
+    	
+		adCruceTextPanel.add(new JLabel("  Min:  "));
+		adCruceTextPanel.add(minProbCruce);
+		adCruceTextPanel.add(new JLabel("     Max:  "));
+		adCruceTextPanel.add(maxProbCruce);
+        
+        cruceCardPanel.add(cruceTextPanel, NINGUNO);
+        cruceCardPanel.add(adCruceTextPanel, PROB_CRUCE);
+        
 		crucePanel.add(tipoCruceLabel);
 		crucePanel.add(cruceBox);
 		crucePanel.add(porCruceLabel);
-		crucePanel.add(cruceText);
+		crucePanel.add(cruceCardPanel);
 	}
 
 	private void mutacionPanel() {
@@ -472,6 +554,8 @@ public class LeftPanel extends JPanel implements Observer{
 		porMutaLabel = new JLabel("% Mutación (>= 0 y <= 100)");
 		
 		mutaText = new JTextField("5.0");
+		
+		JPanel mutaTextPanel = new JPanel(new BorderLayout());
 		
 		DocumentListener dl = new DocumentListener() {
 
@@ -505,11 +589,87 @@ public class LeftPanel extends JPanel implements Observer{
         
         
         mutaText.getDocument().addDocumentListener(dl);
+        
+        mutaTextPanel.add(mutaText, BorderLayout.CENTER);
+        
+        JPanel adMutaTextPanel = new JPanel();
+        adMutaTextPanel.setLayout(new BoxLayout(adMutaTextPanel, BoxLayout.X_AXIS));
+        adMutaTextPanel.setBackground(Color.WHITE);
+        
+    	minProbMuta = new JTextField();
+    	
+		DocumentListener dlmin = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setMin();	
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setMin();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setMin();
+			}
+			
+			private void setMin() {
+				try {
+					_ctrl.setMin(Integer.parseInt(minProbMuta.getText()));
+				}
+				catch(Exception e) {
+					_ctrl.setMin(-1);
+				}
+			}
+		};
+        
+		minProbMuta.getDocument().addDocumentListener(dlmin);
+    	
+		maxProbMuta = new JTextField();
+    	
+		DocumentListener dlmax = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setMax();	
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				setMax();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setMax();
+			}
+			
+			private void setMax() {
+				try {
+					_ctrl.setMax(Integer.parseInt(maxProbMuta.getText()));
+				}
+				catch(Exception e) {
+					_ctrl.setMax(-1);
+				}
+			}
+		};
+        
+		maxProbMuta.getDocument().addDocumentListener(dlmax);
+    	
+		adMutaTextPanel.add(new JLabel("  Min:  "));
+		adMutaTextPanel.add(minProbMuta);
+		adMutaTextPanel.add(new JLabel("     Max:  "));
+		adMutaTextPanel.add(maxProbMuta);
+        
+        mutaCardPanel.add(mutaTextPanel, NINGUNO);
+        mutaCardPanel.add(adMutaTextPanel, PROB_MUTACION);
 		
 		mutaPanel.add(tipoMutaLabel);
 		mutaPanel.add(mutaBox);
 		mutaPanel.add(porMutaLabel);
-		mutaPanel.add(mutaText);
+		mutaPanel.add(mutaCardPanel);
 	}
 
 	private void elitePanel() {
@@ -638,7 +798,9 @@ public class LeftPanel extends JPanel implements Observer{
 			cl.show(mapaPaneles.get(key), key);
 			intervaloActual = key;
 		}
-		else 
+		else {
 			intervaloActual = NINGUNO;
+			onReset();
+		}
 	}
 }

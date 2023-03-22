@@ -74,6 +74,7 @@ public class CrucePMX implements Cruce {
 		for(int i = punto1; i < punto2;i++) {
 			
 		}
+		return null;
 		
 	}
 		
