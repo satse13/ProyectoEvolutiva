@@ -19,11 +19,21 @@ import model.AlgoritmoGenetico;
 import model.cruce.Cruce;
 import model.cruce.CruceAritmetico;
 import model.cruce.CruceBLXA;
+import model.cruce.CruceCodificacionOrdinal;
 import model.cruce.CruceMonopunto;
+import model.cruce.CruceOX;
+import model.cruce.CruceOrdenPrioritario;
+import model.cruce.CrucePosPrio;
+import model.cruce.CruceRecombinacionRutas;
 import model.cruce.CruceUniforme;
 import model.mutacion.Mutacion;
 import model.mutacion.MutacionBasica;
+import model.mutacion.MutacionHeuristica;
+import model.mutacion.MutacionInsercion;
+import model.mutacion.MutacionIntercambio;
+import model.mutacion.MutacionInversion;
 import model.seleccion.EstocasticoUniversal;
+import model.seleccion.Ranking;
 import model.seleccion.Restos;
 import model.seleccion.Seleccion;
 import model.seleccion.SeleccionRuleta;
@@ -77,6 +87,7 @@ public class Main {
 				put("Estocástico Universal", new EstocasticoUniversal());
 				put("Truncamiento", new Truncamiento());
 				put("Restos", new Restos());
+				put("Ranking", new Ranking());
 		}};
 		
 		mapaCruce = new HashMap<String, Cruce>(){{
@@ -84,10 +95,20 @@ public class Main {
 			put("Cruce Uniforme" , new CruceUniforme());
 			put("Cruce Aritmético", new CruceAritmetico());
 			put("BLX-Alpha", new CruceBLXA());
+			put("Cruce OX", new CruceOX());
+			put("Cruce Posiciones Prioritarias", new CrucePosPrio());
+			put("Cruce Orden Prioritario", new CruceOrdenPrioritario());
+			put("Cruce ciclos", new CruceOX());
+			put("Cruce Recombinación rutas", new CruceRecombinacionRutas());
+			put("Cruce Codificación ordinal", new CruceCodificacionOrdinal());
 		}};
 		
 		mapaMutacion = new HashMap<String, Mutacion>(){{
-			put("Mutación Básica", new MutacionBasica());
+			put("Básica", new MutacionBasica());
+			put("Heuristica", new MutacionHeuristica());
+			put("Inserción", new MutacionInsercion());
+			put("Inversión", new MutacionInversion());
+			put("Intercambio", new MutacionIntercambio());
 		}};
 		
 		listaSeleccion = new ArrayList<String>() {{
@@ -97,6 +118,7 @@ public class Main {
 				add("Estocástico Universal");
 				add("Truncamiento");
 				add("Restos");
+				add("Ranking");
 		}};
 		
 		
@@ -113,7 +135,11 @@ public class Main {
 		}};
 	
 		listaMutacionBasica = new ArrayList<String>(){{
-			add("Mutación Básica");
+			add("Básica");
+			add("Inserción");
+			add("Inversión");
+			add("Intercambio");
+			add("Heuristica");
 		}};
 		
 		 mapaFactories = new TreeMap<String, Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>>(){{

@@ -17,7 +17,11 @@ import utils.Pair;
 
 public class AdvancedGraph extends JPanel implements Observer {
 	
+	private final static String AG = "ADVANCED_GRAPH";
+	
 	Controller ctrl;
+	
+	Mediator me;
 	
 	Plot2DPanel plot;
 	
@@ -25,8 +29,9 @@ public class AdvancedGraph extends JPanel implements Observer {
 	
 	int maxGeneraciones;
 	
-	public AdvancedGraph(Controller _ctrl) {
+	public AdvancedGraph(Controller _ctrl, Mediator me) {
 		ctrl = _ctrl;
+		this.me = me;
 		ctrl.addObserver(this);
 		key = "Ninguno";
 		initGUI();
@@ -49,9 +54,13 @@ public class AdvancedGraph extends JPanel implements Observer {
 
 	@Override
 	public void onEnd(AlgoritmoGenetico algoritmo, String key) {
-		plot.removeAllPlots();
-		Pair<double[], double[]> individuos = algoritmo.getMejoresIntervalos();
-		plot.addLinePlot("Mejores Individuos", individuos.getFirst(), individuos.getSecond());
+		if (!key.equals("Ninguno")) {
+			me.changeGraph(AG);
+			plot.setAxisLabels(key, "Valor del fitness");
+			plot.removeAllPlots();
+			Pair<double[], double[]> individuos = algoritmo.getMejoresIntervalos();
+			plot.addLinePlot("Mejores Individuos", individuos.getFirst(), individuos.getSecond());
+		}
 		
 	}
 	

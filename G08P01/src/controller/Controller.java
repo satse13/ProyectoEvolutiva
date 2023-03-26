@@ -51,13 +51,13 @@ public class Controller {
 	}
 
 	private void initMapa() {
-		mapaFunciones = new HashMap<>() {{
+		mapaFunciones = new HashMap<String, Function<Double>>() {{
 			put(TAM_POBLACION, (x) -> updatePobSize(x));
 			put(PROB_CRUCE, (x) -> updateProbCruce(x/100));
 			put(PROB_MUTACION, (x) -> updateProbMuta(x/100));
 		}};
 		
-		mapaExcepciones = new HashMap<>() {{
+		mapaExcepciones = new HashMap<String,Pair<Double,Double>>() {{
 			put(TAM_POBLACION, new Pair<Double,Double>(2.0,(double)Integer.MAX_VALUE));
 			put(PROB_CRUCE, new Pair<Double,Double>(0.0,100.0));
 			put(PROB_MUTACION, new Pair<Double,Double>(0.0,100.0));

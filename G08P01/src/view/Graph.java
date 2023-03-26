@@ -17,13 +17,18 @@ import model.observers.Observer;
 
 public class Graph extends JPanel implements Observer {
 	
+	private final static String G = "GRAPH";
+	
 	Controller ctrl;
+	
+	Mediator me;
 	
 	Plot2DPanel plot;
 	
 	int maxGeneraciones;
 	
-	public Graph(Controller _ctrl) {
+	public Graph(Controller _ctrl, Mediator me) {
+		this.me = me;
 		ctrl = _ctrl;
 		ctrl.addObserver(this);
 		initGUI();
@@ -46,14 +51,17 @@ public class Graph extends JPanel implements Observer {
 
 	@Override
 	public void onEnd(AlgoritmoGenetico algoritmo, String key) {
-		plot.removeAllPlots();
-		double[] generaciones = new double[algoritmo.getMaxGeneraciones() + 1];
-		for (int i = 1; i <= algoritmo.getMaxGeneraciones(); ++i) {
-			generaciones[i] = i;
+		if (key.equals("Ninguno")) {
+			me.changeGraph(G);
+			plot.removeAllPlots();
+			double[] generaciones = new double[algoritmo.getMaxGeneraciones() + 1];
+			for (int i = 1; i <= algoritmo.getMaxGeneraciones(); ++i) {
+				generaciones[i] = i;
+			}
+			plot.addLinePlot("Mejor Absoluto", generaciones, algoritmo.getMejorAbs());
+			plot.addLinePlot("Mejor de la generación", generaciones, algoritmo.getMejorGeneracion());
+			plot.addLinePlot("Media de la generación", generaciones, algoritmo.getMedias());
 		}
-		plot.addLinePlot("Mejor Absoluto", generaciones, algoritmo.getMejorAbs());
-		plot.addLinePlot("Mejor de la generación", generaciones, algoritmo.getMejorGeneracion());
-		plot.addLinePlot("Media de la generación", generaciones, algoritmo.getMedias());
 	}
 	
 

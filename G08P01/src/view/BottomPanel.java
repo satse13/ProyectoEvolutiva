@@ -51,7 +51,9 @@ public class BottomPanel extends JToolBar implements Observer {
 		textConfiguration();
 		
 		JPanel aux = new JPanel(new FlowLayout());
+		aux.setBackground(Color.WHITE);
 		buttonPanel = new JPanel(new CardLayout());
+		buttonPanel.setBackground(Color.WHITE);
 		buttonPanel.add(ejecutarPanel, "1");
 		buttonPanel.add(adEjecutarPanel, "2");
 		
@@ -86,15 +88,17 @@ public class BottomPanel extends JToolBar implements Observer {
 	
 	private void buttonsConfiguration() {
 		
-		ejecutarPanel = new JPanel();
-		adEjecutarPanel = new JPanel();
+		ejecutarPanel = new JPanel(new BorderLayout());
+		ejecutarPanel.setBackground(Color.WHITE);
+		adEjecutarPanel = new JPanel(new BorderLayout());
+		adEjecutarPanel.setBackground(Color.WHITE);
 		
 		resetButton = new JButton("Resetear"); 
 		ejecutarButton = new JButton("Ejecutar");
 		adEjecutarButton = new JButton("Ejecutar*");
 		
-		ejecutarPanel.add(ejecutarButton);
-		adEjecutarPanel.add(adEjecutarButton);
+		ejecutarPanel.add(ejecutarButton, BorderLayout.CENTER);
+		adEjecutarPanel.add(adEjecutarButton, BorderLayout.CENTER);
 		
 		actions();
 		
@@ -120,7 +124,11 @@ public class BottomPanel extends JToolBar implements Observer {
 
 	@Override
 	public void onEnd(AlgoritmoGenetico algoritmo, String key) {
-		solucionText.setText(algoritmo.getMejor().getDeco());		
+		if (key.equals("Ninguno")) 
+			solucionText.setText(algoritmo.getMejor().getDeco());	
+		else 
+			solucionText.setText(algoritmo.setTextIntervalos());
+			
 	}
 
 	@Override

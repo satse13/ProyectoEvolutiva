@@ -15,6 +15,8 @@ import controller.Controller;
 
 public class MainWindow extends JFrame {
 	private Controller _ctrl;  
+	
+	JPanel graph;
 
 	private final int WIDTH = 1200;
 	private final int HEIGHT = 745;
@@ -27,22 +29,21 @@ public class MainWindow extends JFrame {
 
 	private void initGUI() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		
-		JPanel bottom = new JPanel(new CardLayout());
-		JPanel left = new JPanel(new CardLayout());
-		JPanel graph = new JPanel(new CardLayout());
+	
+		graph = new JPanel(new CardLayout());
 		
 		LeftPanel lp = new LeftPanel(_ctrl);
 		BottomPanel bp = new BottomPanel(_ctrl);
+		TopPanel tp = new TopPanel(_ctrl,lp,bp);
 		
-		bottom.add(bp, "BOTTOM");
-		left.add(lp, "LEFT");
-		graph.add(new Graph(_ctrl), "GRAPH");
-		graph.add(new AdvancedGraph(_ctrl), "ADVANCED_GRAPH");
+		Mediator me = new Mediator(_ctrl, this, lp, bp);
 		
-		mainPanel.add(new TopPanel(_ctrl,lp,bp), BorderLayout.PAGE_START);
-		mainPanel.add(bottom, BorderLayout.PAGE_END);
-		mainPanel.add(left, BorderLayout.WEST);
+		graph.add(new Graph(_ctrl, me), "GRAPH");
+		graph.add(new AdvancedGraph(_ctrl, me), "ADVANCED_GRAPH");
+		
+		mainPanel.add(tp, BorderLayout.PAGE_START);
+		mainPanel.add(bp, BorderLayout.PAGE_END);
+		mainPanel.add(lp, BorderLayout.WEST);
 		mainPanel.add(graph, BorderLayout.CENTER);
 		
 		setBackground(Color.WHITE);
@@ -53,5 +54,10 @@ public class MainWindow extends JFrame {
 		setLocation(s.width/2 - WIDTH /2, s.height/2 - HEIGHT /2);
 		this.setVisible(true);
 		
+	}
+
+	public void changeGraph(String key) {
+		CardLayout cl = (CardLayout)(graph.getLayout());
+		cl.show(graph, key);
 	}
 }

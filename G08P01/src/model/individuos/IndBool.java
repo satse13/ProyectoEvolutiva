@@ -23,7 +23,7 @@ public abstract class IndBool extends Individuo<Boolean>{
     }
 	
 	
-	public void mutar(double prob) {  
+	public void mutarBas(double prob) {  
 		Random r = new Random();	 
 		for(int i = 0; i < cromosoma.size();i++) {
 			if(r.nextDouble(0,1) < prob) {

@@ -66,7 +66,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		if(!parseParam())
 			return;
 		
-		System.out.println(cruce);
+		System.out.println(seleccion);
 		
 		poblacion = new ArrayList<Individuo>();
 		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
@@ -103,7 +103,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		
 		
 		for (Observer o: observers) {
-			o.onEnd(this, "");
+			o.onEnd(this, "Ninguno"); // Se pone ninguno como key para avisar a la grafica normal que tiene que mostrar valores
 		}
 
 	}
@@ -124,6 +124,20 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		
 		return new Pair<double[], double[]>(valores,fitness);
 		
+	}
+	
+	public String setTextIntervalos() {
+		String ret = "El mejor valor del intervalo seleccionado es: ";
+		Individuo max = mejoresIntervalo.get(0).getSecond();
+		int indMax = 0;
+		for (int i = 1; i < mejoresIntervalo.size(); ++i) {
+			if (max.mejorFitness(mejoresIntervalo.get(i).getSecond())) {
+				max = mejoresIntervalo.get(i).getSecond();
+				indMax = i;
+			}
+		}
+		ret += mejoresIntervalo.get(indMax).getFirst() + " con fitness: " + max.getFitness(); 
+		return ret;
 	}
 	
 	private boolean parseParam(){
