@@ -1,23 +1,23 @@
 package view;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-import org.math.plot.*;
+import org.math.plot.Plot2DPanel;
 
 import controller.Controller;
 import model.AlgoritmoGenetico;
 import model.observers.Observer;
+import utils.Pair;
 
-public class Graph extends JPanel implements Observer {
+public class AdvancedGraph extends JPanel implements Observer {
 	
-	private final static String G = "GRAPH";
+	private final static String AG = "ADVANCED_GRAPH";
 	
 	Controller ctrl;
 	
@@ -25,12 +25,15 @@ public class Graph extends JPanel implements Observer {
 	
 	Plot2DPanel plot;
 	
+	String key;
+	
 	int maxGeneraciones;
 	
-	public Graph(Controller _ctrl, Mediator me) {
-		this.me = me;
+	public AdvancedGraph(Controller _ctrl, Mediator me) {
 		ctrl = _ctrl;
+		this.me = me;
 		ctrl.addObserver(this);
+		key = "Ninguno";
 		initGUI();
 	}
 
@@ -42,7 +45,7 @@ public class Graph extends JPanel implements Observer {
 		
 		plot = new Plot2DPanel();
 		
-		plot.setAxisLabels("  Generacion", "Valor de la función");
+		plot.setAxisLabels(key, "Valor del fitness");
 
 		plot.addLegend("SOUTH");
 		
@@ -51,17 +54,14 @@ public class Graph extends JPanel implements Observer {
 
 	@Override
 	public void onEnd(AlgoritmoGenetico algoritmo, String key) {
-		if (key.equals("Ninguno")) {
-			me.changeGraph(G);
+		if (!key.equals("Ninguno")) {
+			me.changeGraph(AG);
+			plot.setAxisLabels(key, "Valor del fitness");
 			plot.removeAllPlots();
-			double[] generaciones = new double[algoritmo.getMaxGeneraciones() + 1];
-			for (int i = 1; i <= algoritmo.getMaxGeneraciones(); ++i) {
-				generaciones[i] = i;
-			}
-			plot.addLinePlot("Mejor Absoluto", generaciones, algoritmo.getMejorAbs());
-			plot.addLinePlot("Mejor de la generación", generaciones, algoritmo.getMejorGeneracion());
-			plot.addLinePlot("Media de la generación", generaciones, algoritmo.getMedias());
+			Pair<double[], double[]> individuos = algoritmo.getMejoresIntervalos();
+			plot.addLinePlot("Mejores Individuos", individuos.getFirst(), individuos.getSecond());
 		}
+		
 	}
 	
 
@@ -76,6 +76,3 @@ public class Graph extends JPanel implements Observer {
 		
 	}
 }
-
-
-

@@ -13,7 +13,7 @@ public abstract class IndDouble extends Individuo<Double>{
         return cromosoma.get(gen);
     }
 	
-	public void mutar(double prob) {  
+	public void mutarBas(double prob) {  
 		Random r = new Random();	 
 		for(int i = 0; i < cromosoma.size();i++) {
 			if(r.nextDouble(0,1) < prob) {

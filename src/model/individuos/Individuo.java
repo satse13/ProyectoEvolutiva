@@ -23,7 +23,6 @@ public abstract class Individuo<T> implements Comparable<Individuo>{
 	protected abstract double getValor();
 	protected abstract String decodificar();
 	public abstract double getFenotipo(int gen);
-	public abstract void mutar(double prob);
 	public abstract boolean mejorFitness(Individuo individuo);
 	public abstract Double adaptar(Individuo individuo);
 	
@@ -37,7 +36,11 @@ public abstract class Individuo<T> implements Comparable<Individuo>{
 		}
 		this.fitness = this.getValor();
 	}
-	
-	
-	
+
+	public void mutarBas(double prob) {}
+	public void mutarInser(double prob) {}
+	public void mutarInter(double prob) {}
+	public void mutarInver(double prob) {}
+	public void mutarHeur(double prob) {}
+	public void mutarTAM(double prob) {}
 }
