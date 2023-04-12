@@ -738,6 +738,22 @@ public class LeftPanel extends JPanel implements Observer{
         cruceBox.setSelectedIndex(0);
         mutaBox.setSelectedIndex(0);
         selecBox.setSelectedIndex(0);
+        minProbCruce.setText(""); 
+        maxProbCruce.setText("");
+        minProbMuta.setText(""); 
+        maxProbMuta.setText("");
+        minTamPob.setText("");
+        maxTamPob.setText("");
+        _ctrl.setMin(-1.0);
+        _ctrl.setMax(-1.0);
+        _ctrl.updatePobSize(100.0);
+        _ctrl.updateGenSize(100.0);
+        _ctrl.updateValorError(0.001);
+        _ctrl.updateProbCruce(60.0/100);
+        _ctrl.updateProbMuta(5.0/100);
+        _ctrl.updatePorElite(0.0);
+  
+        
     }
 
 	@Override
@@ -800,7 +816,9 @@ public class LeftPanel extends JPanel implements Observer{
 		}
 		else {
 			intervaloActual = NINGUNO;
-			onReset();
+			
 		}
+		onReset();
 	}
+	
 }

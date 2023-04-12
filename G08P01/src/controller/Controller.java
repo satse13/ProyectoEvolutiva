@@ -83,8 +83,6 @@ public class Controller {
 			algoritmo.run();
 			algoritmo.addValor(valor);
 			valor += inc;
-			System.out.println(algoritmo.getMejor().getFitness());
-			System.out.println(valor);
 		}
 		algoritmo.finIntervalos(key);
 	}
@@ -95,7 +93,7 @@ public class Controller {
 			return false;
 		}
 		else if(min > max) {
-			algoritmo.throwException("El valor mínimo debe ser mayor que el valor máximo");
+			algoritmo.throwException("El valor mínimo debe ser menor que el valor máximo");
 			return false;
 		}
 		

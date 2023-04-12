@@ -42,4 +42,5 @@ public abstract class Individuo<T> implements Comparable<Individuo>{
 	public void mutarInter(double prob) {}
 	public void mutarInver(double prob) {}
 	public void mutarHeur(double prob) {}
+	public void mutarTAM(double prob) {}
 }

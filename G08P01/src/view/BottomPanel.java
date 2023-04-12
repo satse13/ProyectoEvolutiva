@@ -95,7 +95,7 @@ public class BottomPanel extends JToolBar implements Observer {
 		
 		resetButton = new JButton("Resetear"); 
 		ejecutarButton = new JButton("Ejecutar");
-		adEjecutarButton = new JButton("Ejecutar*");
+		adEjecutarButton = new JButton("Ejecutar");
 		
 		ejecutarPanel.add(ejecutarButton, BorderLayout.CENTER);
 		adEjecutarPanel.add(adEjecutarButton, BorderLayout.CENTER);

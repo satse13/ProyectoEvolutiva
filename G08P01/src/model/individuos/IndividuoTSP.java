@@ -9,10 +9,12 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+
+
 @SuppressWarnings("serial")
 public class IndividuoTSP extends Individuo<Integer>{
 	
-	public final static int NUM_CIUDADES = 26;
+	public final static int NUM_CIUDADES = 27;
 
 	private final static int[][] _DIST = {
 				{},
@@ -51,8 +53,8 @@ public class IndividuoTSP extends Individuo<Integer>{
 		put(8,"Cáceres"); put(9,"Cádiz"); put(10,"Castellón"); put(11,"Ciudad Real");
 		put(12,"Córdoba"); put(13,"A Coruña"); put(14,"Cuenca"); put(15,"Gerona");
 		put(16,"Granada"); put(17,"Guadalajara"); put(18,"Huelva"); put(19,"Huesca");
-		put(20,"Jaén"); put(21,"León"); put(22,"Lérida"); put(23,"Logroño");
-		put(24,"Madrid"); put(25,"Málaga"); put(26,"Murcia");
+		put(20,"Jaén"); put(21,"León"); put(22,"Lérida"); put(23,"Logroño");put(24,"Lugo");
+		put(25,"Madrid"); put(26,"Málaga"); put(27,"Murcia");
 	}};
 
 	public IndividuoTSP() {
@@ -61,7 +63,7 @@ public class IndividuoTSP extends Individuo<Integer>{
 		this.cromosoma = new ArrayList<Integer>(NUM_CIUDADES);
 				
 		for(int i = 0; i <= NUM_CIUDADES;i++) {
-			if(i != 24)
+			if(i != 25)
 				cromosoma.add(i);
 		}
 		
@@ -74,13 +76,13 @@ public class IndividuoTSP extends Individuo<Integer>{
 
 		initIndividuo();
 		this.cromosoma = new ArrayList<Integer>(cromosoma);
-		//this.fitness = this.getValor();
+		this.fitness = this.getValor();
 	}
 	
 	
 	@Override
 	public int compareTo(Individuo o) {
-		 if(this.getFitness() > o.getFitness())
+		if(this.getFitness() < o.getFitness())
 			 return 1;
 		 else if(this.getFitness() == o.getFitness())
 			 return 0;
@@ -97,12 +99,12 @@ public class IndividuoTSP extends Individuo<Integer>{
 	private double distTotal(ArrayList<Integer> lista) { // Hacemos esto para poder usar la funcion en 
 		int dist = 0; 									 // la mutacion heuristica
 
-		dist += calDist(24,lista.get(0));
+		dist += calDist(25,lista.get(0));
 		
 		for(int i = 1; i < lista.size();i++) {
 			dist += calDist(lista.get(i-1), lista.get(i));
 		}
-		dist += calDist(24,lista.get(lista.size()-1));
+		dist += calDist(25,lista.get(lista.size()-1));
 
 		return dist;
 	}
@@ -114,6 +116,7 @@ public class IndividuoTSP extends Individuo<Integer>{
 		for(int i = 0; i < NUM_CIUDADES; i++) {
 			str+= ", " + CIUDADES.get(cromosoma.get(i));
 		}
+		str +=", Madrid";
 		str += " - Distancia recorrida = " + this.getFitness();  
 		
 		return str;
@@ -127,7 +130,7 @@ public class IndividuoTSP extends Individuo<Integer>{
 
 	@Override
 	public boolean mejorFitness(Individuo individuo) {
-		if(individuo.getFitness() > this.getFitness())
+		if(individuo.getFitness() < this.getFitness())
 			return true;
 		return false;
 	}
@@ -157,11 +160,10 @@ public class IndividuoTSP extends Individuo<Integer>{
 		if(rand.nextDouble(0,1) < prob) {
 			int elem = rand.nextInt(0,NUM_CIUDADES);
 			int pos = rand.nextInt(0,NUM_CIUDADES);
-			
 			int aux = this.cromosoma.get(elem);
 			this.cromosoma.remove(elem);
 			this.cromosoma.add(null);
-			for(int i = this.cromosoma.size()-1; i >= pos;i--) {
+			for(int i = this.cromosoma.size()-1; i > pos;i--) {
 				this.cromosoma.set(i, this.cromosoma.get(i-1));
 			}
 			this.cromosoma.set(pos, aux);
@@ -203,10 +205,20 @@ public class IndividuoTSP extends Individuo<Integer>{
 	public void mutarHeur(double prob) {
 		if(rand.nextDouble(0,1) < prob) {
 			
+			Set<Integer> conj = new HashSet<Integer>();
 			int pos1 = rand.nextInt(0,NUM_CIUDADES);
+			conj.add(pos1);
 			int pos2 = rand.nextInt(0,NUM_CIUDADES);
+			while(conj.contains(pos2)) {
+				pos2 = rand.nextInt(0,NUM_CIUDADES);
+			}
+			conj.add(pos2);
 			int pos3 = rand.nextInt(0,NUM_CIUDADES);
-
+			while(conj.contains(pos3)) {
+				pos3 = rand.nextInt(0,NUM_CIUDADES);
+			}
+			conj.add(pos3);
+			
 			ArrayList<Integer> lista = new ArrayList<Integer>();
 			lista.add(this.cromosoma.get(pos1));
 			lista.add(this.cromosoma.get(pos2));
@@ -217,21 +229,60 @@ public class IndividuoTSP extends Individuo<Integer>{
 			ArrayList<Integer> mejor = new ArrayList<Integer>(cromosoma);
 			double mejorF = distTotal(mejor);
 			
+			ArrayList<Integer> aux = new ArrayList<Integer>(cromosoma);
 			for(List<Integer> p: permutaciones) {
-				ArrayList<Integer> aux = new ArrayList<Integer>(cromosoma);
 				aux.set(pos1, p.get(0));
 				aux.set(pos2, p.get(1));
 				aux.set(pos3, p.get(2));
 				double fitnessAux = distTotal(aux);
 				if(fitnessAux < mejorF) {
 					mejorF = fitnessAux;
-					mejor = new ArrayList<Integer>(aux);
+					for(int i = 0; i < aux.size();i++) {
+						mejor.set(i, aux.get(i));
+					}
 				}
 			}
 			this.cromosoma = new ArrayList<Integer>(mejor);
 			this.fitness = mejorF;
 		}
 	}
+	
+	public void mutarTAM(double prob) {
+		if(rand.nextDouble() < prob) {
+			int punto1 = rand.nextInt(0,NUM_CIUDADES);
+			int punto2 = rand.nextInt(0,NUM_CIUDADES);
+			
+			if(punto1 > punto2) {
+				int aux = punto1;
+				punto1 = punto2;
+				punto2 = aux;
+			}
+			
+			ArrayList<Integer> listaAux = new ArrayList<Integer>();
+			
+			for(int i = punto1;i <= punto2;i++) {
+				listaAux.add(this.cromosoma.get(punto1));
+				this.cromosoma.remove(punto1);
+			}
+			
+			if(this.cromosoma.size() == 0) {
+				for(int i = 0; i < listaAux.size();i++) {
+					this.cromosoma.add(listaAux.get(i));
+				}	
+				this.fitness = getValor();
+				return;
+			}
+			
+			int pos = rand.nextInt(0,this.cromosoma.size());
+			
+			for(int i = 0; i < listaAux.size();i++) {
+				this.cromosoma.add(pos,listaAux.get(i));
+				pos++;
+			}
+			this.fitness = getValor();
+		}
+	}
+	
 	private List<List<Integer>> getPermutations(ArrayList<Integer> list) {
         List<List<Integer>> result = new ArrayList<>();
         if (list.size() == 1) {
@@ -251,10 +302,12 @@ public class IndividuoTSP extends Individuo<Integer>{
     }
 	
 	public static void main(String args[]) {
+		
 		IndividuoTSP a = new IndividuoTSP();
 		System.out.println(a.cromosoma);
-		a.mutarHeur(1);
+		a.mutarTAM(1);
 		System.out.println(a.cromosoma);
+		
 	}
 	
 }

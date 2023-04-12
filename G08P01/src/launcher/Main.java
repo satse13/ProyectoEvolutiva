@@ -15,14 +15,18 @@ import factories.Individuo3Factory;
 import factories.Individuo4AFactory;
 import factories.Individuo4BFactory;
 import factories.IndividuoFactory;
+import factories.IndividuoTSPFactory;
 import model.AlgoritmoGenetico;
 import model.cruce.Cruce;
+import model.cruce.CruceATX;
 import model.cruce.CruceAritmetico;
 import model.cruce.CruceBLXA;
+import model.cruce.CruceCX;
 import model.cruce.CruceCodificacionOrdinal;
 import model.cruce.CruceMonopunto;
 import model.cruce.CruceOX;
 import model.cruce.CruceOrdenPrioritario;
+import model.cruce.CrucePMX;
 import model.cruce.CrucePosPrio;
 import model.cruce.CruceRecombinacionRutas;
 import model.cruce.CruceUniforme;
@@ -32,6 +36,7 @@ import model.mutacion.MutacionHeuristica;
 import model.mutacion.MutacionInsercion;
 import model.mutacion.MutacionIntercambio;
 import model.mutacion.MutacionInversion;
+import model.mutacion.MutacionTAM;
 import model.seleccion.EstocasticoUniversal;
 import model.seleccion.Ranking;
 import model.seleccion.Restos;
@@ -61,6 +66,11 @@ public class Main {
 	private static ArrayList<String> listaCruceBool = null;
 	
 	private static ArrayList<String> listaMutacionBasica = null;
+	
+	private static ArrayList<String> listaCruceTSP= null;
+
+	private static ArrayList<String> listaMutacionTSP = null;
+
 	
 
 	public static void main(String[] args) {
@@ -95,12 +105,14 @@ public class Main {
 			put("Cruce Uniforme" , new CruceUniforme());
 			put("Cruce Aritmético", new CruceAritmetico());
 			put("BLX-Alpha", new CruceBLXA());
-			put("Cruce OX", new CruceOX());
-			put("Cruce Posiciones Prioritarias", new CrucePosPrio());
-			put("Cruce Orden Prioritario", new CruceOrdenPrioritario());
-			put("Cruce ciclos", new CruceOX());
-			put("Cruce Recombinación rutas", new CruceRecombinacionRutas());
-			put("Cruce Codificación ordinal", new CruceCodificacionOrdinal());
+			put("PMX", new CrucePMX()); // Añadida esta linea post entrega
+			put("OX", new CruceOX());
+			put("Posiciones Prioritarias", new CrucePosPrio());
+			put("Orden Prioritario", new CruceOrdenPrioritario());
+			put("Ciclos", new CruceCX()); // Este tenia el cruce por orden en vez del de ciclos
+			put("Recombinación rutas", new CruceRecombinacionRutas());
+			put("Codificación ordinal", new CruceCodificacionOrdinal());
+			put("ATX", new CruceATX());
 		}};
 		
 		mapaMutacion = new HashMap<String, Mutacion>(){{
@@ -109,24 +121,25 @@ public class Main {
 			put("Inserción", new MutacionInsercion());
 			put("Inversión", new MutacionInversion());
 			put("Intercambio", new MutacionIntercambio());
+			put("TAM",new MutacionTAM());
 		}};
 		
 		listaSeleccion = new ArrayList<String>() {{
-				add("Ruleta");
-				add("Torneo Determinístico");
-				add("Torneo Probabilísitco");
-				add("Estocástico Universal");
-				add("Truncamiento");
-				add("Restos");
-				add("Ranking");
+			add("Ruleta");
+			add("Torneo Determinístico");
+			add("Torneo Probabilísitco");
+			add("Estocástico Universal");
+			add("Truncamiento");
+			add("Restos");
+			add("Ranking");
 		}};
 		
 		
 		listaCruceDouble = new ArrayList<String>() {{
-				add("Cruce Monopunto");
-				add("Cruce Uniforme");
-				add("Cruce Aritmético");
-				add("BLX-Alpha");
+			add("Cruce Monopunto");
+			add("Cruce Uniforme");
+			add("Cruce Aritmético");
+			add("BLX-Alpha");
 		}};
 		
 		listaCruceBool = new ArrayList<String>() {{
@@ -136,18 +149,34 @@ public class Main {
 	
 		listaMutacionBasica = new ArrayList<String>(){{
 			add("Básica");
+		}};
+		
+		listaCruceTSP = new ArrayList<String>() {{
+			add("PMX"); // Añadida esta linea post entrega
+			add("OX");
+			add("Posiciones Prioritarias");
+			add("Orden Prioritario");
+			add("Ciclos");
+			add("Recombinación rutas");
+			add("Codificación ordinal");
+			add("ATX");
+		}};		
+		
+		listaMutacionTSP = new ArrayList<String>(){{
 			add("Inserción");
 			add("Inversión");
 			add("Intercambio");
 			add("Heuristica");
-		}};
+			add("TAM");
+		}};		 
 		
-		 mapaFactories = new TreeMap<String, Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>>(){{
-			 	put("Función 1: Calibración y prueba", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo1Factory(), false, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
-			 	put("Función 2: GrieWank", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo2Factory(), false, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
-			 	put("Función 3: Styblinski-tang", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo3Factory(), false, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
-			 	put("Función 4A: Michalewicz", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo4AFactory(), true, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
-			 	put("Función 4B: Michalewicz", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo4BFactory(), true, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceDouble,listaMutacionBasica)));
+		mapaFactories = new TreeMap<String, Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>>(){{
+		 	put("Función 1: Calibración y prueba", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo1Factory(), false, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
+		 	put("Función 2: GrieWank", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo2Factory(), false, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
+		 	put("Función 3: Styblinski-tang", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo3Factory(), false, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
+		 	put("Función 4A: Michalewicz", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo4AFactory(), true, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceBool,listaMutacionBasica)));
+		 	put("Función 4B: Michalewicz", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new Individuo4BFactory(), true, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceDouble,listaMutacionBasica)));
+		 	put("Función 5: TSP", new Trio<IndividuoFactory, Boolean, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new IndividuoTSPFactory(), false, new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceTSP,listaMutacionTSP)));
 		}};
 			
 	}

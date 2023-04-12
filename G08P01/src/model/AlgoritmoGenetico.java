@@ -65,9 +65,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 				
 		if(!parseParam())
 			return;
-		
-		System.out.println(seleccion);
-		
+
 		poblacion = new ArrayList<Individuo>();
 		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
 		medias = new double[maxGeneraciones+1];

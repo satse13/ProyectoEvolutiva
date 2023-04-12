@@ -88,7 +88,7 @@ public class CruceCodificacionOrdinal implements Cruce{
 	private ArrayList<Integer> codificar(ArrayList<Integer> cP1) {
 		ArrayList<Integer> lista = new ArrayList<Integer>();
 		for(int i = 0; i <= IndividuoTSP.NUM_CIUDADES;i++) {
-			if(i !=24)
+			if(i !=25)
 				lista.add(i);
 		}
 				
@@ -107,7 +107,7 @@ public class CruceCodificacionOrdinal implements Cruce{
 		
 		ArrayList<Integer> lista = new ArrayList<Integer>();
 		for(int i = 0; i <= IndividuoTSP.NUM_CIUDADES;i++) {
-			if(i !=24)
+			if(i !=25)
 				lista.add(i);
 		}
 		ArrayList<Integer> ind = new ArrayList<Integer>();
