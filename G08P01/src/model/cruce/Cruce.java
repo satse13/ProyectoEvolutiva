@@ -5,8 +5,41 @@ import java.util.Random;
 
 import model.individuos.Individuo;
 import utils.Pair;
-public interface Cruce {
+public abstract class Cruce{
 	
-	public ArrayList<ArrayList> cruzar(ArrayList<Individuo> poblacion,ArrayList<Integer> seleccionados, double probCruce);
+	public ArrayList cruzar(ArrayList<Individuo> poblacion,ArrayList<Integer> seleccionados, double probCruce){
+		ArrayList nuevaGen = new ArrayList<>();
+		
+		Individuo padre1, padre2;
+		
+		Random r = new Random();
+		
+		if(poblacion.size() % 2 == 1) {
+			nuevaGen.add(poblacion.get(seleccionados.get(seleccionados.size()-1)).getCromosoma());
+			seleccionados.remove(seleccionados.size()-1);
+		}
+		
+		for(int i = 0; i < seleccionados.size();i+=2) {
+			
+			padre1 = poblacion.get(seleccionados.get(i));
+			padre2 = poblacion.get(seleccionados.get(i+1));
+
+			if(r.nextDouble() < probCruce) { // Se cruzan
+				Pair<ArrayList,ArrayList> hijos = cruceAux(padre1,padre2);
+				nuevaGen.add(hijos.getFirst());
+				nuevaGen.add(hijos.getSecond());
+			}
+			
+			else {
+				nuevaGen.add(padre1.getCromosoma());
+				nuevaGen.add(padre2.getCromosoma());
+			}
+			
+		}
+		
+		return nuevaGen;
+	}
+	
+	protected abstract <T> Pair<ArrayList, ArrayList> cruceAux(Individuo padre1, Individuo padre2);
 
 }

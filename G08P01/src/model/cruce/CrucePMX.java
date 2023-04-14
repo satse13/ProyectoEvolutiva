@@ -11,47 +11,9 @@ import model.individuos.Individuo;
 import model.individuos.IndividuoTSP;
 import utils.Pair;
 
-public class CrucePMX implements Cruce {
+public class CrucePMX extends Cruce {
 
-	
-	@Override
-	public ArrayList<ArrayList> cruzar(ArrayList<Individuo> poblacion, ArrayList<Integer> seleccionados,
-			double probCruce) {
-
-		ArrayList nuevaGen = new ArrayList<>();
-		
-		Individuo padre1, padre2;
-		
-		Random r = new Random();
-		
-		if(poblacion.size() % 2 == 1) {
-			nuevaGen.add(poblacion.get(seleccionados.get(seleccionados.size()-1)).getCromosoma());
-			seleccionados.remove(seleccionados.size()-1);
-		}
-		
-		for(int i = 0; i < seleccionados.size();i+=2) {
-			
-			padre1 = poblacion.get(seleccionados.get(i));
-			padre2 = poblacion.get(seleccionados.get(i+1));
-
-			if(r.nextDouble() < probCruce) { // Se cruzan
-				Pair<ArrayList,ArrayList> hijos = cruceAux(padre1,padre2);
-				nuevaGen.add(hijos.getFirst());
-				nuevaGen.add(hijos.getSecond());
-			}
-			
-			else {
-				nuevaGen.add(padre1.getCromosoma());
-				nuevaGen.add(padre2.getCromosoma());
-			}
-			
-		}
-		
-		
-		return nuevaGen;
-	}
-
-	public static <T> Pair<ArrayList, ArrayList> cruceAux(Individuo padre1, Individuo padre2) {
+	protected <T> Pair<ArrayList, ArrayList> cruceAux(Individuo padre1, Individuo padre2) {
 
 		ArrayList<T> cPadre1 = padre1.getCromosoma();
 		ArrayList<T> cPadre2 = padre2.getCromosoma();
@@ -69,10 +31,7 @@ public class CrucePMX implements Cruce {
 		
 		int punto1 = r.nextInt(0,cPadre1.size());
 		int punto2 = r.nextInt(0,cPadre2.size());
-		
-		//int punto1 = 6;
-		//int punto2 = 7;
-		
+
 		if(punto1 > punto2) {
 			int aux = punto1;
 			punto1 = punto2;
@@ -146,43 +105,5 @@ public class CrucePMX implements Cruce {
 		return new Pair<ArrayList,ArrayList>(crom1,crom2);
 		
 	}
-	
-	 public static void main(String[] args) {
-	       
-		 
-		 ArrayList<Integer> m = new ArrayList<Integer>();
-		 m.add(6);
-		 m.add(8);
-		 m.add(5);
-		 m.add(0);
-		 m.add(1);
-		 m.add(2);
-		 m.add(3);
-		 m.add(4);
-		 m.add(7);
-
-		 
-		 ArrayList<Integer> n = new ArrayList<Integer>();
-		 n.add(0);
-		 n.add(5);
-		 n.add(1);
-		 n.add(6);
-		 n.add(7);
-		 n.add(4);
-		 n.add(8);
-		 n.add(2);
-		 n.add(3);
-		 
-		 IndividuoTSP a = new IndividuoTSP();
-		 IndividuoTSP b = new IndividuoTSP();
-
-		 CrucePMX c = new CrucePMX();
-		 
-		Pair<ArrayList,ArrayList> hijos = c.cruceAux(a,b);
-
-		System.out.println(hijos.getFirst());
-		System.out.println(hijos.getSecond());
-		 
-	 }
-		
+			
 }

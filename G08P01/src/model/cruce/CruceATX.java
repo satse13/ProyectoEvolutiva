@@ -9,44 +9,9 @@ import model.individuos.Individuo;
 import model.individuos.IndividuoTSP;
 import utils.Pair;
 
-public class CruceATX implements Cruce{
+public class CruceATX extends Cruce{
 	
-	@Override
-	public ArrayList<ArrayList> cruzar(ArrayList<Individuo> poblacion, ArrayList<Integer> seleccionados, double probCruce) {
-		
-		ArrayList nuevaGen = new ArrayList<>();
-		
-		Individuo padre1, padre2;
-		
-		Random r = new Random();
-		
-		if(poblacion.size() % 2 == 1) {
-			nuevaGen.add(poblacion.get(seleccionados.get(seleccionados.size()-1)).getCromosoma());
-			seleccionados.remove(seleccionados.size()-1);
-		}
-		
-		for(int i = 0; i < seleccionados.size();i+=2) {
-			
-			padre1 = poblacion.get(seleccionados.get(i));
-			padre2 = poblacion.get(seleccionados.get(i+1));
-
-			if(r.nextDouble() < probCruce) { // Se cruzan
-				Pair<ArrayList,ArrayList> hijos = cruceAux(padre1,padre2);
-				nuevaGen.add(hijos.getFirst());
-				nuevaGen.add(hijos.getSecond());
-			}
-			
-			else {
-				nuevaGen.add(padre1.getCromosoma());
-				nuevaGen.add(padre2.getCromosoma());
-			}
-			
-		}
-		
-		return nuevaGen;
-	}
-
-	private static <T> Pair<ArrayList, ArrayList> cruceAux(Individuo padre1, Individuo padre2) {
+	protected <T> Pair<ArrayList, ArrayList> cruceAux(Individuo padre1, Individuo padre2) {
 	
 		ArrayList<T> cPadre1 = padre1.getCromosoma();
 		ArrayList<T> cPadre2 = padre2.getCromosoma();
@@ -120,23 +85,6 @@ public class CruceATX implements Cruce{
 		
 		
 		return new Pair<ArrayList,ArrayList>(crom1,crom2);
-	}
-
-	public static void main(String args[]) {
-		
-		IndividuoTSP a = new IndividuoTSP();
-		IndividuoTSP b = new IndividuoTSP();
-
-		CruceATX c = new CruceATX();
-		
-		Pair<ArrayList,ArrayList> hijos = cruceAux(a,b);
-		
-		System.out.println(a.getCromosoma());
-		System.out.println(b.getCromosoma());
-		
-		System.out.println(hijos.getFirst());
-		System.out.println(hijos.getSecond());
-		
 	}
 	
 }

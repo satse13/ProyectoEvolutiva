@@ -8,43 +8,9 @@ import java.util.Set;
 import model.individuos.Individuo;
 import utils.Pair;
 
-public class CruceOX implements Cruce{
+public class CruceOX extends Cruce{
 
-	@Override
-	public ArrayList<ArrayList> cruzar(ArrayList<Individuo> poblacion, ArrayList<Integer> seleccionados,double probCruce) {
-		ArrayList nuevaGen = new ArrayList<>();
-		
-		Individuo padre1, padre2;
-		
-		Random r = new Random();
-		
-		if(poblacion.size() % 2 == 1) {
-			nuevaGen.add(poblacion.get(seleccionados.get(seleccionados.size()-1)).getCromosoma());
-			seleccionados.remove(seleccionados.size()-1);
-		}
-		
-		for(int i = 0; i < seleccionados.size();i+=2) {
-			
-			padre1 = poblacion.get(seleccionados.get(i));
-			padre2 = poblacion.get(seleccionados.get(i+1));
-
-			if(r.nextDouble() < probCruce) { // Se cruzan
-				Pair<ArrayList,ArrayList> hijos = cruceAux(padre1,padre2);
-				nuevaGen.add(hijos.getFirst());
-				nuevaGen.add(hijos.getSecond());
-			}
-			
-			else {
-				nuevaGen.add(padre1.getCromosoma());
-				nuevaGen.add(padre2.getCromosoma());
-			}
-			
-		}
-		
-		return nuevaGen;
-	}
-
-	private <T> Pair<ArrayList, ArrayList> cruceAux(Individuo padre1, Individuo padre2) {
+	protected <T> Pair<ArrayList, ArrayList> cruceAux(Individuo padre1, Individuo padre2) {
 		
 		ArrayList<T> cPadre1 = padre1.getCromosoma();
 		ArrayList<T> cPadre2 = padre2.getCromosoma();
