@@ -6,7 +6,7 @@ import model.individuos.Individuo1;
 public class Individuo1Factory implements IndividuoFactory<Individuo1>{
 
 	@Override
-	public Individuo1 generateInd(double valorError, int dimension) {
+	public Individuo1 generateInd(double valorError, int dimension, String creacion, int profundidad) {
 		return new Individuo1(valorError);
 	}
 

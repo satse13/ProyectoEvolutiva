@@ -8,7 +8,7 @@ import model.individuos.Individuo4B;
 public class Individuo4BFactory implements IndividuoFactory<Individuo4B>{
 
 	@Override
-	public Individuo4B generateInd(double valorError, int dimension) {
+	public Individuo4B generateInd(double valorError, int dimension, String creacion, int profundidad) {
 		return new Individuo4B(valorError, dimension);
 	}
 

@@ -18,6 +18,10 @@ import utils.Pair;
 @SuppressWarnings("rawtypes")
 
 public class AlgoritmoGenetico implements Observable<Observer>{
+	
+	public final static String COMPLETO = "COMPLETO";
+	public final static String CRECIENTE = "CRECIENTE";
+	public final static String RAMPED = "RAMPED";
 
 	private int tamPoblacion;
 	private ArrayList<Individuo> poblacion;
@@ -30,11 +34,14 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	private double probCruce;
 	private double probMutacion;
 	private Individuo mejorGeneracion; 
-	private int dimension;
+	private int dimension; 
 	private double valorError;
 	private double porElitismo;
 	private ArrayList<Individuo> elite;
 	private ArrayList<Pair<Double, Individuo>> mejoresIntervalo;
+	
+	private String tipoCreacion;
+	private int profundidad;
 	
 	private double[] medias;
 	private double[] mejorGen;
@@ -56,6 +63,8 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.mutacion = new MutacionBasica();
 		this.valorError = 0.001;
 		this.porElitismo = 0.0;
+		this.tipoCreacion = COMPLETO;
+		this.profundidad = 5; // Maxima profundidad posible del arbol
 		this.mejoresIntervalo = new ArrayList<Pair<Double, Individuo>>();
 		observers = new ArrayList<>();
 		
@@ -214,7 +223,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	
 	private void initPoblacion() {
 		for(int i = 0; i < this.tamPoblacion;i++) {
-			poblacion.add(factory.generateInd(valorError, dimension)); 
+			poblacion.add(factory.generateInd(valorError, dimension, tipoCreacion, profundidad)); 
 		}
 	}
 	
