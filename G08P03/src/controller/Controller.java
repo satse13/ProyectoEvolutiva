@@ -10,12 +10,14 @@ import javax.swing.JOptionPane;
 
 import factories.IndividuoFactory;
 import model.AlgoritmoGenetico;
+import model.creacion.Creacion;
 import model.cruce.Cruce;
 import model.mutacion.Mutacion;
 import model.observers.Observer;
 import model.seleccion.Seleccion;
 import utils.TipoDato;
 import utils.Trio;
+import utils.Cuarteto;
 import utils.Function;
 import utils.Pair;
 
@@ -29,10 +31,11 @@ public class Controller {
 	
 	private AlgoritmoGenetico algoritmo;
 	
-	private Map<String, Pair<IndividuoFactory, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>> mapaFactories;
+	private Map<String, Pair<IndividuoFactory, Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>>> mapaFactories;
 	private Map<String, Seleccion> mapaSeleccion;
 	private Map<String, Cruce> mapaCruce;
 	private Map<String ,Mutacion> mapaMutacion;
+	private Map<String, Creacion> mapaCreacion;
 	
 	private Map<String, Function<Double>> mapaFunciones;
 	private Map<String, Pair<Double,Double>> mapaExcepciones;
@@ -41,12 +44,13 @@ public class Controller {
 	
 	private double min, max; 
 	
-	public Controller(AlgoritmoGenetico algoritmo, Map<String, Pair<IndividuoFactory, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>> mapaFactories, Map<String, Seleccion> mapaSeleccion,Map<String, Cruce> mapaCruce, Map<String,Mutacion> mapaMutacion) {
+	public Controller(AlgoritmoGenetico algoritmo, Map<String, Pair<IndividuoFactory, Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>>> mapaFactories, Map<String, Seleccion> mapaSeleccion,Map<String, Cruce> mapaCruce, Map<String,Mutacion> mapaMutacion, Map<String,Creacion> mapaCreacion) {
 		this.algoritmo = algoritmo;
 		this.mapaFactories = mapaFactories;
 		this.mapaSeleccion = mapaSeleccion;	
 		this.mapaCruce = mapaCruce;
 		this.mapaMutacion = mapaMutacion;
+		this.mapaCreacion = mapaCreacion;
 		initMapa();
 	}
 
@@ -172,7 +176,7 @@ public class Controller {
 		algoritmo.setCruce(this.mapaCruce.get(selectedItem));
 	}
 
-	public Map<String, Pair<IndividuoFactory, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>> getMapaFactories() {
+	public Map<String, Pair<IndividuoFactory, Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>>> getMapaFactories() {
 		return Collections.unmodifiableMap(mapaFactories);
 	}
 

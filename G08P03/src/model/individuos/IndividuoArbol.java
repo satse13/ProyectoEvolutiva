@@ -18,7 +18,6 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	
 	public final static String COMPLETO = "COMPLETO";
 	public final static String CRECIENTE = "CRECIENTE";
-	public final static String RAMPED = "RAMPED";
 	
 	public static final int MAX_PROFUNDIDAD = 5;
 	
@@ -138,7 +137,6 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	private Map<String, Function2<BinTree<String>, Integer>> mapaFunciones = new HashMap<String, Function2<BinTree<String>, Integer>>() {{
 		put(COMPLETO, (x,y) -> inicializacionCompleta(x,y));
 		put(CRECIENTE, (x,y) -> inicializacionCreciente(x,y));
-		put(RAMPED, (x,y) -> RampedAndHalf(x,y));
 	}};
 	
 	

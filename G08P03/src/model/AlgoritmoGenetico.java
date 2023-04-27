@@ -5,6 +5,8 @@ import java.util.Collections;
 
 import factories.IndividuoArbolFactory;
 import factories.IndividuoFactory;
+import model.creacion.Creacion;
+import model.creacion.CreacionCompleta;
 import model.cruce.Cruce;
 import model.cruce.CruceMonopunto;
 import model.individuos.Individuo;
@@ -30,6 +32,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	private Seleccion seleccion;
 	private Cruce cruce;
 	private Mutacion mutacion;
+	private Creacion creacion;
 	private int maxGeneraciones;
 	private double probCruce;
 	private double probMutacion;
@@ -61,6 +64,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.seleccion = new SeleccionRuleta();
 		this.cruce = new CruceMonopunto();
 		this.mutacion = new MutacionBasica();
+		this.creacion = new CreacionCompleta();
 		this.valorError = 0.001;
 		this.porElitismo = 0.0;
 		this.tipoCreacion = COMPLETO;
@@ -201,7 +205,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		mejorGeneracion = poblacion.get(poblacion.size()-1);
 		
 		if (i == 0)
-			elMejorAbs = factory.generateInd(mejorGeneracion.getCromosoma(), valorError, dimension);
+			elMejorAbs = factory.generateInd(mejorGeneracion.getCromosoma());
 		
 		else if (elMejorAbs.mejorFitness(mejorGeneracion)) {
 			elMejorAbs.setCromosoma(mejorGeneracion.getCromosoma());
@@ -222,16 +226,18 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	}	
 	
 	private void initPoblacion() {
-		for(int i = 0; i < this.tamPoblacion;i++) {
+		
+		poblacion = creacion.generarPoblacion(factory, profundidad, tamPoblacion);
+		/*for(int i = 0; i < this.tamPoblacion;i++) {
 			poblacion.add(factory.generateInd(valorError, dimension, tipoCreacion, profundidad)); 
-		}
+		}*/
 	}
 	
 	private <T> ArrayList<Individuo> nuevaGen(ArrayList cromosomas) {
 		ArrayList<Individuo> nuevaGen = new ArrayList<Individuo>();
 		
 		for(int i = 0; i < cromosomas.size();i++) {
-			nuevaGen.add(factory.generateInd((ArrayList<T>) cromosomas.get(i),valorError,dimension));
+			nuevaGen.add(factory.generateInd((ArrayList<T>) cromosomas.get(i)));
 		}
 		
 		return nuevaGen;

@@ -6,8 +6,8 @@ import model.individuos.Individuo;
 
 public interface IndividuoFactory<T extends Individuo>{
 	
-	public Individuo generateInd(double valorError, int dimension, String creacion, int profundidad);
+	public Individuo generateInd(String creacion, int profundidad);
 	
-	public <T> Individuo generateInd(T cromosoma, double valorError, int dimension);
+	public <T> Individuo generateInd(T cromosoma);
 	
 }

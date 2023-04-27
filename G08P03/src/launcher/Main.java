@@ -12,6 +12,10 @@ import controller.Controller;
 import factories.IndividuoArbolFactory;
 import factories.IndividuoFactory;
 import model.AlgoritmoGenetico;
+import model.creacion.Creacion;
+import model.creacion.CreacionCompleta;
+import model.creacion.CreacionCreciente;
+import model.creacion.CreacionRampedHalf;
 import model.cruce.Cruce;
 import model.cruce.CruceAritmetico;
 import model.cruce.CruceBLXA;
@@ -27,6 +31,7 @@ import model.seleccion.SeleccionRuleta;
 import model.seleccion.TorneoDeterministico;
 import model.seleccion.TorneoProbabilistico;
 import model.seleccion.Truncamiento;
+import utils.Cuarteto;
 import utils.Pair;
 import utils.TipoDato;
 import utils.Trio;
@@ -34,7 +39,7 @@ import view.MainWindow;
 
 public class Main {
 
-	private static Map<String, Pair<IndividuoFactory, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>> mapaFactories = null;
+	private static Map<String, Pair<IndividuoFactory, Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>>> mapaFactories = null;
 
 	private static Map<String, Seleccion> mapaSeleccion = null;
 
@@ -42,18 +47,24 @@ public class Main {
 	
 	private static Map<String, Mutacion> mapaMutacion = null;
 	
+	private static Map<String, Creacion> mapaCreacion = null;
+	
+	private static ArrayList<String> listaCreacion = null;
+	
 	private static ArrayList<String> listaSeleccion = null;
 	
 	private static ArrayList<String> listaMutacion = null;
 	
 	private static ArrayList<String> listaCruce= null;
 	
+	
+	
 
 	public static void main(String[] args) {
 		
 		initMaps();
 		AlgoritmoGenetico algoritmo = new AlgoritmoGenetico();
-		Controller ctrl = new Controller(algoritmo,mapaFactories,mapaSeleccion, mapaCruce,mapaMutacion);
+		Controller ctrl = new Controller(algoritmo,mapaFactories,mapaSeleccion, mapaCruce,mapaMutacion,mapaCreacion);
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -65,13 +76,13 @@ public class Main {
 	private static void initMaps() {
 		
 		mapaSeleccion = new HashMap<String, Seleccion>(){{
-				put("Ruleta", new SeleccionRuleta());
-				put("Torneo Determinístico", new TorneoDeterministico());
-				put("Torneo Probabilísitco", new TorneoProbabilistico());
-				put("Estocástico Universal", new EstocasticoUniversal());
-				put("Truncamiento", new Truncamiento());
-				put("Restos", new Restos());
-				put("Ranking", new Ranking());
+			put("Ruleta", new SeleccionRuleta());
+			put("Torneo Determinístico", new TorneoDeterministico());
+			put("Torneo Probabilísitco", new TorneoProbabilistico());
+			put("Estocástico Universal", new EstocasticoUniversal());
+			put("Truncamiento", new Truncamiento());
+			put("Restos", new Restos());
+			put("Ranking", new Ranking());
 		}};
 		
 		mapaCruce = new HashMap<String, Cruce>(){{
@@ -83,6 +94,18 @@ public class Main {
 		
 		mapaMutacion = new HashMap<String, Mutacion>(){{
 			put("Básica", new MutacionBasica());
+		}};
+		
+		mapaCreacion = new HashMap<String,Creacion>(){{
+			put("Creciente", new CreacionCreciente());
+			put("Completa", new CreacionCompleta());
+			put("Ramped and Half", new CreacionRampedHalf());
+		}};
+		
+		listaCreacion = new ArrayList<String>() {{
+			add("Completa");
+			add("Creciente");
+			add("Ramped and Half");
 		}};
 		
 		listaSeleccion = new ArrayList<String>() {{
@@ -106,8 +129,8 @@ public class Main {
 			add("BLX-Alpha");
 		}};
 		
-		mapaFactories = new TreeMap<String, Pair<IndividuoFactory, Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>>>(){{
-		 		put("Individuo Arbol", new Pair<IndividuoFactory, Trio<ArrayList<String>, ArrayList<String>, ArrayList<String>>>(new IndividuoArbolFactory(), new Trio<ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruce,listaMutacion)));
+		mapaFactories = new TreeMap<String, Pair<IndividuoFactory, Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>>>(){{
+		 		put("Individuo Arbol", new Pair<IndividuoFactory, Cuarteto<ArrayList<String>, ArrayList<String>, ArrayList<String>,ArrayList<String>>>(new IndividuoArbolFactory(), new Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruce,listaMutacion,listaCreacion)));
 		}};
 			
 	}
