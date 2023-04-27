@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 import model.individuos.Individuo;
 
-public class MutacionBasica implements Mutacion{
+public class MutacionFuncional implements Mutacion{
 
 	@Override
 	public void mutar(ArrayList<Individuo> poblacion, double prob) {
 		for(Individuo in: poblacion) {
-			in.mutarBas(prob);
-		}
+			in.mutarFun(prob);
+		}		
 	}
-
 }

@@ -13,8 +13,8 @@ public class CruceBLXA extends Cruce{
 	
 	protected Pair<ArrayList, ArrayList> cruceAux(Individuo padre1, Individuo padre2) {
 	
-		ArrayList cPadre1 = padre1.getCromosoma();
-		ArrayList cPadre2 = padre2.getCromosoma();
+		ArrayList cPadre1 = (ArrayList) padre1.getCromosoma();
+		ArrayList cPadre2 = (ArrayList) padre2.getCromosoma();
 
 		
 		ArrayList crom1 = new ArrayList<>(cPadre1.size()); 

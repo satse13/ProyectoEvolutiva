@@ -7,7 +7,7 @@ import model.individuos.Individuo;
 import utils.Pair;
 public abstract class Cruce{
 	
-	public ArrayList cruzar(ArrayList<Individuo> poblacion,ArrayList<Integer> seleccionados, double probCruce){
+	public <T> ArrayList<T> cruzar(ArrayList<Individuo> poblacion,ArrayList<Integer> seleccionados, double probCruce){
 		ArrayList nuevaGen = new ArrayList<>();
 		
 		Individuo padre1, padre2;
@@ -25,7 +25,7 @@ public abstract class Cruce{
 			padre2 = poblacion.get(seleccionados.get(i+1));
 
 			if(r.nextDouble() < probCruce) { // Se cruzan
-				Pair<ArrayList,ArrayList> hijos = cruceAux(padre1,padre2);
+				Pair<T,T> hijos = cruceAux(padre1,padre2);
 				nuevaGen.add(hijos.getFirst());
 				nuevaGen.add(hijos.getSecond());
 			}
@@ -40,6 +40,6 @@ public abstract class Cruce{
 		return nuevaGen;
 	}
 	
-	protected abstract <T> Pair<ArrayList, ArrayList> cruceAux(Individuo padre1, Individuo padre2);
+	protected abstract <T> Pair<T, T> cruceAux(Individuo padre1, Individuo padre2);
 
 }

@@ -14,7 +14,7 @@ public class IndividuoArbolFactory implements IndividuoFactory<IndividuoArbol>{
 	}
 
 	@Override
-	public Individuo generateInd(ArrayList cromosoma, double valorError, int dimension) {
+	public <T> Individuo generateInd(T cromosoma, double valorError, int dimension) {
 		// TODO Auto-generated method stub
 		return null;
 	}
