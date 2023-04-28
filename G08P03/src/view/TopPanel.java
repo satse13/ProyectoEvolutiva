@@ -27,11 +27,13 @@ public class TopPanel extends JPanel implements Observer {
 	
 	private Controller _ctrl;
 	
-	JLabel problemaLabel;
+	JLabel problemaLabel, creacionLabel, profundidadLabel;
 	
-	JComboBox problemaBox, parametrosBox;
+	JComboBox problemaBox, parametrosBox, creacionBox;
 	
 	LeftPanel lp;
+	
+	JSpinner profundidadSpinner;
 	
 	BottomPanel bp;
 	
@@ -77,6 +79,41 @@ public class TopPanel extends JPanel implements Observer {
 		JSeparator separator3 = new JSeparator(JSeparator.VERTICAL);
 		separator3.setPreferredSize(new Dimension(5, 0)); 
 		
+		creacionLabel = new JLabel("Tipo de creación: ");
+		
+		String[] crea = new String[_ctrl.getMapaFactories().get((String) problemaBox.getSelectedItem()).getSecond().getFourth().size()];
+		
+		for(int i = 0; i < crea.length;i++) {
+			crea[i] = _ctrl.getMapaFactories().get((String) problemaBox.getSelectedItem()).getSecond().getFourth().get(i);
+		}
+		
+		creacionBox = new JComboBox<String>(crea);
+		
+		creacionBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				_ctrl.updateTipoCreacion((String) creacionBox.getSelectedItem());
+			}	
+		});
+		
+		JSeparator separator4 = new JSeparator(JSeparator.VERTICAL);
+		separator4.setPreferredSize(new Dimension(5, 0)); 
+		
+		profundidadLabel = new JLabel("Profundidad máxima: ");
+		
+		SpinnerNumberModel sp = new SpinnerNumberModel(5,2,5,1);
+		profundidadSpinner = new JSpinner(sp);
+		profundidadSpinner.setPreferredSize(new Dimension(40,25));
+		//profundidadSpinner.setEnabled(_ctrl.getMapaFactories().get((String) problemaBox.getSelectedItem()).getSecond());
+
+		
+		profundidadSpinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				_ctrl.updateProfundidad((int)profundidadSpinner.getValue());
+			}
+			
+		});
+		
 		add(new JLabel("Análisis de parametros: "));
 		add(parametrosBox);
  		add(separator1);
@@ -84,6 +121,11 @@ public class TopPanel extends JPanel implements Observer {
 		add(separator2);
 		add(problemaBox);
 		add(separator3);
+		add(creacionLabel);
+		add(creacionBox);
+		add(separator4);
+		add(profundidadLabel);
+		add(profundidadSpinner);
 		setBackground(Color.WHITE);
 		setVisible(true);
 		
@@ -101,6 +143,7 @@ public class TopPanel extends JPanel implements Observer {
 	public void onReset() {
         problemaBox.setSelectedIndex(0);
         parametrosBox.setSelectedIndex(0);
+        profundidadSpinner.setValue(5);;
     }
 
 	@Override

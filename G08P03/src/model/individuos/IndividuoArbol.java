@@ -24,7 +24,7 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	public static final Set<String> operadores = new HashSet<String>() {{add("add"); add("mul"); add("sub");}};
 	
 	public static final Set<String> terminales = new HashSet<String>() {{add("x"); add("1"); add("2"); add("0"); add("-1"); add("-2");}};
-		
+	
 	public static final ArrayList<Pair<Double,Double>> fitnessAux = new ArrayList<Pair<Double,Double>>(){{
 	
 		add(new Pair<Double,Double>(-1.0,1.0));
@@ -130,6 +130,17 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 		add(new Pair<Double,Double>(1.00,5.0000));
 	}};
 	
+	// Esto es una prueba
+	//public  ArrayList<Pair<Double,Double>> fitnessAux;
+	
+	private void initFitnessAux() {
+		/*
+		fitnessAux = new ArrayList<Pair<Double,Double>>();
+        for (double ini = -1.0; ini <= 1.0 ; ini += 0.02) {
+        	fitnessAux.add(new Pair<Double,Double>(ini, Math.pow(ini, 4) + Math.pow(ini, 3) + Math.pow(ini, 2) + ini + 1));
+        }*/
+    }
+	
 	private static int profundidad;
 	
 	private static String tipoCreacion;
@@ -141,6 +152,7 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	
 	
 	public IndividuoArbol(String tipoCreacion, int profundidad) {
+		initFitnessAux();
 		IndividuoArbol.profundidad = profundidad;
 		IndividuoArbol.tipoCreacion = tipoCreacion;
 		this.cromosoma = new BinTree<String>();
@@ -149,8 +161,9 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	}
 	
 	public IndividuoArbol(BinTree<String> cromosoma) {
+		initFitnessAux();
 		this.cromosoma = new BinTree<String>();
-		this.cromosoma.copiarArbol(cromosoma);
+		this.cromosoma.setArbol(cromosoma);
 		this.fitness = this.getValor();
 	}
 	
@@ -229,14 +242,15 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	@Override
 	protected double getValor() {
 		
-		double fitness = 0;
+		double sum = 0;
 		for(int i = 0; i < fitnessAux.size();i++) {
 			double fAux = 0;
 			fAux = funcArbol(this.cromosoma,fitnessAux.get(i).getFirst());
-			fitness += Math.pow(fitnessAux.get(i).getSecond() - fAux,2);
+
+			sum += Math.pow(fitnessAux.get(i).getSecond() - fAux,2);
 		}
-		fitness = Math.sqrt(fitness);
-		return fitness;
+		sum = Math.sqrt(sum);
+		return sum;
 	}
 
 	public void mutarTer(double prob){
@@ -334,7 +348,12 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	
 	@Override
 	public String decodificar() {
-		return arbol_a_string(cromosoma);
+		double x = this.fitness;
+		double y = this.getValor();
+		if (x != y) {
+			System.out.println("cuidado");
+		}
+		return "F(x) = " + arbol_a_string(cromosoma) + " valor: " + this.fitness;
 	}
 	
 	private String arbol_a_string(BinTree<String> arbol) {
@@ -368,6 +387,11 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 		return  Math.abs(this.getFitness() 	* 1.05) - individuo.getFitness();
 	}
 	
+	@Override
+	public String toString() {
+		return arbol_a_string(cromosoma);
+	}
+	
 	private String randElem(Set<String> set) {
 		this.rand = new Random();
 		int size = set.size();
@@ -382,9 +406,10 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	}
 	
 	@Override
-	public void setCromosoma(BinTree<String> cromosoma) { // revisar si funciona
-		cromosoma = new BinTree<String>();
-		this.cromosoma.copiarArbol(cromosoma);
+	public void setCromosoma(BinTree<String> cromosoma) { 
+		this.cromosoma = new BinTree<String>();
+		this.cromosoma = this.cromosoma.copiarArbol(cromosoma);
+		this.fitness = this.getValor();
 	}
 	
 	@Override
@@ -397,6 +422,10 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 			return -1;
 	}
 	
+	public int getNumNodos() {
+		
+		return cromosoma.getNumNodos();
+	}
 
 }
 

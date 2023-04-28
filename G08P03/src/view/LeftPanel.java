@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,6 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -41,19 +44,20 @@ public class LeftPanel extends JPanel implements Observer{
 	
 	String individuo;
 	
-	TopPanel tp;
 	
-	JPanel pobPanel, genePanel, errorPanel, selecPanel, crucePanel, mutaPanel, elitePanel;
+	JPanel pobPanel, genePanel, bloatingPanel, selecPanel, crucePanel, mutaPanel, elitePanel;
 	
-	JLabel pobLabel, geneLabel, errorLabel, tipoSelecLabel, tipoCruceLabel, porCruceLabel, tipoMutaLabel, porMutaLabel, porEliteLabel;
+	JLabel pobLabel, geneLabel, bloatingLabel, tipoSelecLabel, tipoCruceLabel, porCruceLabel, tipoMutaLabel, porMutaLabel, porEliteLabel;
 	
-	JTextField pobText, geneText, errorText, cruceText, mutaText, eliteText;
+	JTextField pobText, geneText, cruceText, mutaText, eliteText;
 	
 	JComboBox selecBox, cruceBox, mutaBox;
 	
 	JPanel adCrucePanel, adMutaPanel, adTamPobPanel;
 	
 	JTextField minProbCruce, maxProbCruce, minProbMuta, maxProbMuta, minTamPob, maxTamPob;
+	
+	JCheckBox bloatingCheckBox;
 	
 	GridBagConstraints c;
 	
@@ -65,7 +69,6 @@ public class LeftPanel extends JPanel implements Observer{
 	
 	public LeftPanel(Controller ctrl) {
 		_ctrl = ctrl;
-		this.tp = tp;
 		_ctrl.addObserver(this);
 		individuo = "Individuo Arbol";
 		initGUI();
@@ -81,11 +84,11 @@ public class LeftPanel extends JPanel implements Observer{
 		
 		poblacionPanel();
 		generacionesPanel();
-		errorPanel();
 		seleccionPanel();
 		crucePanel();
 		mutacionPanel();
 		elitePanel();
+		bloatingPanel();
 		
 		addPanels();	
 	}
@@ -119,19 +122,19 @@ public class LeftPanel extends JPanel implements Observer{
 	    add(genePanel, c);
 	    c.gridx = 0;
 	    c.gridy = 2;
-	    add(errorPanel, c);
-	    c.gridx = 0;
-	    c.gridy = 3;
 	    add(selecPanel, c);
 	    c.gridx = 0;
-	    c.gridy = 4;
+	    c.gridy = 3;
 	    add(crucePanel, c);
 	    c.gridx = 0;
-	    c.gridy = 5;
+	    c.gridy = 4;
 	    add(mutaPanel, c);
 	    c.gridx = 0;
-	    c.gridy = 6;
+	    c.gridy = 5;
 	    add(elitePanel, c);
+	    c.gridx = 0;
+	    c.gridy = 6;
+	    add(bloatingPanel, c);
 	}
 
 	private void poblacionPanel() {
@@ -307,50 +310,31 @@ public class LeftPanel extends JPanel implements Observer{
 		
 	}
 
-	private void errorPanel() {
-		errorPanel = new JPanel();
-		errorPanel.setPreferredSize(new Dimension(300, 75));
-		errorPanel.setLayout(new GridLayout(2,0));
-		errorPanel.setBackground(Color.WHITE);
-		errorPanel.setBorder(new EmptyBorder(10,10,10,10));
+	// PONER BLOATING
+	
+	private void bloatingPanel() {
 		
-		errorLabel = new JLabel("Valor de error (>0 y <1)");
+		bloatingPanel = new JPanel();
+		bloatingPanel.setPreferredSize(new Dimension(300, 75));
+		bloatingPanel.setLayout(new GridLayout(2,0));
+		bloatingPanel.setBackground(Color.WHITE);
+		bloatingPanel.setBorder(new EmptyBorder(10,10,10,10));
 		
-		errorText = new JTextField("0.001");
+		bloatingLabel = new JLabel("Bloating:");
 		
-		DocumentListener dl = new DocumentListener() {
+		bloatingCheckBox = new JCheckBox("Activar Bloating");
+		bloatingCheckBox.setBackground(Color.WHITE);
+		bloatingCheckBox.addChangeListener(new ChangeListener() {
 
 			@Override
-			public void insertUpdate(DocumentEvent e) {
-				setValorError();
-				
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				setValorError();
-				
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				setValorError();
-				
+			public void stateChanged(ChangeEvent e) {
+				_ctrl.updateBloating(bloatingCheckBox.isSelected());
 			}
 			
-			private void setValorError() {
-				try {
-					_ctrl.updateValorError(Double.parseDouble(errorText.getText()));
-				}
-				catch(Exception e) {
-					_ctrl.updateValorError(-1);
-				}
-			}
-		};
+		});
 		
-		errorText.getDocument().addDocumentListener(dl);
-		errorPanel.add(errorLabel);
-		errorPanel.add(errorText);
+		bloatingPanel.add(bloatingLabel);
+		bloatingPanel.add(bloatingCheckBox);
 	}
 	
 	private void seleccionPanel() {
@@ -731,7 +715,6 @@ public class LeftPanel extends JPanel implements Observer{
 	public void onReset() {
         pobText.setText("100");
         geneText.setText("100");
-        errorText.setText("0.001");
         cruceText.setText("60.0");
         mutaText.setText("5.0");
         eliteText.setText("0.0");
@@ -744,11 +727,11 @@ public class LeftPanel extends JPanel implements Observer{
         maxProbMuta.setText("");
         minTamPob.setText("");
         maxTamPob.setText("");
+        bloatingCheckBox.setSelected(false);
         _ctrl.setMin(-1.0);
         _ctrl.setMax(-1.0);
         _ctrl.updatePobSize(100.0);
         _ctrl.updateGenSize(100.0);
-        _ctrl.updateValorError(0.001);
         _ctrl.updateProbCruce(60.0/100);
         _ctrl.updateProbMuta(5.0/100);
         _ctrl.updatePorElite(0.0);

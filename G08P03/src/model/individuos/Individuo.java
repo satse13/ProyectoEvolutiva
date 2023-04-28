@@ -15,6 +15,10 @@ public abstract class Individuo<T> implements Comparable<Individuo>{
 		return this.fitness;
 	}
 	
+	public void setFitness(double fitness) {
+		this.fitness = fitness;
+	}
+	
 	public String getDeco() {
 		return decodificar();
 	}
@@ -24,6 +28,7 @@ public abstract class Individuo<T> implements Comparable<Individuo>{
 	public abstract double getFenotipo(int gen);
 	public abstract boolean mejorFitness(Individuo individuo);
 	public abstract Double adaptar(Individuo individuo);
+	public abstract int getNumNodos();
 	public abstract void setCromosoma(T cromosoma);
 	
 	public T getCromosoma() {

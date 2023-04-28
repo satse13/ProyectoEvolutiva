@@ -136,11 +136,6 @@ public class Controller {
 		
 	}
 
-	public void updateValorError(double d) {
-		algoritmo.setValorError(d);
-		
-	}
-
 	public void updateProbCruce(double d) {
 		algoritmo.setProbCruce(d);
 		
@@ -167,10 +162,11 @@ public class Controller {
 		
 	}
 	
-	public void updateDimension(int value) {
-		algoritmo.setDimension(value);
-		
+	public void updateTipoCreacion(String selectedItem) { // Agregada
+		algoritmo.setCreacion(mapaCreacion.get(selectedItem));
 	}
+	
+
 	
 	public void updateCruce(String selectedItem) {
 		algoritmo.setCruce(this.mapaCruce.get(selectedItem));
@@ -190,6 +186,15 @@ public class Controller {
 	
 	public void setMax(double max) {
 		this.max = max;
+	}
+
+	public void updateBloating(boolean value) {
+		algoritmo.setBloating(value);
+	}
+
+	public void updateProfundidad(int value) {
+		algoritmo.setProfundidad(value);
+		
 	}
 
 }

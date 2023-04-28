@@ -5,13 +5,17 @@ import java.util.Collections;
 
 import factories.IndividuoArbolFactory;
 import factories.IndividuoFactory;
+import model.bloating.Bloating;
+import model.bloating.BloatingTarpeian;
 import model.creacion.Creacion;
 import model.creacion.CreacionCompleta;
 import model.cruce.Cruce;
 import model.cruce.CruceMonopunto;
+import model.cruce.CruceOperador;
 import model.individuos.Individuo;
 import model.mutacion.Mutacion;
 import model.mutacion.MutacionBasica;
+import model.mutacion.MutacionTerminal;
 import model.observers.Observable;
 import model.observers.Observer;
 import model.seleccion.Seleccion;
@@ -37,9 +41,10 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	private double probCruce;
 	private double probMutacion;
 	private Individuo mejorGeneracion; 
-	private int dimension; 
-	private double valorError;
+	private Bloating contBloating;
+
 	private double porElitismo;
+	private boolean bloating;
 	private ArrayList<Individuo> elite;
 	private ArrayList<Pair<Double, Individuo>> mejoresIntervalo;
 	
@@ -59,16 +64,16 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.maxGeneraciones = 100;
 		this.probCruce = 0.6;
 		this.probMutacion = 0.05;
-		this.dimension = 2;		
 		this.factory = new IndividuoArbolFactory(); // ESTO LO CAMBIAMOS 
 		this.seleccion = new SeleccionRuleta();
-		this.cruce = new CruceMonopunto();
-		this.mutacion = new MutacionBasica();
+		this.cruce = new CruceOperador(); // ESTO LO CAMBIE PARA TENER DEFAULT EL CRUCE ARBOL
+		this.mutacion = new MutacionTerminal(); // ESTO LO CAMBIE PARA TENER DEFAULT LA MUTACION ARBOL 
 		this.creacion = new CreacionCompleta();
-		this.valorError = 0.001;
+		this.contBloating = new BloatingTarpeian();
 		this.porElitismo = 0.0;
 		this.tipoCreacion = COMPLETO;
 		this.profundidad = 5; // Maxima profundidad posible del arbol
+		this.bloating = false;
 		this.mejoresIntervalo = new ArrayList<Pair<Double, Individuo>>();
 		observers = new ArrayList<>();
 		
@@ -78,6 +83,9 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 				
 		if(!parseParam())
 			return;
+		
+		System.out.println(profundidad);
+		System.out.println(bloating);
 
 		poblacion = new ArrayList<Individuo>();
 		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
@@ -94,10 +102,14 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		
 		for (int i = 0; i < maxGeneraciones; ++i) {
 			
+			// llamar al bloating
+			
 			if(porElitismo > 0)
 				seleccionaElite();
 			
-			seleccionados = seleccion.seleccionar(poblacion, poblacion.size());
+			
+			
+			seleccionados = seleccion.seleccionar(poblacion, poblacion.size());// por el bloating habrai que pasar tampobb, en vez pob.siee()
 			
 			cromosomas = cruce.cruzar(poblacion,seleccionados, probCruce);
 			
@@ -105,10 +117,15 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		
 			mutacion.mutar(poblacion, probMutacion);
 			
+			if(bloating) {
+				contBloating.controlBloating(poblacion);
+			}
+			
 			if(porElitismo > 0)
 				incluirElite();
 			
 			pobEvaluation(i+1);
+			System.out.println(poblacion.size());
 		}
 		
 		
@@ -157,8 +174,6 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 				throw new Exception("El tamaño de la poblacion debe ser superior a 1");
 			else if(this.maxGeneraciones < 0)
 				throw new Exception("Debe haber un minimo de 0 generaciones");
-			else if(this.valorError <= 0 || this.valorError > 1)
-				throw new Exception("El valor de error debe estar entre 0 y 1");
 			else if(this.probCruce < 0 || this.probCruce > 1)
 				throw new Exception("La probabilidad de cruce debe estar entre 0 y 100");
 			else if(this.probMutacion < 0 || this.probMutacion > 1)
@@ -210,6 +225,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		else if (elMejorAbs.mejorFitness(mejorGeneracion)) {
 			elMejorAbs.setCromosoma(mejorGeneracion.getCromosoma());
 		}
+	
 		mejorGen[i] = mejorGeneracion.getFitness();
 		mejorAbs[i] = elMejorAbs.getFitness();
 		
@@ -237,7 +253,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		ArrayList<Individuo> nuevaGen = new ArrayList<Individuo>();
 		
 		for(int i = 0; i < cromosomas.size();i++) {
-			nuevaGen.add(factory.generateInd((ArrayList<T>) cromosomas.get(i)));
+			nuevaGen.add(factory.generateInd(cromosomas.get(i))); 
 		}
 		
 		return nuevaGen;
@@ -282,10 +298,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.maxGeneraciones = parseInt;
 	}
 
-	public void setValorError(double d) {
-		this.valorError = d;
-		
-	}
+
 
 	public void setProbCruce(double d) {
 		this.probCruce = d;
@@ -314,10 +327,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.factory = individuoFactory;
 		
 	}
-	
-	public void setDimension(int value) {
-		this.dimension = value;
-	}
+
 	
 	public void setCruce(Cruce cruce) {
 		this.cruce = cruce;
@@ -327,18 +337,22 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.mutacion = mutacion;
 	}
 	
+	public void setCreacion(Creacion creacion) { // Agregada 
+		this.creacion = creacion;
+	}
+	
 	public void reset() {
         this.tamPoblacion = 100;
         this.maxGeneraciones = 100;
         this.probCruce = 0.6;
         this.probMutacion = 0.05;
-        this.dimension = 2;
         this.factory = new IndividuoArbolFactory();
         this.seleccion = new SeleccionRuleta();
-        this.cruce = new CruceMonopunto();
-        this.mutacion = new MutacionBasica();
-        this.valorError = 0.001;
+		this.cruce = new CruceOperador(); // ESTO LO CAMBIE PARA TENER DEFAULT EL CRUCE ARBOL
+		this.mutacion = new MutacionTerminal(); // ESTO LO CAMBIE PARA TENER DEFAULT LA MUTACION ARBOL 
         this.porElitismo = 0.0;
+        this.bloating = false;
+        this.profundidad = 5;
 
         for (Observer o: observers) {
             o.onReset();
@@ -356,7 +370,17 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		}
 	}
 
-	
+	public void setBloating(boolean value) {
+		bloating = value;
+		
+	}
+
+	public void setProfundidad(int value) {
+		this.profundidad = value;
+		
+	}
+
+
 
 	
 

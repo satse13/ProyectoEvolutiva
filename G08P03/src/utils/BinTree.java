@@ -89,5 +89,12 @@ public class BinTree<T> {
 	public void setDato(T dato) {
 		this.dato = dato;
 	}
+
+	public int getNumNodos() {
+		if(terminales.contains(dato)) {
+			return 1;
+		}
+		return (izq.getNumNodos() + der.getNumNodos() + 1);
+	}
 }
 

@@ -20,9 +20,13 @@ import model.cruce.Cruce;
 import model.cruce.CruceAritmetico;
 import model.cruce.CruceBLXA;
 import model.cruce.CruceMonopunto;
+import model.cruce.CruceOperador;
 import model.cruce.CruceUniforme;
 import model.mutacion.Mutacion;
+import model.mutacion.MutacionArSub;
 import model.mutacion.MutacionBasica;
+import model.mutacion.MutacionFuncional;
+import model.mutacion.MutacionTerminal;
 import model.seleccion.EstocasticoUniversal;
 import model.seleccion.Ranking;
 import model.seleccion.Restos;
@@ -53,11 +57,9 @@ public class Main {
 	
 	private static ArrayList<String> listaSeleccion = null;
 	
-	private static ArrayList<String> listaMutacion = null;
+	private static ArrayList<String> listaMutacionArbol = null;
 	
-	private static ArrayList<String> listaCruce= null;
-	
-	
+	private static ArrayList<String> listaCruceArbol = null;
 	
 
 	public static void main(String[] args) {
@@ -90,10 +92,14 @@ public class Main {
 			put("Cruce Uniforme" , new CruceUniforme());
 			put("Cruce Aritmético", new CruceAritmetico());
 			put("BLX-Alpha", new CruceBLXA());
+			put("Intercambio Subárbol", new CruceOperador());
 		}};
 		
 		mapaMutacion = new HashMap<String, Mutacion>(){{
 			put("Básica", new MutacionBasica());
+			put("Terminal", new MutacionTerminal());
+			put("Funcional", new MutacionFuncional());
+			put("Subárbol", new MutacionArSub());
 		}};
 		
 		mapaCreacion = new HashMap<String,Creacion>(){{
@@ -118,19 +124,32 @@ public class Main {
 			add("Ranking");
 		}};
 	
-		listaMutacion = new ArrayList<String>(){{
+
+		listaMutacionArbol = new ArrayList<String>(){{
+			add("Terminal");
+			add("Funcional");
+			add("Subárbol");
+		}}; 
+		
+		listaCruceArbol = new ArrayList<String>() {{
+			add("Intercambio Subárbol");
+		}};
+		
+		/*
+		listaMutacionArbol = new ArrayList<String>(){{
 			add("Básica");
 		}}; 
 		
-		listaCruce = new ArrayList<String>() {{
+		listaCruceArbol = new ArrayList<String>() {{
 			add("Cruce Monopunto");
 			add("Cruce Uniforme");
 			add("Cruce Aritmético");
 			add("BLX-Alpha");
 		}};
+		 */
 		
 		mapaFactories = new TreeMap<String, Pair<IndividuoFactory, Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>>>(){{
-		 		put("Individuo Arbol", new Pair<IndividuoFactory, Cuarteto<ArrayList<String>, ArrayList<String>, ArrayList<String>,ArrayList<String>>>(new IndividuoArbolFactory(), new Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruce,listaMutacion,listaCreacion)));
+		 		put("Individuo Arbol", new Pair<IndividuoFactory, Cuarteto<ArrayList<String>, ArrayList<String>, ArrayList<String>,ArrayList<String>>>(new IndividuoArbolFactory(), new Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceArbol,listaMutacionArbol,listaCreacion)));
 		}};
 			
 	}

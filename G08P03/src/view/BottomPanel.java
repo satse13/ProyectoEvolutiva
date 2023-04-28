@@ -124,8 +124,11 @@ public class BottomPanel extends JToolBar implements Observer {
 
 	@Override
 	public void onEnd(AlgoritmoGenetico algoritmo, String key) {
-		if (key.equals("Ninguno")) 
-			solucionText.setText(algoritmo.getMejor().getDeco());	
+		if (key.equals("Ninguno")) {
+			
+			solucionText.setText(algoritmo.getMejor().getDeco());
+			//System.out.println(algoritmo.getMejor().toString());
+		}
 		else 
 			solucionText.setText(algoritmo.setTextIntervalos());
 			
