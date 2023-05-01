@@ -19,5 +19,9 @@ public class Mediator {
 	public void changeGraph(String key) {
 		mw.changeGraph(key);
 	}
+	
+	public void resetGraph() {
+		mw.resetGraph();
+	}
 }
  

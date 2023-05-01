@@ -17,14 +17,9 @@ import model.creacion.CreacionCompleta;
 import model.creacion.CreacionCreciente;
 import model.creacion.CreacionRampedHalf;
 import model.cruce.Cruce;
-import model.cruce.CruceAritmetico;
-import model.cruce.CruceBLXA;
-import model.cruce.CruceMonopunto;
 import model.cruce.CruceOperador;
-import model.cruce.CruceUniforme;
 import model.mutacion.Mutacion;
 import model.mutacion.MutacionArSub;
-import model.mutacion.MutacionBasica;
 import model.mutacion.MutacionFuncional;
 import model.mutacion.MutacionTerminal;
 import model.seleccion.EstocasticoUniversal;
@@ -37,8 +32,6 @@ import model.seleccion.TorneoProbabilistico;
 import model.seleccion.Truncamiento;
 import utils.Cuarteto;
 import utils.Pair;
-import utils.TipoDato;
-import utils.Trio;
 import view.MainWindow;
 
 public class Main {
@@ -70,7 +63,7 @@ public class Main {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-					new MainWindow(ctrl);
+				new MainWindow(ctrl);
 			}
 		});	
 	}
@@ -88,15 +81,10 @@ public class Main {
 		}};
 		
 		mapaCruce = new HashMap<String, Cruce>(){{
-			put("Cruce Monopunto", new CruceMonopunto());
-			put("Cruce Uniforme" , new CruceUniforme());
-			put("Cruce Aritmético", new CruceAritmetico());
-			put("BLX-Alpha", new CruceBLXA());
 			put("Intercambio Subárbol", new CruceOperador());
 		}};
 		
 		mapaMutacion = new HashMap<String, Mutacion>(){{
-			put("Básica", new MutacionBasica());
 			put("Terminal", new MutacionTerminal());
 			put("Funcional", new MutacionFuncional());
 			put("Subárbol", new MutacionArSub());
@@ -135,21 +123,8 @@ public class Main {
 			add("Intercambio Subárbol");
 		}};
 		
-		/*
-		listaMutacionArbol = new ArrayList<String>(){{
-			add("Básica");
-		}}; 
-		
-		listaCruceArbol = new ArrayList<String>() {{
-			add("Cruce Monopunto");
-			add("Cruce Uniforme");
-			add("Cruce Aritmético");
-			add("BLX-Alpha");
-		}};
-		 */
-		
 		mapaFactories = new TreeMap<String, Pair<IndividuoFactory, Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>>>(){{
-		 		put("Individuo Arbol", new Pair<IndividuoFactory, Cuarteto<ArrayList<String>, ArrayList<String>, ArrayList<String>,ArrayList<String>>>(new IndividuoArbolFactory(), new Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceArbol,listaMutacionArbol,listaCreacion)));
+		 	put("Individuo Arbol", new Pair<IndividuoFactory, Cuarteto<ArrayList<String>, ArrayList<String>, ArrayList<String>,ArrayList<String>>>(new IndividuoArbolFactory(), new Cuarteto<ArrayList<String>,ArrayList<String>,ArrayList<String>,ArrayList<String>>(listaSeleccion,listaCruceArbol,listaMutacionArbol,listaCreacion)));
 		}};
 			
 	}

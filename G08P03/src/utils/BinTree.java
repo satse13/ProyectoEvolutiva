@@ -8,8 +8,6 @@ public class BinTree<T> {
 	private T dato;
 	private BinTree<T> izq;
 	private BinTree<T> der;
-	private boolean completo = false;
-	private int profundidad;
 	
 	public BinTree() {
 	}
@@ -95,6 +93,10 @@ public class BinTree<T> {
 			return 1;
 		}
 		return (izq.getNumNodos() + der.getNumNodos() + 1);
+	}
+
+	public void adaptar(int profundidadAct, int profundiadMax) {
+		
 	}
 }
 

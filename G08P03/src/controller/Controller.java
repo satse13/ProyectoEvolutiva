@@ -15,7 +15,6 @@ import model.cruce.Cruce;
 import model.mutacion.Mutacion;
 import model.observers.Observer;
 import model.seleccion.Seleccion;
-import utils.TipoDato;
 import utils.Trio;
 import utils.Cuarteto;
 import utils.Function;
@@ -133,17 +132,14 @@ public class Controller {
 
 	public void updateGenSize(double parseInt) {
 		algoritmo.setGenSize((int)parseInt);
-		
 	}
 
 	public void updateProbCruce(double d) {
 		algoritmo.setProbCruce(d);
-		
 	}
 
 	public void updateProbMuta(double d) {
 		algoritmo.setProbMutacion(d);
-		
 	}
 
 	public void updatePorElite(double d) {
@@ -153,20 +149,16 @@ public class Controller {
 
 	public void updateSeleccion(String selectedItem) {
 		algoritmo.setSeleccion(mapaSeleccion.get(selectedItem));
-		
 	}
 
 
 	public void updateIndividuoFactory(String selectedItem) {
 		algoritmo.setIndividuoFactory(mapaFactories.get(selectedItem).getFirst());
-		
 	}
 	
 	public void updateTipoCreacion(String selectedItem) { // Agregada
 		algoritmo.setCreacion(mapaCreacion.get(selectedItem));
 	}
-	
-
 	
 	public void updateCruce(String selectedItem) {
 		algoritmo.setCruce(this.mapaCruce.get(selectedItem));
@@ -196,5 +188,4 @@ public class Controller {
 		algoritmo.setProfundidad(value);
 		
 	}
-
 }

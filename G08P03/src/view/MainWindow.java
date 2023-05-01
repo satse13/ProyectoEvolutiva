@@ -21,6 +21,10 @@ public class MainWindow extends JFrame {
 	private final int WIDTH = 1200;
 	private final int HEIGHT = 745;
 	
+	private Graph grNormal;
+	private AdvancedGraph grAdvanced;
+	private FunctionGraph grFunction;
+	
 	public MainWindow(Controller ctrl) {
 		super("Algoritmo Genético");
 		_ctrl = ctrl;
@@ -34,12 +38,17 @@ public class MainWindow extends JFrame {
 		
 		LeftPanel lp = new LeftPanel(_ctrl);
 		BottomPanel bp = new BottomPanel(_ctrl);
-		TopPanel tp = new TopPanel(_ctrl,lp,bp);
 		
 		Mediator me = new Mediator(_ctrl, this, lp, bp);
+		TopPanel tp = new TopPanel(_ctrl,lp,bp,me);
 		
-		graph.add(new Graph(_ctrl, me), "GRAPH");
-		graph.add(new AdvancedGraph(_ctrl, me), "ADVANCED_GRAPH");
+		grNormal = new Graph(_ctrl, me);
+		grAdvanced = new AdvancedGraph(_ctrl, me);
+		grFunction = new FunctionGraph(_ctrl,me);
+		
+		graph.add(grNormal, "GRAPH");
+		graph.add(grAdvanced, "ADVANCED_GRAPH");
+		graph.add(grFunction,"FUNCTION_GRAPH");
 		
 		mainPanel.add(tp, BorderLayout.PAGE_START);
 		mainPanel.add(bp, BorderLayout.PAGE_END);
@@ -59,5 +68,11 @@ public class MainWindow extends JFrame {
 	public void changeGraph(String key) {
 		CardLayout cl = (CardLayout)(graph.getLayout());
 		cl.show(graph, key);
+	}
+
+	public void resetGraph() {
+		grNormal.onReset();
+		grAdvanced.onReset();
+		grFunction.onReset();
 	}
 }

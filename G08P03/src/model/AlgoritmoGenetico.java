@@ -6,15 +6,13 @@ import java.util.Collections;
 import factories.IndividuoArbolFactory;
 import factories.IndividuoFactory;
 import model.bloating.Bloating;
-import model.bloating.BloatingTarpeian;
+import model.bloating.BloatingFund;
 import model.creacion.Creacion;
 import model.creacion.CreacionCompleta;
 import model.cruce.Cruce;
-import model.cruce.CruceMonopunto;
 import model.cruce.CruceOperador;
 import model.individuos.Individuo;
 import model.mutacion.Mutacion;
-import model.mutacion.MutacionBasica;
 import model.mutacion.MutacionTerminal;
 import model.observers.Observable;
 import model.observers.Observer;
@@ -64,19 +62,18 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		this.maxGeneraciones = 100;
 		this.probCruce = 0.6;
 		this.probMutacion = 0.05;
-		this.factory = new IndividuoArbolFactory(); // ESTO LO CAMBIAMOS 
+		this.factory = new IndividuoArbolFactory();
 		this.seleccion = new SeleccionRuleta();
-		this.cruce = new CruceOperador(); // ESTO LO CAMBIE PARA TENER DEFAULT EL CRUCE ARBOL
-		this.mutacion = new MutacionTerminal(); // ESTO LO CAMBIE PARA TENER DEFAULT LA MUTACION ARBOL 
+		this.cruce = new CruceOperador(); 
+		this.mutacion = new MutacionTerminal(); 
 		this.creacion = new CreacionCompleta();
-		this.contBloating = new BloatingTarpeian();
+		this.contBloating = new BloatingFund();
 		this.porElitismo = 0.0;
 		this.tipoCreacion = COMPLETO;
-		this.profundidad = 5; // Maxima profundidad posible del arbol
+		this.profundidad = 5; 
 		this.bloating = false;
 		this.mejoresIntervalo = new ArrayList<Pair<Double, Individuo>>();
 		observers = new ArrayList<>();
-		
 	}
 	
 	public void run() {
@@ -84,9 +81,6 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		if(!parseParam())
 			return;
 		
-		System.out.println(profundidad);
-		System.out.println(bloating);
-
 		poblacion = new ArrayList<Individuo>();
 		elite = new ArrayList<Individuo>((int)(poblacion.size()*porElitismo));
 		medias = new double[maxGeneraciones+1];
@@ -97,19 +91,17 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		
 		pobEvaluation(0);
 		
+		
 		ArrayList<Integer> seleccionados = new ArrayList<Integer>();
 		ArrayList cromosomas = new ArrayList<>();
 		
 		for (int i = 0; i < maxGeneraciones; ++i) {
 			
-			// llamar al bloating
 			
 			if(porElitismo > 0)
 				seleccionaElite();
-			
-			
-			
-			seleccionados = seleccion.seleccionar(poblacion, poblacion.size());// por el bloating habrai que pasar tampobb, en vez pob.siee()
+						
+			seleccionados = seleccion.seleccionar(poblacion, poblacion.size());
 			
 			cromosomas = cruce.cruzar(poblacion,seleccionados, probCruce);
 			
@@ -125,7 +117,6 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 				incluirElite();
 			
 			pobEvaluation(i+1);
-			System.out.println(poblacion.size());
 		}
 		
 		
@@ -208,7 +199,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		double numElite = (porElitismo * poblacion.size());
 		int contador = poblacion.size()-1;
 		while(numElite > 0) {
-			elite.add(poblacion.get(contador));
+			elite.add(factory.generateInd(poblacion.get(contador).getCromosoma()));
 			contador--;
 			numElite--;
 		}
@@ -217,7 +208,7 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	private void pobEvaluation(int i) {
 		Collections.sort(poblacion);
 		
-		mejorGeneracion = poblacion.get(poblacion.size()-1);
+		mejorGeneracion = factory.generateInd(poblacion.get(poblacion.size()-1).getCromosoma());
 		
 		if (i == 0)
 			elMejorAbs = factory.generateInd(mejorGeneracion.getCromosoma());
@@ -237,16 +228,11 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 		media = media / poblacion.size();
 		
 		medias[i] = media;
-		
-		
+			
 	}	
 	
 	private void initPoblacion() {
-		
 		poblacion = creacion.generarPoblacion(factory, profundidad, tamPoblacion);
-		/*for(int i = 0; i < this.tamPoblacion;i++) {
-			poblacion.add(factory.generateInd(valorError, dimension, tipoCreacion, profundidad)); 
-		}*/
 	}
 	
 	private <T> ArrayList<Individuo> nuevaGen(ArrayList cromosomas) {
@@ -320,14 +306,11 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 
 	public void setProbCruce(Cruce cruce) {
 		this.cruce = cruce;
-		
 	}
 
 	public void setIndividuoFactory(IndividuoFactory individuoFactory) {
-		this.factory = individuoFactory;
-		
+		this.factory = individuoFactory;		
 	}
-
 	
 	public void setCruce(Cruce cruce) {
 		this.cruce = cruce;
@@ -361,7 +344,6 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 
 	public void clearMejores() {
 		this.mejoresIntervalo.clear();
-		
 	}
 
 	public void finIntervalos(String key) {
@@ -378,12 +360,5 @@ public class AlgoritmoGenetico implements Observable<Observer>{
 	public void setProfundidad(int value) {
 		this.profundidad = value;
 		
-	}
-
-
-
-	
-
-	
-	
+	}	
 }

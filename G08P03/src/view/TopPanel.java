@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -27,20 +28,28 @@ public class TopPanel extends JPanel implements Observer {
 	
 	private Controller _ctrl;
 	
-	JLabel problemaLabel, creacionLabel, profundidadLabel;
+	private String claveGrafica; 
 	
-	JComboBox problemaBox, parametrosBox, creacionBox;
+	private JLabel problemaLabel, creacionLabel, profundidadLabel;
 	
-	LeftPanel lp;
+	private JComboBox problemaBox, parametrosBox, creacionBox;
+		
+	private LeftPanel lp; 	
 	
-	JSpinner profundidadSpinner;
+	private JButton botonCambio;
 	
-	BottomPanel bp;
+	private JSpinner profundidadSpinner;
 	
-	public TopPanel(Controller ctrl, LeftPanel lp, BottomPanel bp) {
+	private BottomPanel bp;
+	
+	private Mediator med;
+	
+	public TopPanel(Controller ctrl, LeftPanel lp, BottomPanel bp, Mediator med) {
 		_ctrl = ctrl;
 		this.lp = lp;
 		this.bp = bp;
+		this.med = med;
+		claveGrafica = "GRAPH";
 		_ctrl.addObserver(this);
 		initGUI();
 	}
@@ -54,6 +63,14 @@ public class TopPanel extends JPanel implements Observer {
 			public void actionPerformed(ActionEvent e) {
 				lp.changePanel((String)parametrosBox.getSelectedItem());
 				bp.changePanel((String)parametrosBox.getSelectedItem());
+				String item = (String)parametrosBox.getSelectedItem();
+				if(!item.equals("Ninguno")) {
+					botonCambio.setVisible(false);
+				}
+				else {
+					botonCambio.setVisible(true);
+					med.resetGraph();
+				}
 			}	
 		});
 	
@@ -114,6 +131,25 @@ public class TopPanel extends JPanel implements Observer {
 			
 		});
 		
+		JSeparator separator5 = new JSeparator(JSeparator.VERTICAL);
+		separator5.setPreferredSize(new Dimension(5, 0)); 
+		
+		botonCambio = new JButton("Grafica Función");
+		botonCambio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(claveGrafica.equals("GRAPH")) {
+					med.changeGraph("FUNCTION_GRAPH");
+					claveGrafica = "FUNCTION_GRAPH";
+				}
+				
+				else if(claveGrafica.equals("FUNCTION_GRAPH")) {
+					med.changeGraph("GRAPH");
+					claveGrafica = "GRAPH";
+				}
+			}
+		});
+		
+		
 		add(new JLabel("Análisis de parametros: "));
 		add(parametrosBox);
  		add(separator1);
@@ -126,6 +162,8 @@ public class TopPanel extends JPanel implements Observer {
 		add(separator4);
 		add(profundidadLabel);
 		add(profundidadSpinner);
+		add(separator5);
+		add(botonCambio);
 		setBackground(Color.WHITE);
 		setVisible(true);
 		
@@ -143,7 +181,8 @@ public class TopPanel extends JPanel implements Observer {
 	public void onReset() {
         problemaBox.setSelectedIndex(0);
         parametrosBox.setSelectedIndex(0);
-        profundidadSpinner.setValue(5);;
+        profundidadSpinner.setValue(5);
+        creacionBox.setSelectedIndex(0);
     }
 
 	@Override

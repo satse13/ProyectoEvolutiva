@@ -75,6 +75,9 @@ public class CruceOperador extends Cruce{
 		
 		BinTree<String> aux = new BinTree<>();
 		aux = aux.copiarArbol(punto1);
+	//	punto1 = punto1.copiarArbol(punto2);
+//		punto2 = punto2.copiarArbol(aux);
+
 		punto1.setArbol(punto2);
 		punto2.setArbol(aux);
 	
@@ -98,8 +101,21 @@ public class CruceOperador extends Cruce{
 		System.out.println(p.getFirst().decodificar());
 		System.out.println(p.getSecond().decodificar());
 
+		
 		System.out.println(a.decodificar());
 		System.out.println(b.decodificar());
-				
+
+		IndividuoArbol hijo1 = new IndividuoArbol(p.getFirst());
+		IndividuoArbol hijo2 = new IndividuoArbol(p.getSecond());
+
+		hijo1.mutarTer(1);
+		hijo2.mutarTer(1);
+		
+		System.out.println(hijo1.decodificar());
+		System.out.println(hijo2.decodificar());
+
+		
+		System.out.println(a.decodificar());
+		System.out.println(b.decodificar());
 	}
 }

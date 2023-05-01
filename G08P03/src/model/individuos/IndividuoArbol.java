@@ -23,8 +23,9 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	
 	public static final Set<String> operadores = new HashSet<String>() {{add("add"); add("mul"); add("sub");}};
 	
-	public static final Set<String> terminales = new HashSet<String>() {{add("x"); add("1"); add("2"); add("0"); add("-1"); add("-2");}};
+	public static final Set<String> terminales = new HashSet<String>() {{add("x"); add("1"); add("2"); add("-1"); add("-2");}};
 	
+
 	public static final ArrayList<Pair<Double,Double>> fitnessAux = new ArrayList<Pair<Double,Double>>(){{
 	
 		add(new Pair<Double,Double>(-1.0,1.0));
@@ -130,18 +131,8 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 		add(new Pair<Double,Double>(1.00,5.0000));
 	}};
 	
-	// Esto es una prueba
-	//public  ArrayList<Pair<Double,Double>> fitnessAux;
-	
-	private void initFitnessAux() {
-		/*
-		fitnessAux = new ArrayList<Pair<Double,Double>>();
-        for (double ini = -1.0; ini <= 1.0 ; ini += 0.02) {
-        	fitnessAux.add(new Pair<Double,Double>(ini, Math.pow(ini, 4) + Math.pow(ini, 3) + Math.pow(ini, 2) + ini + 1));
-        }*/
-    }
-	
 	private static int profundidad;
+
 	
 	private static String tipoCreacion;
 	
@@ -152,8 +143,7 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	
 	
 	public IndividuoArbol(String tipoCreacion, int profundidad) {
-		initFitnessAux();
-		IndividuoArbol.profundidad = profundidad;
+		this.profundidad = profundidad;
 		IndividuoArbol.tipoCreacion = tipoCreacion;
 		this.cromosoma = new BinTree<String>();
 		mapaFunciones.get(tipoCreacion).apply(cromosoma,1);
@@ -161,16 +151,16 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	}
 	
 	public IndividuoArbol(BinTree<String> cromosoma) {
-		initFitnessAux();
 		this.cromosoma = new BinTree<String>();
-		this.cromosoma.setArbol(cromosoma);
+		//this.cromosoma.setArbol(cromosoma);
+		this.cromosoma = this.cromosoma.copiarArbol(cromosoma);
 		this.fitness = this.getValor();
 	}
 	
 
 	public BinTree<String> inicializacionCompletaAux(int profundidad) {
 		BinTree<String> arbolAux;
-		if (profundidad < IndividuoArbol.profundidad) {
+		if (profundidad < this.profundidad) {
 			arbolAux = new BinTree<String>(randElem(operadores));
 			arbolAux.setArbolIzq(inicializacionCompletaAux(profundidad+1));
 			arbolAux.setArbolDer(inicializacionCompletaAux(profundidad+1));
@@ -191,7 +181,7 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 			arbolAux.setArbolDer(inicializacionCrecienteAux(profundidad+1));
 		}
 		
-		else if (profundidad < IndividuoArbol.profundidad) {
+		else if (profundidad < this.profundidad) {
 			String[] nodo = new String[2];
 			nodo[0] = randElem(operadores);
 			nodo[1] = randElem(terminales);
@@ -205,12 +195,7 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 		}
 		return arbolAux;
 	}
-	
-	public BinTree<String> RampedAndHalfAux(int profundidad) {  
-		//TODO
-		return cromosoma;
-	}
-	
+		
 	private void toArrayAux(ArrayList<String> array, BinTree<String> a){
 		array.add(a.getDato());
 		toArrayAux(array,a.getIzq());
@@ -235,6 +220,7 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 			case "sub":return (funcArbol(arbol.getIzq(),valor) - funcArbol(arbol.getDer(),valor));
 			case "mul": return (funcArbol(arbol.getIzq(),valor) * funcArbol(arbol.getDer(),valor));
 			case "x": return valor;
+			case "y": return valor;
 			default: return Integer.parseInt(arbol.getDato());
 		}	
 	}
@@ -353,11 +339,17 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 		if (x != y) {
 			System.out.println("cuidado");
 		}
-		return "F(x) = " + arbol_a_string(cromosoma) + " valor: " + this.fitness;
+		String str = "F(x) = " + arbol_a_string(cromosoma) + " valor: ";
+		if(this.fitness < 0.001) {
+			str += "0";
+			return str;
+		}
+		return str += this.fitness;
 	}
 	
 	private String arbol_a_string(BinTree<String> arbol) {
-	    if(terminales.contains(arbol.getDato()))
+		
+		if(terminales.contains(arbol.getDato()))
 	        return arbol.getDato();
 	    else {
 	        String iz = arbol_a_string(arbol.getIzq());
@@ -423,9 +415,35 @@ public class IndividuoArbol extends Individuo<BinTree<String>>{
 	}
 	
 	public int getNumNodos() {
-		
 		return cromosoma.getNumNodos();
 	}
 
+	
+	public Pair<double[], double[]> getListFunction() {
+		double x[] = new double[fitnessAux.size()];
+		for(int i = 0; i < fitnessAux.size();i++) {
+			x[i] = fitnessAux.get(i).getFirst();
+		}
+		
+		double y[] = new double[fitnessAux.size()];
+		for(int i = 0; i < fitnessAux.size();i++) {
+			y[i] = fitnessAux.get(i).getSecond();
+		}
+		
+		return new Pair<double[], double[]>(x,y);
+	}
+
+	@Override
+	public Pair<double[], double[]> getFunction() {
+		double x[] = new double[fitnessAux.size()];
+		for(int i = 0; i < fitnessAux.size();i++) {
+			x[i] = fitnessAux.get(i).getFirst();
+		}
+		double y[] = new double[fitnessAux.size()];
+		for(int i = 0; i < fitnessAux.size();i++) {
+			y[i] = funcArbol(this.cromosoma,fitnessAux.get(i).getFirst());
+		}
+		return new Pair<double[], double[]>(x,y);
+	}
 }
 

@@ -21,7 +21,6 @@ public class CreacionRampedHalf implements Creacion{
 				poblacion.add(factory.generateInd("COMPLETO",i));
 				poblacion.add(factory.generateInd("CRECIENTE",i));
 			}
-
 		}
 		
 		int cont = poblacion.size();
